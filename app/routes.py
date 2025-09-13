@@ -20,7 +20,7 @@ def chat():
     else:
         return render_template('chat.html', render_sidebar=True)
 
-@app.route('chat_preview')
+@app.route('/chat_preview')
 def chat_preview():
     return render_template('chat.html', render_sidebar=False)
 
@@ -28,7 +28,7 @@ def chat_preview():
 def chamados():
     return render_template('chamados.html', render_sidebar=True)
 
-@app.route('chamados_preview')
+@app.route('/chamados_preview')
 def chat_preview():
     return render_template('chamados.html', render_sidebar=False)
 
@@ -36,7 +36,7 @@ def chat_preview():
 def dashboard():
     return render_template('dashboard.html', render_sidebar=True)
 
-@app.route('dashboard_preview')
+@app.route('/dashboard_preview')
 def chat_preview():
     return render_template('dashboard.html', render_sidebar=False)
 
