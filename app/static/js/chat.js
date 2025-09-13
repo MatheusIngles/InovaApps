@@ -231,21 +231,21 @@ document.addEventListener("DOMContentLoaded", () => {
                   <label for="ticketTitle" class="form-label">
                     <i class="fas fa-heading me-1"></i>Título do Chamado
                   </label>
-                  <input type="text" class="form-control" id="ticketTitle" placeholder="Descreva brevemente o problema" required>
+                  <input name="title" type="text" class="form-control" id="ticketTitle" placeholder="Descreva brevemente o problema" required>
                 </div>
                 
                 <div class="mb-3">
                   <label for="ticketDescription" class="form-label">
                     <i class="fas fa-align-left me-1"></i>Descrição Detalhada
                   </label>
-                  <textarea class="form-control" id="ticketDescription" rows="4" placeholder="Descreva detalhadamente o problema ou solicitação" required></textarea>
+                  <textarea name="description" class="form-control" id="ticketDescription" rows="4" placeholder="Descreva detalhadamente o problema ou solicitação" required></textarea>
                 </div>
                 
                 <div class="mb-3">
                   <label for="ticketPriority" class="form-label">
                     <i class="fas fa-exclamation-triangle me-1"></i>Prioridade
                   </label>
-                  <select class="form-select" id="ticketPriority" required>
+                  <select name="priority" class="form-select" id="ticketPriority" required>
                     <option value="">Selecione a prioridade</option>
                     <option value="baixa">Baixa - Não é urgente</option>
                     <option value="media">Média - Precisa de atenção</option>
