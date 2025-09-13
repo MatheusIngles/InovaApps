@@ -137,6 +137,133 @@
   transform: none;
 }
 
+/* Estilos para o botão de áudio */
+.audio-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--success-color);
+  color: var(--white);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.audio-button:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+
+.audio-button.recording {
+  background: var(--danger-color);
+  animation: pulse 1s infinite;
+}
+
+.audio-button:disabled {
+  background: var(--gray-400);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Indicador de gravação */
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--danger-color);
+  color: var(--white);
+  padding: 0.75rem 1rem;
+  border-radius: 25px;
+  margin-top: 0.5rem;
+  animation: pulse 1s infinite;
+}
+
+.recording-animation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.stop-recording-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: var(--white);
+  color: var(--danger-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.stop-recording-btn:hover {
+  background: var(--gray-100);
+}
+
+/* Estilos para mensagens de áudio */
+.audio-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--gray-100);
+  padding: 0.75rem;
+  border-radius: 15px;
+  max-width: 250px;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.play-audio-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.play-audio-btn:hover {
+  background: #0056b3;
+}
+
+.audio-duration {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  min-width: 40px;
+}
+
+.audio-waveform {
+  flex: 1;
+  height: 30px;
+  background: var(--gray-300);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.waveform-progress {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 15px;
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
 /* Indicador de digitação */
 .typing-indicator {
   display: flex;
@@ -192,6 +319,18 @@
   }
   30% {
     transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
