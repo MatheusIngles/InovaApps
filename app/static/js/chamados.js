@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBody = document.getElementById("modalBody")
   const overlay = document.getElementById("overlay")
 
-
   // Renderizar tickets
   function renderTickets(ticketsToRender) {
     ticketsContainer.innerHTML = ""

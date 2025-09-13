@@ -86,7 +86,39 @@
         tickets_js = {{ tickets | tojson }}
 
         window.onload = function() {
-            renderTickets(tickets_js)
+            const ticketsContainer = document.getElementById("ticketsContainer")
+
+            ticketsContainer.innerHTML = ""
+
+            if (tickets_js.length === 0) {
+            ticketsContainer.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--gray-500);">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>Nenhum chamado encontrado</p>
+                        </div>
+                    `
+            return
+            }
+
+            tickets_js.forEach((ticket) => {
+            const ticketCard = document.createElement("div")
+            ticketCard.className = `ticket-card priority-${ticket.priority}`
+            ticketCard.innerHTML = `
+                        <div class="ticket-header">
+                            <span class="ticket-id">${ticket.id}</span>
+                            <span class="ticket-status status-${ticket.status}">${getStatusText(ticket.status)}</span>
+                        </div>
+                        <h3 class="ticket-title">${ticket.title}</h3>
+                        <p class="ticket-description">${ticket.description}</p>
+                        <div class="ticket-meta">
+                            <span class="ticket-priority priority-${ticket.priority}">${getPriorityText(ticket.priority)}</span>
+                            <span class="ticket-date">${formatDate(ticket.date)} às ${ticket.time}</span>
+                        </div>
+                    `
+
+            ticketCard.addEventListener("click", () => openTicketModal(ticket))
+            ticketsContainer.appendChild(ticketCard)
+            })
         }
     </script>
 </body>
