@@ -1,4 +1,3 @@
-//Programacao
 [
   {
     "topico": "como instalar python",
@@ -7,5 +6,49 @@
   {
     "topico": "como criar ambiente virtual",
     "resposta": "Use 'python -m venv nome_do_ambiente' e ative com 'source nome_do_ambiente/bin/activate' (Linux/Mac) ou 'nome_do_ambiente\\Scripts\\activate' (Windows)."
+  },
+  {
+    "topico": "impressora não imprime",
+    "resposta": "Verifique: 1) Se está ligada e com papel 2) Conexão USB/rede 3) Driver instalado 4) Se não está com fila de impressão travada 5) Reinicie a impressora e computador"
+  },
+  {
+    "topico": "sem conexão com internet",
+    "resposta": "Solução: 1) Reinicie modem/router 2) Verifique cabos 3) Teste em outro dispositivo 4) Chame provedor se problema persistir"
+  },
+  {
+    "topico": "email não envia anexos grandes",
+    "resposta": "Limite geralmente é 25MB. Use: Google Drive, WeTransfer ou OneDrive para compartilhar arquivos grandes"
+  },
+  {
+    "topico": "computador lento",
+    "resposta": "Otimize: 1) Feche programas desnecessários 2) Limpe disco 3) Aumente RAM 4) Verifique malware 5) Desfragmente HD (se Windows)"
+  },
+  {
+    "topico": "senha bloqueada",
+    "resposta": "Contate o administrador de TI para resetar a senha ou use a opção 'esqueci minha senha' no sistema"
+  },
+  {
+    "topico": "problema com wifi",
+    "resposta": "Solução: 1) Reconecte à rede 2) Esqueça rede e reconecte 3) Atualize driver wifi 4) Reinicie roteador"
+  },
+  {
+    "topico": "microfone não funciona nas reuniões",
+    "resposta": "Verifique: 1) Permissões do aplicativo 2) Microfone selecionado corretamente 3) Não está mudo 4) Drivers atualizados"
+  },
+  {
+    "topico": "teclado/mouse não funcionam",
+    "resposta": "Teste: 1) Troque porta USB 2) Reinicie computador 3) Teste em outra máquina 4) Verifique pilhas (se wireless)"
+  },
+  {
+    "topico": "arquivo corrompido",
+    "resposta": "Tente: 1) Abrir backup 2) Usar 'abrir e reparar' no Office 3) Recuperar versões anteriores 4) Software de recuperação"
+  },
+  {
+    "topico": "tela azul windows",
+    "resposta": "Causas comuns: 1) Driver problemático 2) Hardware defeituoso 3) Superaquecimento 4) Memória RAM defeituosa"
+  },
+  {
+    "topico": "programa não responde",
+    "resposta": "Use Ctrl+Alt+Del para abrir Gerenciador de Tarefas e finalizar o programa travado"
   }
 ]
