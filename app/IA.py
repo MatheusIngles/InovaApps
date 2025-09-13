@@ -135,13 +135,7 @@ def responder_usuario(texto):
     # Sempre tenta busca semântica primeiro (gratuita)
     resposta_semantica, similaridade = busca_semantica(texto)
     if resposta_semantica and similaridade > 0.7:
-        return f"📚 Resposta da base de conhecimento (similaridade: {similaridade:.2f}):\n{resposta_semantica}"
+        return f"{resposta_semantica}"
     
     # Se não encontrou boa correspondência semântica, pergunta se quer usar Gemini
-    i = input("Resposta não encontrada no nosso banco de dados. Posso gerar uma resposta para você? (s/n) ")
-    if i.lower() == "s":
-        return UsarGemini(texto)
-    else:
-        return "❌ Busca cancelada pelo usuário."
-
-# Delay entre testes
+    return False

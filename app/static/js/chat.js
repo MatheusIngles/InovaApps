@@ -50,43 +50,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Respostas automáticas da IA
-  const botResponses = [
-    "Entendi sua solicitação. Vou criar um chamado para você.",
-    "Obrigado por entrar em contato. Como posso ajudá-lo melhor?",
-    "Vou encaminhar sua questão para o setor responsável.",
-    "Sua solicitação foi registrada com o número #" + Math.floor(Math.random() * 10000),
-    "Posso ajudá-lo com mais alguma coisa?",
-    "Vou verificar essa informação para você.",
-    "Entendo sua preocupação. Vamos resolver isso juntos.",
-    "Sua mensagem foi recebida. Aguarde um momento, por favor.",
-  ]
-
   // Enviar mensagem
   function sendMessage() {
     const message = messageInput.value.trim()
     if (message === "") return
 
-    // Adicionar mensagem do usuário
     addMessage(message, "user")
     messageInput.value = ""
     sendButton.disabled = true
 
-    sendMessageToBackend(message)
-
-    // Simular digitação do bot
     showTypingIndicator()
 
-    // Resposta automática após delay
-    setTimeout(
-      () => {
+    sendMessageToBackend(message).then((Response) => {
+      setTimeout(() => {
         hideTypingIndicator()
-        const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
-        addMessage(randomResponse, "bot")
+        if (Response.enunciado) {
+          addMessage(Response.text, "bot")
+        }
+        else{
+          addMessage(Response.text, "bot")
+          // Aqui bassul
+        }
         sendButton.disabled = false
-      },
-      1500 + Math.random() * 2000,
-    )
+      }, 1500 + Math.random() * 2000)
+    })
   }
 
   // Adicionar mensagem ao chat
@@ -211,81 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function startRecording() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      mediaRecorder = new MediaRecorder(stream)
-      audioChunks = []
-
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunks.push(event.data)
-      }
-
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
-        addMessage("", "user", true, audioBlob)
-
-        sendAudioToBackend(audioBlob)
-
-        // Simular resposta do bot
-        setTimeout(() => {
-          const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
-          addMessage(randomResponse, "bot")
-        }, 1000)
-
-        // Parar todas as tracks do stream
-        stream.getTracks().forEach((track) => track.stop())
-      }
-
-      mediaRecorder.start()
-      isRecording = true
-      audioButton.classList.add("recording")
-      recordingIndicator.style.display = "flex"
-      messageInput.disabled = true
-      sendButton.disabled = true
-    } catch (error) {
-      console.error("Erro ao acessar o microfone:", error)
-      alert("Erro ao acessar o microfone. Verifique as permissões.")
-    }
-  }
-
-  function stopRecording() {
-    if (mediaRecorder && isRecording) {
-      mediaRecorder.stop()
-      isRecording = false
-      audioButton.classList.remove("recording")
-      recordingIndicator.style.display = "none"
-      messageInput.disabled = false
-      sendButton.disabled = messageInput.value.trim() === ""
-    }
-  }
 
   // Inicializar estado do botão
   if (sendButton && messageInput) {
     sendButton.disabled = messageInput.value.trim() === ""
-  }
-
-  function sendAudioToBackend(audioBlob) {
-    const formData = new FormData()
-    formData.append("audio", audioBlob, "recording.wav") // o nome e extensão são importantes
-
-    fetch("/speech", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Texto reconhecido:", data.text)
-        // Opcional: mostrar o texto reconhecido no chat
-        if (data.text) {
-          addMessage(data.text, "user")
-        }
-      })
-      .catch((err) => {
-        console.error("Erro ao enviar áudio:", err)
-        // Opcional: mostrar erro para o usuário
-        addMessage("Erro ao processar áudio", "bot")
-      })
   }
 
   function startListening() {
@@ -320,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function sendMessageToBackend(message) {
-    fetch("/chat", {
+    return fetch("/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -331,17 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Mensagem enviada para o backend:", data)
-        // Opcional: usar a resposta do backend em vez da resposta simulada
-        // if (data.response) {
-        //   hideTypingIndicator()
-        //   addMessage(data.response, "bot")
-        // }
-      })
       .catch((error) => {
         console.error("Erro ao enviar mensagem para o backend:", error)
-        // Continua funcionando normalmente mesmo se o backend não estiver disponível
       })
   }
 

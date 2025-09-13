@@ -3,6 +3,7 @@
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request, abort, jsonify
 import sqlalchemy as sa
+from app.IA import responder_usuario
 from app import app, db
 from datetime import datetime, timezone
 
@@ -15,8 +16,12 @@ def chat():
     if request.method == "POST":
         data = request.json
         text = data.get("message", "")
-
-        return jsonify({"status": "ok", "text": text})
+        Resposta = responder_usuario(text)
+        if Resposta:
+            text = Resposta
+            return jsonify({"status": "ok", "text": text, "encontrado": True})
+        else:
+            return jsonify({"text": "Desculpe, Não encontrei informações específicas sobre isso na base de conhecimento. Quer que eu pense para te responder ou já abrir um chamado com base no chat?", "encontrado": False})     
     else:
         return render_template('chat.html', render_sidebar=True)
 
