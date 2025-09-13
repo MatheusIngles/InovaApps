@@ -242,8 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-
-// APAGA ISSO DEPOIS É SO UMA MENSAGEM SOU UM MENSAGEIRO
 function sendAudioToBackend(audioBlob) {
   const formData = new FormData();
   formData.append("audio", audioBlob, "recording.wav"); // o nome e extensão são importantes
