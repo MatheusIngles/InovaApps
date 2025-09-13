@@ -17,6 +17,8 @@ class Ticket(db.Model):
         sa.DateTime, default=lambda: datetime.now(timezone.utc)
     )
     status: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
+    code: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
+    priority: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
 
 
 class Chat(db.Model):
