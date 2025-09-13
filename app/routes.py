@@ -6,6 +6,7 @@ import sqlalchemy as sa
 from app.IA import responder_usuario
 from app import app, db
 from datetime import datetime, timezone
+from app.models import Ticket, Chat, Message, ApplicationSettings
 
 import tempfile
 
@@ -31,7 +32,22 @@ def chat_preview():
 
 @app.route('/chamados')
 def chamados():
-    return render_template('chamados.html', render_sidebar=True)
+    tickets = Ticket.query.all()
+
+    tickets_data = [
+        {
+            "code": t.code,
+            "title": t.title,
+            "description": t.description,
+            "status": t.status,
+            "priority": t.priority,
+            "date": t.created_at.strftime("%d/%m/%Y"),
+            "time": t.created_at.strftime("%H:%M"),
+        }
+        for t in tickets
+    ]
+
+    return render_template('chamados.html', render_sidebar=True, tickets=tickets_data)
 
 @app.route('/chamados_preview')
 def chamados_preview():

@@ -10,57 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBody = document.getElementById("modalBody")
   const overlay = document.getElementById("overlay")
 
-  // Dados de exemplo dos chamados
-  const tickets = [
-    {
-      id: "TK-001",
-      title: "Problema com login no sistema",
-      description: "Não consigo fazer login na plataforma. Aparece erro de credenciais inválidas.",
-      status: "aberto",
-      priority: "alta",
-      date: "2024-01-15",
-      time: "14:30",
-    },
-    {
-      id: "TK-002",
-      title: "Solicitação de nova funcionalidade",
-      description: "Gostaria de solicitar a implementação de relatórios personalizados.",
-      status: "em-andamento",
-      priority: "media",
-      date: "2024-01-14",
-      time: "09:15",
-    },
-    {
-      id: "TK-003",
-      title: "Bug na página de relatórios",
-      description: "Os gráficos não estão carregando corretamente na página de relatórios.",
-      status: "resolvido",
-      priority: "baixa",
-      date: "2024-01-13",
-      time: "16:45",
-    },
-    {
-      id: "TK-004",
-      title: "Erro crítico no sistema de pagamentos",
-      description: "Sistema de pagamentos apresentando falhas. Transações não estão sendo processadas.",
-      status: "aberto",
-      priority: "urgente",
-      date: "2024-01-15",
-      time: "11:20",
-    },
-    {
-      id: "TK-005",
-      title: "Dúvida sobre configuração",
-      description: "Como configurar as notificações por email no sistema?",
-      status: "fechado",
-      priority: "baixa",
-      date: "2024-01-12",
-      time: "13:10",
-    },
-  ]
 
   // Renderizar tickets
-  function renderTickets(ticketsToRender = tickets) {
+  function renderTickets(ticketsToRender) {
     ticketsContainer.innerHTML = ""
 
     if (ticketsToRender.length === 0) {

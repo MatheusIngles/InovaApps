@@ -82,5 +82,12 @@
 
     <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/chamados.js') }}"></script>
+    <script>
+        tickets_js = {{ tickets | tojson }}
+
+        window.onload = function() {
+            renderTickets(tickets_js)
+        }
+    </script>
 </body>
 </html>

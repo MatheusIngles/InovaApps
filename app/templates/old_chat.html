@@ -37,15 +37,27 @@
         <div class="chat-container">
             <div class="messages-container" id="messagesContainer">
                 {% for message in messages %}
-                <div class="message bot-message">
-                    <div class="message-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="message-content">
-                        <p>Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?</p>
-                        <span class="message-time">Agora</span>
-                    </div>
-                </div>
+                    {% if message["message_type"] == "bot" %}
+                        <div class="message bot-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>{{ message["content"] }}</p>
+                                <span class="message-time">{{ message["created_at"] }}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="message user-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>{{ message["content"] }}</p>
+                                <span class="message-time">{{ message["created_at"] }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 
