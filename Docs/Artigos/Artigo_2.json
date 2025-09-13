@@ -1,1 +1,58 @@
-// Receita de bolos \ alimentação
+[
+  {
+    "topico": "receita bolo de chocolate simples",
+    "resposta": "Bolo de Chocolate: 2 xícaras de farinha, 1 xícara de açúcar, 1 xícara de chocolate em pó, 1 xícara de leite, 1/2 xícara de óleo, 2 ovos, 1 colher de sopa de fermento. Misture tudo e asse por 30-40 min a 180°C."
+  },
+  {
+    "topico": "como fazer bolo de cenoura",
+    "resposta": "Bolo de Cenoura: Bata 3 cenouras, 3 ovos, 1 xícara de óleo e 2 xícaras de açúcar no liquidificador. Misture com 2 xícaras de farinha e 1 colher de fermento. Asse por 40 min a 180°C."
+  },
+  {
+    "topico": "receita bolo de fubá",
+    "resposta": "Bolo de Fubá: 2 xícaras de fubá, 1 xícara de farinha, 3 ovos, 2 xícaras de leite, 1 xícara de óleo, 1 colher de fermento. Bata tudo e asse por 35 min a 180°C."
+  },
+  {
+    "topico": "bolo de laranja fofinho",
+    "resposta": "Bolo de Laranja: Suco de 2 laranjas, raspas da casca, 3 ovos, 2 xícaras de farinha, 1 xícara de açúcar, 1/2 xícara de óleo, 1 colher de fermento. Asse por 30-40 min."
+  },
+  {
+    "topico": "como fazer pão caseiro",
+    "resposta": "Pão Caseiro: 500g farinha, 10g fermento biológico, 1 colher de sal, 1 colher de açúcar, 300ml água morna. Sove, deixe crescer 1h, forme os pães e asse por 25 min a 200°C."
+  },
+  {
+    "topico": "receita bolo de milho",
+    "resposta": "Bolo de Milho: 1 lata de milho verde (escorrido), 3 ovos, 1 xícara de leite, 1 xícara de açúcar, 1/2 xícara de óleo, 1 xícara de fubá, 1 colher de fermento. Bata no liquidificador e asse por 40 min."
+  },
+  {
+    "topico": "bolo de banana saudável",
+    "resposta": "Bolo de Banana: 4 bananas maduras amassadas, 2 ovos, 1/2 xícara de aveia, 1/4 xícara de mel, 1 colher de fermento, canela a gosto. Asse por 25 min a 180°C."
+  },
+  {
+    "topico": "como fazer brownie",
+    "resposta": "Brownie: 200g chocolate meio amargo, 150g manteiga, 3 ovos, 1 xícara de açúcar, 1/2 xícara de farinha, 1/2 xícara de cacau em pó. Asse por 25-30 min a 180°C."
+  },
+  {
+    "topico": "receita bolo de limão",
+    "resposta": "Bolo de Limão: 2 xícaras farinha, 1 xícara açúcar, 1/2 xícara óleo, 3 ovos, suco de 2 limões, raspas, 1 colher fermento. Asse e faça calda com suco de limão e açúcar."
+  },
+  {
+    "topico": "bolo de café da manhã",
+    "resposta": "Bolo Simples: 2 xícaras farinha, 1 xícara açúcar, 1 xícara leite, 1/2 xícara óleo, 3 ovos, 1 colher fermento. Pode adicionar coco, canela ou frutas."
+  },
+  {
+    "topico": "como umedecer bolo seco",
+    "resposta": "Passe calda simples (açúcar + água) ainda quente sobre o bolo ou use leite condensado diluído com leite para pincelar."
+  },
+  {
+    "topico": "bolo sem glúten",
+    "resposta": "Substitua farinha comum por: mix de farinha de arroz, polvilho doce e amido de milho (proporção 2:1:1) + 1 colher de goma xantana."
+  },
+  {
+    "topico": "bolo sem lactose",
+    "resposta": "Use leite vegetal (amêndoas, aveia, coco) e substitua manteiga por óleo vegetal ou margarina sem lactose."
+  },
+  {
+    "topico": "como decorar bolo simples",
+    "resposta": "Use: chocolate granulado, coco ralado, frutas frescas, calda de chocolate, açúcar de confeiteiro ou chantilly caseiro."
+  }
+]
