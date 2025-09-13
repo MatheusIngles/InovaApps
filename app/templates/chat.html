@@ -1,1 +1,77 @@
 <!-- app/templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Atendimento - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header do Chat -->
+        <header class="chat-header">
+            <div class="contact-info">
+                <div class="avatar">
+                    <img src="/placeholder.svg?height=40&width=40" alt="Atendente">
+                </div>
+                <div class="contact-details">
+                    <h3>Atendimento Automático</h3>
+                    <span class="status">Online</span>
+                </div>
+            </div>
+            
+            <!-- Menu Hamburger -->
+            <button class="hamburger-menu" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <!-- Menu Lateral -->
+        <nav class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <h2>Menu</h2>
+                <button class="close-menu" id="closeMenuBtn">&times;</button>
+            </div>
+            <ul class="menu-items">
+                <li><a href="index.html" class="active">Chat</a></li>
+                <li><a href="meus-chamados.html">Meus Chamados</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customizacao.html">Customização</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overlay para fechar menu -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <!-- Área de Mensagens -->
+        <main class="messages-area" id="messagesArea">
+            <div class="message bot-message">
+                <div class="message-content">
+                    <p>Olá! Bem-vindo ao nosso atendimento automático. Como posso ajudá-lo hoje?</p>
+                    <span class="message-time">14:30</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Área de Input -->
+        <footer class="input-area">
+            <div class="input-container">
+                <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500">
+                <button class="send-button" id="sendBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts/chat.js"></script>
+    <script src="scripts/navigation.js"></script>
+</body>
+</html>

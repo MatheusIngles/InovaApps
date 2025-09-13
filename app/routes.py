@@ -6,13 +6,22 @@ import sqlalchemy as sa
 from app import app, db
 from datetime import datetime, timezone
 
-
-img = {'src': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5wXuP78VDV_ZMEMJG2VUi1bZNEbUBWe630g&s',
-        'alt': 'Imagem de um Lapras'}
-
-
 @app.route('/')
-@app.route('/index')
 def index():
-    return render_template("index.html")
+    return render_template('chat.html')
 
+@app.route('/chat')
+def landing():
+    return render_template('chat.html')
+
+@app.route('/chamados')
+def landing():
+    return render_template('chamados.html')
+
+@app.route('/dashboard')
+def landing():
+    return render_template('dashboard.html')
+
+@app.route('/custom')
+def landing():
+    return render_template('custom.html')
