@@ -10,9 +10,16 @@ import tempfile
 
 @app.route('/')
 @app.route('/index')
-@app.route('/chat')
+@app.route('/chat', methods=["GET", "POST"])
 def chat():
-    return render_template('chat.html')
+    if request.method == "POST":
+        data = request.json
+        text = data.get("message", "")
+        print("Texto recebido:", f"'{text}'")
+        # aqui você poderia salvar no banco, processar, etc.
+        return jsonify({"status": "ok", "text": text})
+    else:
+        return render_template('chat.html')
 
 @app.route('/chamados')
 def chamados():
@@ -26,13 +33,6 @@ def dashboard():
 def custom():
     return render_template('custom.html')
 
-@app.route("/submit_text", methods=["POST"])
-def submit_text():
-    data = request.json
-    text = data.get("text", "")
-    print("Texto recebido:", text)
-    # aqui você poderia salvar no banco, processar, etc.
-    print(jsonify({"status": "ok", "text": text}))
 
 @app.route("/erro_404")
 def erro_404():
