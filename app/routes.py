@@ -8,6 +8,9 @@ from app import app, db
 from datetime import datetime, timezone
 from app.models import Ticket, Chat, Message, ApplicationSettings
 
+import random
+import string
+
 import tempfile
 
 @app.route('/')
@@ -46,8 +49,27 @@ def criar_chamado():
 
 @app.route('/add_ticket_database', methods=["POST"])
 def add_ticket_database():
-    
-    redirect(url_for('/chamados'))
+    title = request.form.get("title")
+    description = request.form.get("description")
+    priority = request.form.get("priority")
+
+    letters = ''.join(random.choices(string.ascii_uppercase, k=2))
+    numbers = ''.join(random.choices(string.digits, k=3))
+    code = f"{letters}-{numbers}"
+
+    new_ticket = Ticket(
+        title=title,
+        description=description,
+        status="aberto",
+        code=code,
+        priority=priority
+    )
+
+    db.session.add(new_ticket)
+
+    db.session.commit()
+
+    redirect(url_for('chamados'))
 
 @app.route('/chamados')
 def chamados():
