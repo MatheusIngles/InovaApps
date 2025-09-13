@@ -3,234 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Atendimento - Customização</title>
+    <title>Central de Atendimento - Customização Avançada</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="app-container">
-        <!-- Novo header com notificação de feedback -->
-        <div class="notification-banner" id="notificationBanner">
-            <i class="fas fa-check-circle"></i>
-            <span id="notificationText">Alterações salvas com sucesso!</span>
-            <button class="close-notification" onclick="hideNotification()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <!-- Header -->
-        <header class="chat-header">
-            <div class="header-left">
-                <h3>Customização Avançada</h3>
-                <span class="subtitle">Personalize sua central de atendimento</span>
+<body class="bg-light">
+    <!-- Toast de Notificação -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+        <div id="customToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-palette text-primary me-2"></i>
+                <strong class="me-auto">Customização</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
             </div>
-            <div class="header-right">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Sidebar Menu -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h3>Menu</h3>
-                <button class="close-sidebar" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">
-                    <i class="fas fa-comments"></i>
-                    <span>Chat</span>
-                </a>
-                <a href="meus-chamados.html" class="nav-item">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Meus Chamados</span>
-                </a>
-                <a href="dashboard.html" class="nav-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="customizacao.html" class="nav-item active">
-                    <i class="fas fa-palette"></i>
-                    <span>Customização</span>
-                </a>
-            </nav>
-        </div>
-
-        <!-- Layout completamente redesenhado com split-screen moderno -->
-        <div class="main-content">
-            <div class="customization-layout">
-                <!-- Painel de Controles Redesenhado -->
-                <div class="controls-panel">
-                    <div class="controls-header">
-                        <h4><i class="fas fa-sliders-h"></i> Controles de Personalização</h4>
-                        <p>Ajuste as configurações e veja as mudanças em tempo real</p>
-                    </div>
-
-                    <div class="controls-content">
-                        <!-- Seção de Cores Melhorada -->
-                        <div class="control-section">
-                            <div class="section-header">
-                                <i class="fas fa-palette"></i>
-                                <h5>Paleta de Cores</h5>
-                            </div>
-                            <div class="color-grid">
-                                <div class="color-control">
-                                    <label>Primária</label>
-                                    <div class="color-input-wrapper">
-                                        <input type="color" id="primaryColor" value="#15803d">
-                                        <span class="color-value">#15803d</span>
-                                    </div>
-                                </div>
-                                <div class="color-control">
-                                    <label>Secundária</label>
-                                    <div class="color-input-wrapper">
-                                        <input type="color" id="secondaryColor" value="#84cc16">
-                                        <span class="color-value">#84cc16</span>
-                                    </div>
-                                </div>
-                                <div class="color-control">
-                                    <label>Fundo</label>
-                                    <div class="color-input-wrapper">
-                                        <input type="color" id="backgroundColor" value="#f0fdf4">
-                                        <span class="color-value">#f0fdf4</span>
-                                    </div>
-                                </div>
-                                <div class="color-control">
-                                    <label>Texto</label>
-                                    <div class="color-input-wrapper">
-                                        <input type="color" id="textColor" value="#374151">
-                                        <span class="color-value">#374151</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Seção de Tipografia Melhorada -->
-                        <div class="control-section">
-                            <div class="section-header">
-                                <i class="fas fa-font"></i>
-                                <h5>Tipografia</h5>
-                            </div>
-                            <div class="typography-controls">
-                                <div class="control-item">
-                                    <label>Fonte dos Títulos</label>
-                                    <select id="headingFont">
-                                        <option value="'Playfair Display', serif">Playfair Display</option>
-                                        <option value="'Roboto', sans-serif">Roboto</option>
-                                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                                        <option value="'Lato', sans-serif">Lato</option>
-                                    </select>
-                                </div>
-                                <div class="control-item">
-                                    <label>Fonte do Corpo</label>
-                                    <select id="bodyFont">
-                                        <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
-                                        <option value="'Roboto', sans-serif">Roboto</option>
-                                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                                        <option value="Arial, sans-serif">Arial</option>
-                                    </select>
-                                </div>
-                                <div class="control-item">
-                                    <label>Tamanho Base</label>
-                                    <div class="slider-control">
-                                        <input type="range" id="fontSize" min="12" max="18" value="14">
-                                        <span id="fontSizeValue">14px</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Seção de Layout Melhorada -->
-                        <div class="control-section">
-                            <div class="section-header">
-                                <i class="fas fa-th-large"></i>
-                                <h5>Layout & Espaçamento</h5>
-                            </div>
-                            <div class="layout-controls">
-                                <div class="control-item">
-                                    <label>Bordas Arredondadas</label>
-                                    <div class="slider-control">
-                                        <input type="range" id="borderRadius" min="0" max="20" value="8">
-                                        <span id="borderRadiusValue">8px</span>
-                                    </div>
-                                </div>
-                                <div class="control-item">
-                                    <label>Espaçamento Interno</label>
-                                    <div class="slider-control">
-                                        <input type="range" id="spacing" min="8" max="32" value="16">
-                                        <span id="spacingValue">16px</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Botões de Ação Redesenhados -->
-                        <div class="action-section">
-                            <button id="saveBtn" class="btn-primary">
-                                <i class="fas fa-save"></i>
-                                Salvar Alterações
-                            </button>
-                            <button id="resetBtn" class="btn-secondary">
-                                <i class="fas fa-undo"></i>
-                                Restaurar Padrão
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Painel de Preview com páginas reais em abas -->
-                <div class="preview-panel">
-                    <div class="preview-header">
-                        <h4><i class="fas fa-eye"></i> Preview em Tempo Real</h4>
-                        <div class="preview-tabs">
-                            <button class="tab-btn active" data-tab="chat">
-                                <i class="fas fa-comments"></i>
-                                Chat
-                            </button>
-                            <button class="tab-btn" data-tab="tickets">
-                                <i class="fas fa-ticket-alt"></i>
-                                Chamados
-                            </button>
-                            <button class="tab-btn" data-tab="dashboard">
-                                <i class="fas fa-chart-bar"></i>
-                                Dashboard
-                            </button>
-                        </div>
-                        <button id="fullscreenPreview" class="btn-icon">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="preview-container">
-                        <!-- Preview do Chat -->
-                        <div class="preview-content active" id="chat-preview">
-                            <iframe src="/chat_preview" class="preview-iframe" id="chatFrame"></iframe>
-                        </div>
-                        
-                        <!-- Preview dos Chamados -->
-                        <div class="preview-content" id="tickets-preview">
-                            <iframe src="/chamados_preview" class="preview-iframe" id="ticketsFrame"></iframe>
-                        </div>
-                        
-                        <!-- Preview do Dashboard -->
-                        <div class="preview-content" id="dashboard-preview">
-                            <iframe src="dashboard_preview" class="preview-iframe" id="dashboardFrame"></iframe>
-                        </div>
-                    </div>
-                </div>
+            <div class="toast-body" id="toastMessage">
+                Configurações aplicadas com sucesso!
             </div>
         </div>
-
-        <!-- Overlay -->
-        <div class="overlay" id="overlay"></div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
+    <!-- Header Moderno -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-palette me-2"></i>
+                Customização Avançada
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/" title="Voltar ao Chat">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0 min-vh-100">
+            <!-- Painel de Controles -->
+            <div class="col-lg-4 col-xl-3 bg-white border-end shadow-sm">
+                <div class="p-4 border-bottom bg-gradient" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                    <h5 class="text-white mb-1 fw-semibold">
+                        <i class="fas fa-sliders-h me-2"></i>
+                        Controles de Personalização
+                    </h5>
+                    <p class="text-white-50 mb-0 small">Ajuste e veja mudanças em tempo real</p>
+                </div>
+
+                <div class="controls-scroll" style="height: calc(100vh - 140px); overflow-y: auto;">
+                    <!-- Seção de Cores -->
+                    <div class="p-4 border-bottom">
+                        <h6 class="fw-semibold mb-3 text-primary">
+                            <i class="fas fa-palette me-2"></i>
+                            Paleta de Cores
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-medium">Cor Primária</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" class="form-control form-control-color" id="primaryColor" value="#6366f1">
+                                    <small class="text-muted d-block mt-1" id="primaryColorValue">#6366f1</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-medium">Cor Secundária</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" class="form-control form-control-color" id="secondaryColor" value="#8b5cf6">
+                                    <small class="text-muted d-block mt-1" id="secondaryColorValue">#8b5cf6</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-medium">Cor de Fundo</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" class="form-control form-control-color" id="backgroundColor" value="#f8fafc">
+                                    <small class="text-muted d-block mt-1" id="backgroundColorValue">#f8fafc</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-medium">Cor do Texto</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" class="form-control form-control-color" id="textColor" value="#1e293b">
+                                    <small class="text-muted d-block mt-1" id="textColorValue">#1e293b</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção de Tipografia -->
+                    <div class="p-4 border-bottom">
+                        <h6 class="fw-semibold mb-3 text-primary">
+                            <i class="fas fa-font me-2"></i>
+                            Tipografia
+                        </h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium">Fonte dos Títulos</label>
+                            <select class="form-select" id="headingFont">
+                                <option value="'Poppins', sans-serif">Poppins (Moderno)</option>
+                                <option value="'Inter', sans-serif">Inter (Clean)</option>
+                                <option value="'Roboto', sans-serif">Roboto (Google)</option>
+                                <option value="'Montserrat', sans-serif">Montserrat (Elegante)</option>
+                                <option value="'Open Sans', sans-serif">Open Sans (Clássico)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium">Fonte do Corpo</label>
+                            <select class="form-select" id="bodyFont">
+                                <option value="'Inter', sans-serif">Inter (Recomendado)</option>
+                                <option value="'Roboto', sans-serif">Roboto</option>
+                                <option value="'Open Sans', sans-serif">Open Sans</option>
+                                <option value="'Lato', sans-serif">Lato</option>
+                                <option value="system-ui, sans-serif">System UI</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium">Tamanho Base</label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range me-3" id="fontSize" min="12" max="18" value="14">
+                                <span class="badge bg-light text-dark" id="fontSizeValue">14px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção de Layout -->
+                    <div class="p-4 border-bottom">
+                        <h6 class="fw-semibold mb-3 text-primary">
+                            <i class="fas fa-th-large me-2"></i>
+                            Layout & Espaçamento
+                        </h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium">Bordas Arredondadas</label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range me-3" id="borderRadius" min="0" max="20" value="8">
+                                <span class="badge bg-light text-dark" id="borderRadiusValue">8px</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-medium">Espaçamento</label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range me-3" id="spacing" min="8" max="32" value="16">
+                                <span class="badge bg-light text-dark" id="spacingValue">16px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção de Temas Predefinidos -->
+                    <div class="p-4 border-bottom">
+                        <h6 class="fw-semibold mb-3 text-primary">
+                            <i class="fas fa-swatchbook me-2"></i>
+                            Temas Predefinidos
+                        </h6>
+                        
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary btn-sm w-100 theme-preset" data-theme="modern">
+                                    <i class="fas fa-circle text-primary me-1"></i>
+                                    Moderno
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-success btn-sm w-100 theme-preset" data-theme="nature">
+                                    <i class="fas fa-circle text-success me-1"></i>
+                                    Natureza
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-warning btn-sm w-100 theme-preset" data-theme="warm">
+                                    <i class="fas fa-circle text-warning me-1"></i>
+                                    Caloroso
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-dark btn-sm w-100 theme-preset" data-theme="dark">
+                                    <i class="fas fa-circle text-dark me-1"></i>
+                                    Escuro
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="p-4">
+                        <div class="d-grid gap-2">
+                            <button id="saveBtn" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                Salvar Configurações
+                            </button>
+                            <button id="resetBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-undo me-2"></i>
+                                Restaurar Padrão
+                            </button>
+                            <button id="exportBtn" class="btn btn-outline-info">
+                                <i class="fas fa-download me-2"></i>
+                                Exportar Tema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Preview -->
+            <div class="col-lg-8 col-xl-9">
+                <div class="bg-white h-100">
+                    <!-- Header do Preview -->
+                    <div class="p-3 border-bottom bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-eye me-2 text-primary"></i>
+                                Preview em Tempo Real
+                            </h6>
+                            <div class="d-flex gap-2">
+                                <!-- Tabs de Preview -->
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="previewTab" id="chatTab" checked>
+                                    <label class="btn btn-outline-primary btn-sm" for="chatTab">
+                                        <i class="fas fa-comments me-1"></i>
+                                        Chat
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="previewTab" id="ticketsTab">
+                                    <label class="btn btn-outline-primary btn-sm" for="ticketsTab">
+                                        <i class="fas fa-ticket-alt me-1"></i>
+                                        Chamados
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="previewTab" id="dashboardTab">
+                                    <label class="btn btn-outline-primary btn-sm" for="dashboardTab">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        Dashboard
+                                    </label>
+                                </div>
+                                
+                                <button id="fullscreenBtn" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Container de Preview -->
+                    <div class="preview-container position-relative" style="height: calc(100vh - 200px);">
+                        <!-- Loading Spinner -->
+                        <div class="loading-spinner position-absolute top-50 start-50 translate-middle" id="loadingSpinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+
+                        <!-- Preview do Chat -->
+                        <div class="preview-content h-100" id="chatPreview">
+                            <iframe src="/chat" class="w-100 h-100 border-0 rounded" id="chatFrame"></iframe>
+                        </div>
+
+                        <!-- Preview dos Chamados -->
+                        <div class="preview-content h-100 d-none" id="ticketsPreview">
+                            <iframe src="/chamados" class="w-100 h-100 border-0 rounded" id="ticketsFrame"></iframe>
+                        </div>
+
+                        <!-- Preview do Dashboard -->
+                        <div class="preview-content h-100 d-none" id="dashboardPreview">
+                            <iframe src="/dashboard" class="w-100 h-100 border-0 rounded" id="dashboardFrame"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Exportação -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-download me-2"></i>
+                        Exportar Tema
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Copie o código CSS abaixo para usar este tema em outros projetos:</p>
+                    <textarea class="form-control" rows="10" id="exportedCSS" readonly></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="copyCSS">
+                        <i class="fas fa-copy me-1"></i>
+                        Copiar CSS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
 </body>
 </html>
