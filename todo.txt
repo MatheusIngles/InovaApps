@@ -1,5 +1,12 @@
-* Modificar SQLALCHEMY_DATABASE_URI em config.py
-    - Ou então nem usar sqlalchemy, a depender de como MongoDB funciona
+* Verificar questão de API gemini
 
-* Ao definir e construir o banco de dados, realizar flask-migrate e gerar
-  diretório "migrations"
+* Entender se devemos fazer:
+  > Artigo unico (um arquivo > uma receita de bolo)
+  VS
+  > Artigo multivalorado (um json "culinária", com chave de receita de bolo, chave de receita de biscoito...)
+
+* Terminar BD
+* Integrar reconhecimento de voz
+
+* Ajeitar hamburguer
+* Fazer layout
