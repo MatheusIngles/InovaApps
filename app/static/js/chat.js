@@ -184,6 +184,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
         addMessage("", "user", true, audioBlob)
 
+        sendAudioToBackend(audioBlob)
+
         // Simular resposta do bot
         setTimeout(() => {
           const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
@@ -217,43 +219,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Event listeners
-  if (sendButton) {
-    sendButton.addEventListener("click", sendMessage)
-  }
-
-  if (audioButton) {
-    audioButton.addEventListener("click", () => {
-      if (isRecording) {
-        stopRecording()
-      } else {
-        startRecording()
-      }
-    })
-  }
-
-  if (stopRecordingBtn) {
-    stopRecordingBtn.addEventListener("click", stopRecording)
-  }
-
   // Inicializar estado do botão
   if (sendButton && messageInput) {
     sendButton.disabled = messageInput.value.trim() === ""
   }
+
+  function sendAudioToBackend(audioBlob) {
+    const formData = new FormData()
+    formData.append("audio", audioBlob, "recording.wav") // o nome e extensão são importantes
+
+    fetch("/speech", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Texto reconhecido:", data.text)
+        // Opcional: mostrar o texto reconhecido no chat
+        if (data.text) {
+          addMessage(data.text, "user")
+        }
+      })
+      .catch((err) => {
+        console.error("Erro ao enviar áudio:", err)
+        // Opcional: mostrar erro para o usuário
+        addMessage("Erro ao processar áudio", "bot")
+      })
+  }
 })
-
-function sendAudioToBackend(audioBlob) {
-  const formData = new FormData();
-  formData.append("audio", audioBlob, "recording.wav"); // o nome e extensão são importantes
-
-  fetch("/speech", {
-    method: "POST",
-    body: formData,
-  })
-  .then((res) => res.json())
-  .then((data) => {
-    console.log("Texto reconhecido:", data.text);
-    addMessage(data.text, "user"); // opcional: mostrar no chat
-  })
-  .catch((err) => console.error(err));
-}
