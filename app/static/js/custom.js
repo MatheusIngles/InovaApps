@@ -1,48 +1,207 @@
-// Funcionalidade da página de customização
+// JavaScript completamente redesenhado para a nova interface de customização
 document.addEventListener("DOMContentLoaded", () => {
-  // Elementos do DOM
   const primaryColorInput = document.getElementById("primaryColor")
   const secondaryColorInput = document.getElementById("secondaryColor")
   const backgroundColorInput = document.getElementById("backgroundColor")
   const textColorInput = document.getElementById("textColor")
-  const fontFamilySelect = document.getElementById("fontFamily")
+  const headingFontSelect = document.getElementById("headingFont")
+  const bodyFontSelect = document.getElementById("bodyFont")
   const fontSizeRange = document.getElementById("fontSize")
   const fontSizeValue = document.getElementById("fontSizeValue")
   const borderRadiusRange = document.getElementById("borderRadius")
   const borderRadiusValue = document.getElementById("borderRadiusValue")
   const spacingRange = document.getElementById("spacing")
   const spacingValue = document.getElementById("spacingValue")
-  const customCSSTextarea = document.getElementById("customCSS")
-  const previewBtn = document.getElementById("previewBtn")
   const saveBtn = document.getElementById("saveBtn")
   const resetBtn = document.getElementById("resetBtn")
-  const previewContainer = document.getElementById("previewContainer")
   const fullscreenPreview = document.getElementById("fullscreenPreview")
+  const notificationBanner = document.getElementById("notificationBanner")
+  const notificationText = document.getElementById("notificationText")
 
-  // Configurações padrão
+  const tabButtons = document.querySelectorAll(".tab-btn")
+  const previewContents = document.querySelectorAll(".preview-content")
+  const iframes = document.querySelectorAll(".preview-iframe")
+
+  // Configurações padrão baseadas no design brief
   const defaultSettings = {
-    primaryColor: "#007bff",
-    secondaryColor: "#6c757d",
-    backgroundColor: "#ffffff",
-    textColor: "#333333",
-    fontFamily: "Arial, sans-serif",
+    primaryColor: "#15803d",
+    secondaryColor: "#84cc16",
+    backgroundColor: "#f0fdf4",
+    textColor: "#374151",
+    headingFont: "'Playfair Display', serif",
+    bodyFont: "'Source Sans Pro', sans-serif",
     fontSize: 14,
     borderRadius: 8,
     spacing: 16,
-    customCSS: "",
+  }
+
+  const pageSpecificSettings = {
+    chat: {
+      primaryColor: "#15803d",
+      secondaryColor: "#84cc16",
+      backgroundColor: "#f0fdf4",
+      textColor: "#374151",
+      headingFont: "'Playfair Display', serif",
+      bodyFont: "'Source Sans Pro', sans-serif",
+      fontSize: 14,
+      borderRadius: 8,
+      spacing: 16,
+    },
+    tickets: {
+      primaryColor: "#1e40af",
+      secondaryColor: "#3b82f6",
+      backgroundColor: "#eff6ff",
+      textColor: "#1f2937",
+      headingFont: "'Playfair Display', serif",
+      bodyFont: "'Source Sans Pro', sans-serif",
+      fontSize: 14,
+      borderRadius: 6,
+      spacing: 18,
+    },
+    dashboard: {
+      primaryColor: "#7c3aed",
+      secondaryColor: "#a855f7",
+      backgroundColor: "#faf5ff",
+      textColor: "#374151",
+      headingFont: "'Playfair Display', serif",
+      bodyFont: "'Source Sans Pro', sans-serif",
+      fontSize: 15,
+      borderRadius: 10,
+      spacing: 20,
+    },
+  }
+
+  let currentPage = "chat"
+
+  function initializeTabs() {
+    tabButtons.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        // Remove active de todas as abas
+        tabButtons.forEach((tab) => tab.classList.remove("active"))
+        previewContents.forEach((content) => content.classList.remove("active"))
+
+        // Ativa a aba clicada
+        btn.classList.add("active")
+        previewContents[index].classList.add("active")
+
+        // Carrega configurações específicas da página
+        const pageName = btn.getAttribute("data-tab")
+        loadPageSettings(pageName)
+
+        // Aplica customizações ao iframe ativo após um delay
+        setTimeout(() => {
+          applyCustomizationsToIframe(iframes[index])
+        }, 200)
+      })
+    })
+  }
+
+  function applyCustomizationsToIframe(iframe) {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+      const settings = getCurrentSettings()
+
+      // Criar ou atualizar estilo customizado no iframe
+      let customStyle = iframeDoc.getElementById("customizationStyles")
+      if (!customStyle) {
+        customStyle = iframeDoc.createElement("style")
+        customStyle.id = "customizationStyles"
+        iframeDoc.head.appendChild(customStyle)
+      }
+
+      // CSS personalizado para aplicar no iframe
+      customStyle.textContent = `
+        :root {
+          --primary-color: ${settings.primaryColor} !important;
+          --secondary-color: ${settings.secondaryColor} !important;
+          --background-light: ${settings.backgroundColor} !important;
+          --text-primary: ${settings.textColor} !important;
+          --border-radius: ${settings.borderRadius}px !important;
+        }
+        
+        body {
+          font-family: ${settings.bodyFont} !important;
+          font-size: ${settings.fontSize}px !important;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+          font-family: ${settings.headingFont} !important;
+        }
+        
+        .chat-header, .btn-primary, .send-btn {
+          background-color: ${settings.primaryColor} !important;
+        }
+        
+        .btn-secondary, .audio-btn {
+          background-color: ${settings.secondaryColor} !important;
+        }
+        
+        .user-message .message-content {
+          background-color: ${settings.primaryColor} !important;
+          border-radius: ${settings.borderRadius}px !important;
+        }
+        
+        .bot-message .message-content {
+          background-color: white !important;
+          color: ${settings.textColor} !important;
+          border-radius: ${settings.borderRadius}px !important;
+          border: 1px solid ${settings.secondaryColor}40 !important;
+        }
+        
+        .customization-section, .ticket-card, .dashboard-card {
+          padding: ${settings.spacing}px !important;
+          border-radius: ${settings.borderRadius}px !important;
+        }
+        
+        input, select, textarea {
+          border-radius: ${settings.borderRadius}px !important;
+        }
+      `
+    } catch (error) {
+      console.log("Não foi possível aplicar customizações ao iframe:", error)
+    }
+  }
+
+  function updateColorValues() {
+    const colorInputs = document.querySelectorAll('input[type="color"]')
+    colorInputs.forEach((input) => {
+      const valueSpan = input.parentElement.querySelector(".color-value")
+      if (valueSpan) {
+        valueSpan.textContent = input.value.toUpperCase()
+        input.addEventListener("input", () => {
+          valueSpan.textContent = input.value.toUpperCase()
+          updateAllPreviews()
+        })
+      }
+    })
   }
 
   // Carregar configurações salvas
-  function loadSettings() {
-    const savedSettings = localStorage.getItem("customizationSettings")
+  function loadPageSettings(pageName) {
+    currentPage = pageName
+    const savedSettings = localStorage.getItem(`customizationSettings_${pageName}`)
+    let settings
+
     if (savedSettings) {
-      const settings = JSON.parse(savedSettings)
-      applySettings(settings)
-      updateInputs(settings)
+      settings = JSON.parse(savedSettings)
     } else {
-      updateInputs(defaultSettings)
+      settings = pageSpecificSettings[pageName] || defaultSettings
     }
-    updatePreview()
+
+    updateInputs(settings)
+    updateAllPreviews()
+
+    // Feedback visual da mudança de página
+    showNotification(`Carregadas configurações da página: ${getPageDisplayName(pageName)}`, "info")
+  }
+
+  function getPageDisplayName(pageName) {
+    const names = {
+      chat: "Chat",
+      tickets: "Chamados",
+      dashboard: "Dashboard",
+    }
+    return names[pageName] || pageName
   }
 
   // Atualizar inputs com as configurações
@@ -51,7 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (secondaryColorInput) secondaryColorInput.value = settings.secondaryColor
     if (backgroundColorInput) backgroundColorInput.value = settings.backgroundColor
     if (textColorInput) textColorInput.value = settings.textColor
-    if (fontFamilySelect) fontFamilySelect.value = settings.fontFamily
+    if (headingFontSelect) headingFontSelect.value = settings.headingFont
+    if (bodyFontSelect) bodyFontSelect.value = settings.bodyFont
     if (fontSizeRange) {
       fontSizeRange.value = settings.fontSize
       if (fontSizeValue) fontSizeValue.textContent = settings.fontSize + "px"
@@ -64,7 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
       spacingRange.value = settings.spacing
       if (spacingValue) spacingValue.textContent = settings.spacing + "px"
     }
-    if (customCSSTextarea) customCSSTextarea.value = settings.customCSS
+
+    updateColorValues()
   }
 
   // Obter configurações atuais dos inputs
@@ -74,144 +235,70 @@ document.addEventListener("DOMContentLoaded", () => {
       secondaryColor: secondaryColorInput?.value || defaultSettings.secondaryColor,
       backgroundColor: backgroundColorInput?.value || defaultSettings.backgroundColor,
       textColor: textColorInput?.value || defaultSettings.textColor,
-      fontFamily: fontFamilySelect?.value || defaultSettings.fontFamily,
+      headingFont: headingFontSelect?.value || defaultSettings.headingFont,
+      bodyFont: bodyFontSelect?.value || defaultSettings.bodyFont,
       fontSize: Number.parseInt(fontSizeRange?.value) || defaultSettings.fontSize,
       borderRadius: Number.parseInt(borderRadiusRange?.value) || defaultSettings.borderRadius,
       spacing: Number.parseInt(spacingRange?.value) || defaultSettings.spacing,
-      customCSS: customCSSTextarea?.value || defaultSettings.customCSS,
     }
   }
 
-  // Aplicar configurações
-  function applySettings(settings) {
-    const root = document.documentElement
-
-    // Aplicar variáveis CSS
-    root.style.setProperty("--primary-color", settings.primaryColor)
-    root.style.setProperty("--secondary-color", settings.secondaryColor)
-    root.style.setProperty("--white", settings.backgroundColor)
-    root.style.setProperty("--gray-800", settings.textColor)
-    root.style.setProperty("--border-radius", settings.borderRadius + "px")
-
-    // Aplicar fonte
-    document.body.style.fontFamily = settings.fontFamily
-    document.body.style.fontSize = settings.fontSize + "px"
-
-    // Aplicar espaçamento (exemplo nos cards)
-    const cards = document.querySelectorAll(".customization-section")
-    cards.forEach((card) => {
-      card.style.padding = settings.spacing + "px"
+  function updateAllPreviews() {
+    iframes.forEach((iframe) => {
+      // Aguarda o iframe carregar antes de aplicar customizações
+      if (iframe.contentDocument) {
+        applyCustomizationsToIframe(iframe)
+      } else {
+        iframe.addEventListener("load", () => {
+          applyCustomizationsToIframe(iframe)
+        })
+      }
     })
-
-    // Aplicar CSS personalizado
-    let customStyleElement = document.getElementById("customStyles")
-    if (!customStyleElement) {
-      customStyleElement = document.createElement("style")
-      customStyleElement.id = "customStyles"
-      document.head.appendChild(customStyleElement)
-    }
-    customStyleElement.textContent = settings.customCSS
   }
 
-  function updatePreview() {
-    const settings = getCurrentSettings()
+  // Função para mostrar notificações com diferentes tipos
+  function showNotification(message, type = "success") {
+    const banner = notificationBanner
+    const text = notificationText
 
-    if (previewContainer) {
-      // Aplicar configurações gerais ao preview
-      previewContainer.style.fontFamily = settings.fontFamily
-      previewContainer.style.fontSize = settings.fontSize + "px"
+    // Remove classes de tipo anteriores
+    banner.classList.remove("success", "info", "warning", "error")
+    banner.classList.add(type)
 
-      // Atualizar header do chat
-      const chatHeader = previewContainer.querySelector(".preview-chat-header")
-      if (chatHeader) {
-        chatHeader.style.backgroundColor = settings.primaryColor
-        chatHeader.style.color = settings.backgroundColor
-      }
+    text.textContent = message
+    banner.classList.add("show")
 
-      // Atualizar avatar do usuário
-      const userAvatar = previewContainer.querySelector(".user-avatar")
-      if (userAvatar) {
-        userAvatar.style.backgroundColor = settings.primaryColor
-      }
+    setTimeout(() => {
+      hideNotification()
+    }, 4000)
+  }
 
-      // Atualizar mensagens do usuário
-      const userMessages = previewContainer.querySelectorAll(".user-message .message-content")
-      userMessages.forEach((msg) => {
-        msg.style.backgroundColor = settings.primaryColor
-        msg.style.color = settings.backgroundColor
-        msg.style.borderRadius = settings.borderRadius + "px"
-      })
-
-      // Atualizar mensagens do bot
-      const botMessages = previewContainer.querySelectorAll(".bot-message .message-content")
-      botMessages.forEach((msg) => {
-        msg.style.backgroundColor = settings.backgroundColor
-        msg.style.color = settings.textColor
-        msg.style.borderRadius = settings.borderRadius + "px"
-        msg.style.border = `1px solid ${settings.secondaryColor}40`
-      })
-
-      // Atualizar botões de exemplo
-      const primaryButtons = previewContainer.querySelectorAll(".btn-primary")
-      primaryButtons.forEach((btn) => {
-        btn.style.backgroundColor = settings.primaryColor
-        btn.style.borderColor = settings.primaryColor
-        btn.style.borderRadius = settings.borderRadius + "px"
-        btn.style.padding = settings.spacing / 2 + "px " + settings.spacing + "px"
-      })
-
-      const secondaryButtons = previewContainer.querySelectorAll(".btn-secondary")
-      secondaryButtons.forEach((btn) => {
-        btn.style.backgroundColor = settings.secondaryColor
-        btn.style.borderColor = settings.secondaryColor
-        btn.style.borderRadius = settings.borderRadius + "px"
-        btn.style.padding = settings.spacing / 2 + "px " + settings.spacing + "px"
-      })
-
-      // Atualizar card de exemplo
-      const previewCard = previewContainer.querySelector(".preview-card")
-      if (previewCard) {
-        previewCard.style.borderRadius = settings.borderRadius + "px"
-        previewCard.style.padding = settings.spacing + "px"
-        previewCard.style.borderColor = settings.secondaryColor + "40"
-      }
-
-      // Atualizar input de exemplo
-      const previewInput = previewContainer.querySelector(".preview-input-area input")
-      if (previewInput) {
-        previewInput.style.borderRadius = settings.borderRadius * 2 + "px"
-        previewInput.style.borderColor = settings.secondaryColor + "60"
-      }
-
-      // Atualizar botões de áudio e envio
-      const sendBtn = previewContainer.querySelector(".send-btn")
-      if (sendBtn) {
-        sendBtn.style.backgroundColor = settings.primaryColor
-      }
-
-      const audioBtn = previewContainer.querySelector(".audio-btn")
-      if (audioBtn) {
-        audioBtn.style.backgroundColor = settings.secondaryColor
-      }
+  function hideNotification() {
+    if (notificationBanner) {
+      notificationBanner.classList.remove("show")
     }
   }
 
   // Salvar configurações
   function saveSettings() {
     const settings = getCurrentSettings()
-    localStorage.setItem("customizationSettings", JSON.stringify(settings))
-    applySettings(settings)
-    showNotification("Configurações salvas com sucesso!", "success")
+    localStorage.setItem(`customizationSettings_${currentPage}`, JSON.stringify(settings))
+    showNotification(`Configurações da página ${getPageDisplayName(currentPage)} salvas!`, "success")
   }
 
   // Restaurar configurações padrão
   function resetSettings() {
-    if (confirm("Tem certeza que deseja restaurar as configurações padrão? Esta ação não pode ser desfeita.")) {
-      localStorage.removeItem("customizationSettings")
-      updateInputs(defaultSettings)
-      applySettings(defaultSettings)
-      updatePreview()
-      showNotification("Configurações restauradas para o padrão!", "info")
+    const pageName = getPageDisplayName(currentPage)
+    if (
+      confirm(
+        `Tem certeza que deseja restaurar as configurações padrão da página ${pageName}? Esta ação não pode ser desfeita.`,
+      )
+    ) {
+      localStorage.removeItem(`customizationSettings_${currentPage}`)
+      const defaultPageSettings = pageSpecificSettings[currentPage] || defaultSettings
+      updateInputs(defaultPageSettings)
+      updateAllPreviews()
+      showNotification(`Configurações da página ${pageName} restauradas!`, "info")
     }
   }
 
@@ -226,145 +313,66 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Mostrar notificação
-  function showNotification(message, type = "success") {
-    const notification = document.createElement("div")
-    const colors = {
-      success: "#28a745",
-      error: "#dc3545",
-      info: "#17a2b8",
-      warning: "#ffc107",
-    }
-
-    notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${colors[type]};
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 10000;
-            animation: slideInRight 0.3s ease;
-            max-width: 300px;
-        `
-    notification.textContent = message
-    document.body.appendChild(notification)
-
-    setTimeout(() => {
-      notification.style.animation = "slideOutRight 0.3s ease"
-      setTimeout(() => notification.remove(), 300)
-    }, 3000)
-  }
-
-  if (primaryColorInput) {
-    primaryColorInput.addEventListener("input", updatePreview)
-  }
-
-  if (secondaryColorInput) {
-    secondaryColorInput.addEventListener("input", updatePreview)
-  }
-
-  if (backgroundColorInput) {
-    backgroundColorInput.addEventListener("input", updatePreview)
-  }
-
-  if (textColorInput) {
-    textColorInput.addEventListener("input", updatePreview)
-  }
-
-  if (fontFamilySelect) {
-    fontFamilySelect.addEventListener("change", updatePreview)
-  }
+  // Event Listeners
+  if (primaryColorInput) primaryColorInput.addEventListener("input", updateAllPreviews)
+  if (secondaryColorInput) secondaryColorInput.addEventListener("input", updateAllPreviews)
+  if (backgroundColorInput) backgroundColorInput.addEventListener("input", updateAllPreviews)
+  if (textColorInput) textColorInput.addEventListener("input", updateAllPreviews)
+  if (headingFontSelect) headingFontSelect.addEventListener("change", updateAllPreviews)
+  if (bodyFontSelect) bodyFontSelect.addEventListener("change", updateAllPreviews)
 
   if (fontSizeRange) {
     fontSizeRange.addEventListener("input", () => {
       if (fontSizeValue) fontSizeValue.textContent = fontSizeRange.value + "px"
-      updatePreview()
+      updateAllPreviews()
     })
   }
 
   if (borderRadiusRange) {
     borderRadiusRange.addEventListener("input", () => {
       if (borderRadiusValue) borderRadiusValue.textContent = borderRadiusRange.value + "px"
-      updatePreview()
+      updateAllPreviews()
     })
   }
 
   if (spacingRange) {
     spacingRange.addEventListener("input", () => {
       if (spacingValue) spacingValue.textContent = spacingRange.value + "px"
-      updatePreview()
+      updateAllPreviews()
     })
   }
 
-  if (customCSSTextarea) {
-    customCSSTextarea.addEventListener("input", updatePreview)
-  }
+  if (saveBtn) saveBtn.addEventListener("click", saveSettings)
+  if (resetBtn) resetBtn.addEventListener("click", resetSettings)
+  if (fullscreenPreview) fullscreenPreview.addEventListener("click", toggleFullscreenPreview)
 
-  if (previewBtn) {
-    previewBtn.addEventListener("click", () => {
-      const settings = getCurrentSettings()
-      applySettings(settings)
-      showNotification("Alterações aplicadas ao site!", "info")
-    })
-  }
+  const styles = document.createElement("style")
+  styles.textContent = `
+    .preview-panel.fullscreen {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999 !important;
+      border-radius: 0 !important;
+    }
+    
+    .preview-panel.fullscreen .preview-container {
+      height: calc(100vh - 80px) !important;
+    }
+    
+    .preview-iframe {
+      transition: all 0.3s ease;
+    }
+  `
+  document.head.appendChild(styles)
 
-  if (saveBtn) {
-    saveBtn.addEventListener("click", saveSettings)
-  }
+  // Inicializar tudo
+  initializeTabs()
+  loadPageSettings("chat")
 
-  if (resetBtn) {
-    resetBtn.addEventListener("click", resetSettings)
-  }
-
-  if (fullscreenPreview) {
-    fullscreenPreview.addEventListener("click", toggleFullscreenPreview)
-  }
-
-  // Adicionar estilos de animação e fullscreen
-  const animationStyles = document.createElement("style")
-  animationStyles.textContent = `
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOutRight {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-        
-        .preview-panel.fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            background: white;
-            border-radius: 0;
-        }
-        
-        .preview-panel.fullscreen .preview-container {
-            height: calc(100vh - 80px);
-        }
-    `
-  document.head.appendChild(animationStyles)
-
-  // Inicializar
-  loadSettings()
+  setTimeout(() => {
+    updateAllPreviews()
+  }, 1000)
 })

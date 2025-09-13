@@ -1,27 +1,346 @@
-<!-- templates/sidebar.html -->
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h3>Menu</h3>
-        <button class="close-sidebar" id="closeSidebar">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <nav class="sidebar-nav">
-        <a href="/chat" class="nav-item active">
-            <i class="fas fa-comments"></i>
-            <span>Chat</span>
-        </a>
-        <a href="/chamados" class="nav-item">
-            <i class="fas fa-ticket-alt"></i>
-            <span>Meus Chamados</span>
-        </a>
-        <a href="/dashboard" class="nav-item">
-            <i class="fas fa-chart-bar"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="/custom" class="nav-item">
-            <i class="fas fa-palette"></i>
-            <span>Customização</span>
-        </a>
-    </nav>
-</div>
+ <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <!-- Modificando item de chat para incluir novo chat e dropdown -->
+                <div class="nav-item-group">
+                    <a href="index.html" class="nav-item active" id="newChatBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Novo Chat</span>
+                    </a>
+                    <div class="chat-dropdown">
+                        <button class="dropdown-toggle" id="chatDropdownToggle">
+                            <i class="fas fa-history"></i>
+                            <span>Chats Salvos</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu" id="chatDropdownMenu">
+                            <div class="dropdown-header">
+                                <span>Conversas Recentes</span>
+                            </div>
+                            <div class="chat-list" id="chatList">
+                                <!-- Chats serão carregados dinamicamente -->
+                                <div class="empty-chats">
+                                    <i class="fas fa-comments"></i>
+                                    <span>Nenhum chat salvo ainda</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="meus-chamados.html" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Meus Chamados</span>
+                </a>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="customizacao.html" class="nav-item">
+                    <i class="fas fa-palette"></i>
+                    <span>Customização</span>
+                </a>
+            </nav>
+        </div>
+
+<script>
+    // Navegação e controle do menu
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menuToggle")
+  const sidebar = document.getElementById("sidebar")
+  const closeSidebar = document.getElementById("closeSidebar")
+  const overlay = document.getElementById("overlay")
+
+  const chatDropdownToggle = document.getElementById("chatDropdownToggle")
+  const chatDropdownMenu = document.getElementById("chatDropdownMenu")
+  const chatList = document.getElementById("chatList")
+  const newChatBtn = document.getElementById("newChatBtn")
+
+  // Abrir menu
+  if (menuToggle) {
+    menuToggle.addEventListener("click", () => {
+      sidebar.classList.add("active")
+      overlay.classList.add("active")
+      document.body.style.overflow = "hidden"
+    })
+  }
+
+  // Fechar menu
+  function closeSidebarMenu() {
+    sidebar.classList.remove("active")
+    overlay.classList.remove("active")
+    document.body.style.overflow = ""
+    if (chatDropdownMenu) {
+      chatDropdownMenu.classList.remove("active")
+      chatDropdownToggle.classList.remove("active")
+    }
+  }
+
+  if (closeSidebar) {
+    closeSidebar.addEventListener("click", closeSidebarMenu)
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", closeSidebarMenu)
+  }
+
+  // Fechar menu com ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sidebar.classList.contains("active")) {
+      closeSidebarMenu()
+    }
+  })
+
+  if (chatDropdownToggle && chatDropdownMenu) {
+    chatDropdownToggle.addEventListener("click", (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const isActive = chatDropdownMenu.classList.contains("active")
+
+      if (isActive) {
+        chatDropdownMenu.classList.remove("active")
+        chatDropdownToggle.classList.remove("active")
+      } else {
+        chatDropdownMenu.classList.add("active")
+        chatDropdownToggle.classList.add("active")
+        loadSavedChats()
+      }
+    })
+
+    // Fechar dropdown ao clicar fora
+    document.addEventListener("click", (e) => {
+      if (!chatDropdownToggle.contains(e.target) && !chatDropdownMenu.contains(e.target)) {
+        chatDropdownMenu.classList.remove("active")
+        chatDropdownToggle.classList.remove("active")
+      }
+    })
+  }
+
+  if (newChatBtn) {
+    newChatBtn.addEventListener("click", (e) => {
+      e.preventDefault()
+      startNewChat()
+      closeSidebarMenu()
+    })
+  }
+
+  function loadSavedChats() {
+    const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+
+    if (savedChats.length === 0) {
+      chatList.innerHTML = `
+        <div class="empty-chats">
+          <i class="fas fa-comments"></i>
+          <span>Nenhum chat salvo ainda</span>
+        </div>
+      `
+      return
+    }
+
+    chatList.innerHTML = ""
+
+    savedChats.forEach((chat, index) => {
+      const chatItem = document.createElement("div")
+      chatItem.className = "chat-item"
+      chatItem.innerHTML = `
+        <div class="chat-item-info">
+          <div class="chat-item-title">${chat.title}</div>
+          <div class="chat-item-preview">${chat.preview}</div>
+        </div>
+        <div class="chat-item-time">${formatTime(chat.timestamp)}</div>
+      `
+
+      chatItem.addEventListener("click", () => {
+        loadChat(chat.id)
+        closeSidebarMenu()
+      })
+
+      chatList.appendChild(chatItem)
+    })
+  }
+
+  function startNewChat() {
+    // Salvar chat atual se houver mensagens
+    const currentMessages = document.querySelectorAll(".message:not(.typing-indicator)")
+    if (currentMessages.length > 1) {
+      // Mais que a mensagem inicial do bot
+      saveCurrentChat()
+    }
+
+    // Limpar chat atual
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (messagesContainer) {
+      messagesContainer.innerHTML = `
+        <div class="message bot-message">
+          <div class="message-avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="message-content">
+            <p>Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?</p>
+            <span class="message-time">Agora</span>
+          </div>
+        </div>
+      `
+    }
+
+    // Gerar novo ID de chat
+    const newChatId = "chat_" + Date.now()
+    localStorage.setItem("currentChatId", newChatId)
+
+    console.log("[v0] Novo chat iniciado:", newChatId)
+  }
+
+  function saveCurrentChat() {
+    const messages = Array.from(document.querySelectorAll(".message:not(.typing-indicator)"))
+    if (messages.length <= 1) return // Não salvar se só tem mensagem inicial
+
+    const currentChatId = localStorage.getItem("currentChatId") || "chat_" + Date.now()
+    const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+
+    // Extrair informações do chat
+    const firstUserMessage = messages.find((msg) => msg.classList.contains("user-message"))
+    const title = firstUserMessage
+      ? firstUserMessage.querySelector("p")?.textContent?.substring(0, 30) + "..."
+      : "Chat sem título"
+
+    const preview = firstUserMessage
+      ? firstUserMessage.querySelector("p")?.textContent?.substring(0, 50) + "..."
+      : "Conversa iniciada"
+
+    const chatData = {
+      id: currentChatId,
+      title: title,
+      preview: preview,
+      timestamp: Date.now(),
+      messages: messages.map((msg) => ({
+        type: msg.classList.contains("user-message") ? "user" : "bot",
+        content: msg.querySelector("p")?.textContent || "",
+        time: msg.querySelector(".message-time")?.textContent || "",
+      })),
+    }
+
+    // Verificar se chat já existe e atualizar, senão adicionar
+    const existingIndex = savedChats.findIndex((chat) => chat.id === currentChatId)
+    if (existingIndex >= 0) {
+      savedChats[existingIndex] = chatData
+    } else {
+      savedChats.unshift(chatData) // Adicionar no início
+    }
+
+    // Manter apenas os 20 chats mais recentes
+    if (savedChats.length > 20) {
+      savedChats.splice(20)
+    }
+
+    localStorage.setItem("savedChats", JSON.stringify(savedChats))
+    console.log("[v0] Chat salvo:", chatData.title)
+  }
+
+  function loadChat(chatId) {
+    const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+    const chat = savedChats.find((c) => c.id === chatId)
+
+    if (!chat) return
+
+    // Salvar chat atual antes de carregar outro
+    saveCurrentChat()
+
+    // Carregar mensagens do chat selecionado
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (messagesContainer) {
+      messagesContainer.innerHTML = ""
+
+      chat.messages.forEach((msg) => {
+        const messageDiv = document.createElement("div")
+        messageDiv.className = `message ${msg.type}-message`
+
+        messageDiv.innerHTML = `
+          <div class="message-avatar">
+            <i class="fas fa-${msg.type === "bot" ? "robot" : "user"}"></i>
+          </div>
+          <div class="message-content">
+            <p>${msg.content}</p>
+            <span class="message-time">${msg.time}</span>
+          </div>
+        `
+
+        messagesContainer.appendChild(messageDiv)
+      })
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight
+    }
+
+    localStorage.setItem("currentChatId", chatId)
+    console.log("[v0] Chat carregado:", chat.title)
+  }
+
+  function formatTime(timestamp) {
+    const now = Date.now()
+    const diff = now - timestamp
+    const minutes = Math.floor(diff / 60000)
+    const hours = Math.floor(diff / 3600000)
+    const days = Math.floor(diff / 86400000)
+
+    if (minutes < 1) return "Agora"
+    if (minutes < 60) return `${minutes}min`
+    if (hours < 24) return `${hours}h`
+    if (days < 7) return `${days}d`
+
+    return new Date(timestamp).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    })
+  }
+
+  function setupAutoSave() {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+          const addedNode = mutation.addedNodes[0]
+          if (
+            addedNode.classList &&
+            addedNode.classList.contains("message") &&
+            !addedNode.classList.contains("typing-indicator")
+          ) {
+            // Salvar após um pequeno delay para permitir que a conversa continue
+            setTimeout(saveCurrentChat, 2000)
+          }
+        }
+      })
+    })
+
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (messagesContainer) {
+      observer.observe(messagesContainer, { childList: true })
+    }
+  }
+
+  // Marcar item ativo no menu
+  const currentPage = window.location.pathname.split("/").pop() || "index.html"
+  const navItems = document.querySelectorAll(".nav-item")
+
+  navItems.forEach((item) => {
+    const href = item.getAttribute("href")
+    if (href === currentPage || (currentPage === "" && href === "index.html")) {
+      item.classList.add("active")
+    } else {
+      item.classList.remove("active")
+    }
+  })
+
+  if (currentPage === "index.html" || currentPage === "") {
+    setupAutoSave()
+
+    // Definir ID do chat atual se não existir
+    if (!localStorage.getItem("currentChatId")) {
+      localStorage.setItem("currentChatId", "chat_" + Date.now())
+    }
+  }
+})
+
+</script>
