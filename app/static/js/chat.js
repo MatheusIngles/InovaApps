@@ -246,4 +246,27 @@ document.addEventListener("DOMContentLoaded", () => {
         addMessage("Erro ao processar áudio", "bot")
       })
   }
+
+  // Event listeners
+  sendButton.addEventListener("click", sendMessage)
+  messageInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      sendMessage()
+    }
+  })
+
+  messageInput.addEventListener("input", () => {
+    sendButton.disabled = messageInput.value.trim() === ""
+  })
+
+  // Event listeners para gravação de áudio
+  audioButton.addEventListener("click", () => {
+    if (!isRecording) {
+      startRecording()
+    } else {
+      stopRecording()
+    }
+  })
+
+  stopRecordingBtn.addEventListener("click", stopRecording)
 })

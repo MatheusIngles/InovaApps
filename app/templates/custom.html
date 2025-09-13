@@ -6,193 +6,159 @@
     <title>Central de Atendimento - Customização</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="page-container">
+    <div class="app-container">
         <!-- Header -->
-        <header class="page-header">
-            <div class="header-content">
-                <h1>Customização</h1>
-                <div class="header-actions">
-                    <button class="reset-btn" id="resetBtn">Restaurar Padrão</button>
-                    <button class="hamburger-menu" id="hamburgerBtn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div>
+        <header class="chat-header">
+            <div class="header-left">
+                <h3>Customização</h3>
+            </div>
+            <div class="header-right">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </header>
 
-        <!-- Menu Lateral -->
-        {% include 'sidebar.html' %}
+        <!-- Sidebar Menu -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="meus-chamados.html" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Meus Chamados</span>
+                </a>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="customizacao.html" class="nav-item active">
+                    <i class="fas fa-palette"></i>
+                    <span>Customização</span>
+                </a>
+            </nav>
+        </div>
 
-        <!-- Overlay para fechar menu -->
-        <div class="menu-overlay" id="menuOverlay"></div>
-
-        <!-- Conteúdo Principal -->
-        <main class="main-content">
+        <!-- Main Content -->
+        <div class="main-content">
             <div class="customization-container">
-                <!-- Painel de Controles -->
-                <div class="controls-panel">
-                    <div class="control-section">
-                        <h3>Cores do Sistema</h3>
-                        
-                        <div class="control-group">
+                <!-- Seção de Cores -->
+                <div class="customization-section">
+                    <h4><i class="fas fa-palette"></i> Cores do Sistema</h4>
+                    <div class="color-controls">
+                        <div class="color-group">
                             <label for="primaryColor">Cor Primária:</label>
-                            <div class="color-input-group">
-                                <input type="color" id="primaryColor" value="#25D366">
-                                <input type="text" id="primaryColorText" value="#25D366" maxlength="7">
-                            </div>
+                            <input type="color" id="primaryColor" value="#007bff">
                         </div>
-
-                        <div class="control-group">
+                        <div class="color-group">
                             <label for="secondaryColor">Cor Secundária:</label>
-                            <div class="color-input-group">
-                                <input type="color" id="secondaryColor" value="#128C7E">
-                                <input type="text" id="secondaryColorText" value="#128C7E" maxlength="7">
-                            </div>
+                            <input type="color" id="secondaryColor" value="#6c757d">
                         </div>
-
-                        <div class="control-group">
+                        <div class="color-group">
                             <label for="backgroundColor">Cor de Fundo:</label>
-                            <div class="color-input-group">
-                                <input type="color" id="backgroundColor" value="#f0f2f5">
-                                <input type="text" id="backgroundColorText" value="#f0f2f5" maxlength="7">
-                            </div>
+                            <input type="color" id="backgroundColor" value="#ffffff">
                         </div>
-
-                        <div class="control-group">
-                            <label for="chatBackground">Fundo do Chat:</label>
-                            <div class="color-input-group">
-                                <input type="color" id="chatBackground" value="#e5ddd5">
-                                <input type="text" id="chatBackgroundText" value="#e5ddd5" maxlength="7">
-                            </div>
+                        <div class="color-group">
+                            <label for="textColor">Cor do Texto:</label>
+                            <input type="color" id="textColor" value="#333333">
                         </div>
                     </div>
+                </div>
 
-                    <div class="control-section">
-                        <h3>Tipografia</h3>
-                        
+                <!-- Seção de Tipografia -->
+                <div class="customization-section">
+                    <h4><i class="fas fa-font"></i> Tipografia</h4>
+                    <div class="typography-controls">
                         <div class="control-group">
                             <label for="fontFamily">Família da Fonte:</label>
                             <select id="fontFamily">
-                                <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI (Padrão)</option>
                                 <option value="Arial, sans-serif">Arial</option>
-                                <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+                                <option value="'Helvetica Neue', sans-serif">Helvetica</option>
                                 <option value="'Roboto', sans-serif">Roboto</option>
                                 <option value="'Open Sans', sans-serif">Open Sans</option>
-                                <option value="Georgia, serif">Georgia</option>
-                                <option value="'Times New Roman', serif">Times New Roman</option>
+                                <option value="'Lato', sans-serif">Lato</option>
                             </select>
                         </div>
-
                         <div class="control-group">
-                            <label for="fontSize">Tamanho da Fonte Base:</label>
-                            <div class="range-input-group">
-                                <input type="range" id="fontSize" min="12" max="20" value="16">
-                                <span id="fontSizeValue">16px</span>
-                            </div>
+                            <label for="fontSize">Tamanho da Fonte:</label>
+                            <input type="range" id="fontSize" min="12" max="20" value="14">
+                            <span id="fontSizeValue">14px</span>
                         </div>
-
-                        <div class="control-group">
-                            <label for="lineHeight">Altura da Linha:</label>
-                            <div class="range-input-group">
-                                <input type="range" id="lineHeight" min="1.2" max="2.0" step="0.1" value="1.5">
-                                <span id="lineHeightValue">1.5</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="control-section">
-                        <h3>Layout</h3>
-                        
-                        <div class="control-group">
-                            <label for="borderRadius">Raio das Bordas:</label>
-                            <div class="range-input-group">
-                                <input type="range" id="borderRadius" min="0" max="20" value="12">
-                                <span id="borderRadiusValue">12px</span>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="shadowIntensity">Intensidade da Sombra:</label>
-                            <div class="range-input-group">
-                                <input type="range" id="shadowIntensity" min="0" max="1" step="0.1" value="0.1">
-                                <span id="shadowIntensityValue">0.1</span>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="spacing">Espaçamento Geral:</label>
-                            <div class="range-input-group">
-                                <input type="range" id="spacing" min="0.5" max="2" step="0.1" value="1">
-                                <span id="spacingValue">1x</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="control-section">
-                        <h3>Tema</h3>
-                        
-                        <div class="control-group">
-                            <label for="themeMode">Modo do Tema:</label>
-                            <select id="themeMode">
-                                <option value="light">Claro</option>
-                                <option value="dark">Escuro</option>
-                                <option value="auto">Automático</option>
-                            </select>
-                        </div>
-
-                        <div class="control-group">
-                            <label>Temas Predefinidos:</label>
-                            <div class="preset-themes">
-                                <button class="preset-btn" data-theme="default">Padrão</button>
-                                <button class="preset-btn" data-theme="blue">Azul</button>
-                                <button class="preset-btn" data-theme="purple">Roxo</button>
-                                <button class="preset-btn" data-theme="green">Verde</button>
-                                <button class="preset-btn" data-theme="orange">Laranja</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="control-section">
-                        <h3>CSS Personalizado</h3>
-                        
-                        <div class="control-group">
-                            <label for="customCSS">CSS Adicional:</label>
-                            <textarea id="customCSS" placeholder="/* Adicione seu CSS personalizado aqui */
-.custom-style {
-    /* Seus estilos */
-}"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="apply-btn" id="applyBtn">Aplicar Mudanças</button>
-                        <button class="export-btn" id="exportBtn">Exportar CSS</button>
-                        <button class="import-btn" id="importBtn">Importar CSS</button>
-                        <input type="file" id="importFile" accept=".css" style="display: none;">
                     </div>
                 </div>
 
-                <!-- Área de Preview -->
-                <div class="preview-panel">
-                    <div class="preview-header">
-                        <h3>Preview</h3>
-                        <div class="preview-tabs">
-                            <button class="tab-btn active" data-preview="chat">Chat</button>
-                            <button class="tab-btn" data-preview="dashboard">Dashboard</button>
-                            <button class="tab-btn" data-preview="tickets">Chamados</button>
+                <!-- Seção de Layout -->
+                <div class="customization-section">
+                    <h4><i class="fas fa-layout"></i> Layout</h4>
+                    <div class="layout-controls">
+                        <div class="control-group">
+                            <label for="borderRadius">Bordas Arredondadas:</label>
+                            <input type="range" id="borderRadius" min="0" max="20" value="8">
+                            <span id="borderRadiusValue">8px</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="spacing">Espaçamento:</label>
+                            <input type="range" id="spacing" min="8" max="24" value="16">
+                            <span id="spacingValue">16px</span>
                         </div>
                     </div>
-                    
-                    <div class="preview-content">
-                        <iframe id="previewFrame" src="index.html"></iframe>
+                </div>
+
+                <!-- Seção de CSS Personalizado -->
+                <div class="customization-section">
+                    <h4><i class="fas fa-code"></i> CSS Personalizado</h4>
+                    <div class="css-editor">
+                        <textarea id="customCSS" placeholder="Digite seu CSS personalizado aqui..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="action-buttons">
+                    <button id="previewBtn" class="btn btn-secondary">
+                        <i class="fas fa-eye"></i>
+                        Visualizar
+                    </button>
+                    <button id="saveBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Salvar Alterações
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger">
+                        <i class="fas fa-undo"></i>
+                        Restaurar Padrão
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section" id="previewSection">
+                <h4>Pré-visualização</h4>
+                <div class="preview-container" id="previewContainer">
+                    <div class="preview-header">
+                        <h5>Exemplo de Chat</h5>
+                    </div>
+                    <div class="preview-message bot-message">
+                        <p>Esta é uma mensagem de exemplo do bot</p>
+                    </div>
+                    <div class="preview-message user-message">
+                        <p>Esta é uma mensagem de exemplo do usuário</p>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
     </div>
 
     <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
