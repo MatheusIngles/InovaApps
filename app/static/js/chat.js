@@ -72,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     messageInput.value = ""
     sendButton.disabled = true
 
+    sendMessageToBackend(message)
+
     // Simular digitação do bot
     showTypingIndicator()
 
@@ -315,6 +317,32 @@ document.addEventListener("DOMContentLoaded", () => {
       messageInput.disabled = false
       sendButton.disabled = messageInput.value.trim() === ""
     }
+  }
+
+  function sendMessageToBackend(message) {
+    fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Mensagem enviada para o backend:", data)
+        // Opcional: usar a resposta do backend em vez da resposta simulada
+        // if (data.response) {
+        //   hideTypingIndicator()
+        //   addMessage(data.response, "bot")
+        // }
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar mensagem para o backend:", error)
+        // Continua funcionando normalmente mesmo se o backend não estiver disponível
+      })
   }
 
   // Event listeners
