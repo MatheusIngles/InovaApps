@@ -1,0 +1,11 @@
+//Programacao
+[
+  {
+    "topico": "como instalar python",
+    "resposta": "Para instalar Python, vá em python.org e baixe a versão apropriada para seu sistema."
+  },
+  {
+    "topico": "como criar ambiente virtual",
+    "resposta": "Use 'python -m venv nome_do_ambiente' e ative com 'source nome_do_ambiente/bin/activate' (Linux/Mac) ou 'nome_do_ambiente\\Scripts\\activate' (Windows)."
+  }
+]
