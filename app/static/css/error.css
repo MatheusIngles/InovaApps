@@ -1,0 +1,25 @@
+.custom-bg {
+    background: linear-gradient(to right, #1f2937, #111827);
+    color: white !important;
+}
+
+.custom-btn {
+    background-color: #374151 !important;
+    color: white !important;
+}
+
+.custom-btn:hover {
+    background-color: #4b5563 !important;
+}
+
+.custom-a {
+    color: white;
+    text-decoration: none;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.custom-a:hover {
+    color: lightgreen;
+    text-decoration: underline;
+}
