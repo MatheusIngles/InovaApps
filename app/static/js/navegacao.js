@@ -74,217 +74,68 @@ document.addEventListener("DOMContentLoaded", () => {
   if (newChatBtn) {
     newChatBtn.addEventListener("click", (e) => {
       e.preventDefault()
+      if (window.location.pathname !== "/chat" && window.location.pathname !== "/") {
+        window.location.href = "/chat"
+        return
+      }
       startNewChat()
       closeSidebarMenu()
     })
   }
 
-  function loadSavedChats() {
-    const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+  function saveChat() {
+    console.log("[v0] Iniciando salvamento do chat...")
 
-    if (savedChats.length === 0) {
-      const exampleChats = [
-        {
-          id: "example_1",
-          title: "Problema com Login",
-          preview: "Não consigo acessar minha conta...",
-          timestamp: Date.now() - 3600000, // 1 hora atrás
-          isExample: true,
-        },
-        {
-          id: "example_2",
-          title: "Dúvida sobre Faturamento",
-          preview: "Gostaria de entender melhor...",
-          timestamp: Date.now() - 7200000, // 2 horas atrás
-          isExample: true,
-        },
-        {
-          id: "example_3",
-          title: "Suporte Técnico",
-          preview: "Estou com dificuldades para...",
-          timestamp: Date.now() - 10800000, // 3 horas atrás
-          isExample: true,
-        },
-      ]
-
-      chatList.innerHTML = ""
-
-      exampleChats.forEach((chat) => {
-        const chatItem = document.createElement("div")
-        chatItem.className = "chat-item"
-        chatItem.innerHTML = `
-          <div class="chat-item-info">
-            <div class="chat-item-title">${chat.title}</div>
-            <div class="chat-item-preview">${chat.preview}</div>
-          </div>
-          <div class="chat-item-actions">
-            <span class="chat-item-time">${formatTime(chat.timestamp)}</span>
-            <button class="delete-chat-btn" onclick="deleteExampleChat('${chat.id}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        `
-
-        chatItem.addEventListener("click", (e) => {
-          if (!e.target.closest(".delete-chat-btn")) {
-            loadExampleChat(chat.id)
-            closeSidebarMenu()
-          }
-        })
-
-        chatList.appendChild(chatItem)
-      })
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (!messagesContainer) {
+      console.log("[v0] Container de mensagens não encontrado")
       return
     }
 
-    chatList.innerHTML = ""
+    const messages = Array.from(
+      messagesContainer.querySelectorAll(".message:not(.typing-indicator):not(.options-message)"),
+    )
 
-    savedChats.forEach((chat, index) => {
-      const chatItem = document.createElement("div")
-      chatItem.className = "chat-item"
-      chatItem.innerHTML = `
-        <div class="chat-item-info">
-          <div class="chat-item-title">${chat.title}</div>
-          <div class="chat-item-preview">${chat.preview}</div>
-        </div>
-        <div class="chat-item-time">${formatTime(chat.timestamp)}</div>
-      `
-
-      chatItem.addEventListener("click", () => {
-        loadChat(chat.id)
-        closeSidebarMenu()
-      })
-
-      chatList.appendChild(chatItem)
-    })
-  }
-
-  function loadExampleChat(chatId) {
-    const exampleMessages = {
-      example_1: [
-        { type: "bot", content: "Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?", time: "3h" },
-        { type: "user", content: "Não consigo acessar minha conta, sempre dá erro na senha", time: "3h" },
-        {
-          type: "bot",
-          content:
-            "Entendo sua dificuldade. Vamos resolver isso juntos. Você já tentou usar a opção 'Esqueci minha senha'?",
-          time: "3h",
-        },
-      ],
-      example_2: [
-        { type: "bot", content: "Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?", time: "2h" },
-        { type: "user", content: "Gostaria de entender melhor como funciona a cobrança do meu plano", time: "2h" },
-        {
-          type: "bot",
-          content:
-            "Claro! Posso explicar detalhadamente sobre seu plano. Qual informação específica você gostaria de saber?",
-          time: "2h",
-        },
-      ],
-      example_3: [
-        { type: "bot", content: "Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?", time: "3h" },
-        { type: "user", content: "Estou com dificuldades para configurar o sistema no meu computador", time: "3h" },
-        {
-          type: "bot",
-          content: "Vou te ajudar com a configuração. Primeiro, me diga qual sistema operacional você está usando?",
-          time: "3h",
-        },
-      ],
+    // Filtrar apenas mensagens válidas (deve ter pelo menos uma mensagem do usuário)
+    const userMessages = messages.filter((msg) => msg.classList.contains("user-message"))
+    if (userMessages.length === 0) {
+      console.log("[v0] Nenhuma mensagem do usuário encontrada - não salvando")
+      return
     }
-
-    const messages = exampleMessages[chatId]
-    if (!messages) return
-
-    const messagesContainer = document.getElementById("messagesContainer")
-    if (messagesContainer) {
-      messagesContainer.innerHTML = ""
-
-      messages.forEach((msg) => {
-        const messageDiv = document.createElement("div")
-        messageDiv.className = `message ${msg.type}-message`
-
-        messageDiv.innerHTML = `
-          <div class="message-avatar">
-            <i class="fas fa-${msg.type === "bot" ? "robot" : "user"}"></i>
-          </div>
-          <div class="message-content">
-            <p>${msg.content}</p>
-            <span class="message-time">${msg.time}</span>
-          </div>
-        `
-
-        messagesContainer.appendChild(messageDiv)
-      })
-
-      messagesContainer.scrollTop = messagesContainer.scrollHeight
-    }
-
-    localStorage.setItem("currentChatId", chatId)
-    console.log("[v0] Chat de exemplo carregado:", chatId)
-  }
-
-  window.deleteExampleChat = (chatId) => {
-    const chatItem = document.querySelector(`[onclick="deleteExampleChat('${chatId}')"]`).closest(".chat-item")
-    if (chatItem) {
-      chatItem.remove()
-    }
-
-    // Se não sobrar nenhum chat, mostrar mensagem vazia
-    if (chatList.children.length === 0) {
-      chatList.innerHTML = `
-        <div class="empty-chats">
-          <i class="fas fa-comments"></i>
-          <span>Nenhum chat salvo ainda</span>
-        </div>
-      `
-    }
-  }
-
-  function startNewChat() {
-    // Salvar chat atual se houver mensagens
-    const currentMessages = document.querySelectorAll(".message:not(.typing-indicator)")
-    if (currentMessages.length > 1) {
-      // Mais que a mensagem inicial do bot
-      saveCurrentChat()
-    }
-
-    // Limpar chat atual
-    const messagesContainer = document.getElementById("messagesContainer")
-    if (messagesContainer) {
-      messagesContainer.innerHTML = `
-        <div class="message bot-message">
-          <div class="message-avatar">
-            <i class="fas fa-robot"></i>
-          </div>
-          <div class="message-content">
-            <p>Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?</p>
-            <span class="message-time">Agora</span>
-          </div>
-        </div>
-      `
-    }
-
-    // Gerar novo ID de chat
-    const newChatId = "chat_" + Date.now()
-    localStorage.setItem("currentChatId", newChatId)
-
-    console.log("[v0] Novo chat iniciado:", newChatId)
-  }
-
-  function saveCurrentChat() {
-    const messages = Array.from(document.querySelectorAll(".message:not(.typing-indicator):not(.options-message)"))
-    if (messages.length <= 1) return // Não salvar se só tem mensagem inicial
 
     const currentChatId = localStorage.getItem("currentChatId") || "chat_" + Date.now()
-    const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
 
-    const firstUserMessage = messages.find((msg) => msg.classList.contains("user-message"))
-    const title = firstUserMessage
-      ? firstUserMessage.querySelector("p")?.textContent?.substring(0, 30) + "..."
+    // Extrair dados das mensagens
+    const chatMessages = messages
+      .map((msg) => {
+        const contentElement = msg.querySelector(".message-content p")
+        const timeElement = msg.querySelector(".message-time")
+
+        return {
+          type: msg.classList.contains("user-message") ? "user" : "bot",
+          content: contentElement ? contentElement.textContent.trim() : "",
+          time: timeElement ? timeElement.textContent : "",
+        }
+      })
+      .filter((msg) => msg.content.length > 0)
+
+    if (chatMessages.length < 2) {
+      console.log("[v0] Mensagens insuficientes para salvar")
+      return
+    }
+
+    // Criar título baseado na primeira mensagem do usuário
+    const firstUserMsg = chatMessages.find((msg) => msg.type === "user")
+    const title = firstUserMsg
+      ? firstUserMsg.content.length > 30
+        ? firstUserMsg.content.substring(0, 30) + "..."
+        : firstUserMsg.content
       : "Chat sem título"
 
-    const preview = firstUserMessage
-      ? firstUserMessage.querySelector("p")?.textContent?.substring(0, 50) + "..."
+    const preview = firstUserMsg
+      ? firstUserMsg.content.length > 50
+        ? firstUserMsg.content.substring(0, 50) + "..."
+        : firstUserMsg.content
       : "Conversa iniciada"
 
     const chatData = {
@@ -292,46 +143,46 @@ document.addEventListener("DOMContentLoaded", () => {
       title: title,
       preview: preview,
       timestamp: Date.now(),
-      messages: messages
-        .map((msg) => {
-          const content =
-            msg.querySelector("p")?.textContent || msg.querySelector(".message-content")?.textContent || ""
-          return {
-            type: msg.classList.contains("user-message") ? "user" : "bot",
-            content: content.trim(),
-            time: msg.querySelector(".message-time")?.textContent || "",
-          }
-        })
-        .filter((msg) => msg.content.length > 0), // Filtrar mensagens vazias
-    }
-
-    if (chatData.messages.length <= 1) {
-      console.log("[v0] Chat não salvo - conteúdo insuficiente")
-      return
-    }
-
-    // Verificar se chat já existe e atualizar, senão adicionar
-    const existingIndex = savedChats.findIndex((chat) => chat.id === currentChatId)
-    if (existingIndex >= 0) {
-      savedChats[existingIndex] = chatData
-    } else {
-      savedChats.unshift(chatData) // Adicionar no início
-    }
-
-    // Manter apenas os 20 chats mais recentes
-    if (savedChats.length > 20) {
-      savedChats.splice(20)
+      messages: chatMessages,
     }
 
     try {
+      // Recuperar chats salvos
+      let savedChats = []
+      try {
+        savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+      } catch (e) {
+        console.log("[v0] Erro ao ler chats salvos, criando nova lista")
+        savedChats = []
+      }
+
+      // Verificar se chat já existe e atualizar
+      const existingIndex = savedChats.findIndex((chat) => chat.id === currentChatId)
+      if (existingIndex >= 0) {
+        savedChats[existingIndex] = chatData
+        console.log("[v0] Chat atualizado:", title)
+      } else {
+        savedChats.unshift(chatData)
+        console.log("[v0] Novo chat salvo:", title)
+      }
+
+      // Manter apenas 20 chats mais recentes
+      if (savedChats.length > 20) {
+        savedChats = savedChats.slice(0, 20)
+      }
+
+      // Salvar no localStorage
       localStorage.setItem("savedChats", JSON.stringify(savedChats))
-      console.log("[v0] Chat salvo com sucesso:", chatData.title)
-      console.log("[v0] Total de chats salvos:", savedChats.length)
+      localStorage.setItem("currentChatId", currentChatId)
+
+      console.log("[v0] Chat salvo com sucesso! Total de chats:", savedChats.length)
     } catch (error) {
-      console.error("[v0] Erro ao salvar chat no localStorage:", error)
+      console.error("[v0] Erro ao salvar chat:", error)
+
+      // Se localStorage estiver cheio, tentar limpar e salvar novamente
       if (error.name === "QuotaExceededError") {
         try {
-          // Manter apenas os 10 chats mais recentes se localStorage estiver cheio
+          const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
           const reducedChats = savedChats.slice(0, 10)
           localStorage.setItem("savedChats", JSON.stringify(reducedChats))
           console.log("[v0] Chat salvo após limpeza do localStorage")
@@ -342,14 +193,75 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function loadSavedChats() {
+    console.log("[v0] Carregando chats salvos...")
+
+    let savedChats = []
+    try {
+      savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+    } catch (e) {
+      console.log("[v0] Erro ao carregar chats salvos")
+      savedChats = []
+    }
+
+    if (savedChats.length === 0) {
+      chatList.innerHTML = `
+        <div class="empty-chats">
+          <i class="fas fa-comments"></i>
+          <span>Nenhum chat salvo ainda</span>
+        </div>
+      `
+      return
+    }
+
+    chatList.innerHTML = ""
+
+    savedChats.forEach((chat) => {
+      const chatItem = document.createElement("div")
+      chatItem.className = "chat-item"
+      chatItem.innerHTML = `
+        <div class="chat-item-info">
+          <div class="chat-item-title">${chat.title}</div>
+          <div class="chat-item-preview">${chat.preview}</div>
+        </div>
+        <div class="chat-item-actions">
+          <span class="chat-item-time">${formatTime(chat.timestamp)}</span>
+          <button class="delete-chat-btn" onclick="deleteChat('${chat.id}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      `
+
+      chatItem.addEventListener("click", (e) => {
+        if (!e.target.closest(".delete-chat-btn")) {
+          loadChat(chat.id)
+          closeSidebarMenu()
+        }
+      })
+
+      chatList.appendChild(chatItem)
+    })
+  }
+
   function loadChat(chatId) {
+    console.log("[v0] Carregando chat:", chatId)
+
+    if (window.location.pathname !== "/chat" && window.location.pathname !== "/") {
+      localStorage.setItem("loadChatId", chatId)
+      window.location.href = "/chat"
+      return
+    }
+
     const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
     const chat = savedChats.find((c) => c.id === chatId)
 
-    if (!chat) return
+    if (!chat) {
+      console.log("[v0] Chat não encontrado:", chatId)
+      return
+    }
 
     // Salvar chat atual antes de carregar outro
-    saveCurrentChat()
+    saveChat()
 
     // Carregar mensagens do chat selecionado
     const messagesContainer = document.getElementById("messagesContainer")
@@ -377,7 +289,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     localStorage.setItem("currentChatId", chatId)
-    console.log("[v0] Chat carregado:", chat.title)
+    console.log("[v0] Chat carregado com sucesso:", chat.title)
+  }
+
+  function startNewChat() {
+    console.log("[v0] Iniciando novo chat...")
+
+    // Salvar chat atual se houver mensagens
+    saveChat()
+
+    // Limpar chat atual
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (messagesContainer) {
+      messagesContainer.innerHTML = `
+        <div class="message bot-message">
+          <div class="message-avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="message-content">
+            <p>Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?</p>
+            <span class="message-time">Agora</span>
+          </div>
+        </div>
+      `
+    }
+
+    // Gerar novo ID de chat
+    const newChatId = "chat_" + Date.now()
+    localStorage.setItem("currentChatId", newChatId)
+    localStorage.removeItem("loadChatId")
+
+    console.log("[v0] Novo chat iniciado:", newChatId)
+  }
+
+  window.deleteChat = (chatId) => {
+    console.log("[v0] Deletando chat:", chatId)
+
+    let savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
+    savedChats = savedChats.filter((chat) => chat.id !== chatId)
+    localStorage.setItem("savedChats", JSON.stringify(savedChats))
+
+    // Recarregar lista
+    loadSavedChats()
+
+    console.log("[v0] Chat deletado. Total restante:", savedChats.length)
   }
 
   function formatTime(timestamp) {
@@ -399,7 +354,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setupAutoSave() {
+    const messagesContainer = document.getElementById("messagesContainer")
+    if (!messagesContainer) return
+
     const observer = new MutationObserver((mutations) => {
+      let shouldSave = false
+
       mutations.forEach((mutation) => {
         if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
           const addedNode = mutation.addedNodes[0]
@@ -407,21 +367,22 @@ document.addEventListener("DOMContentLoaded", () => {
             addedNode.classList &&
             addedNode.classList.contains("message") &&
             !addedNode.classList.contains("typing-indicator") &&
-            !addedNode.classList.contains("options-message") // Excluir mensagens de opções do auto-save
+            !addedNode.classList.contains("options-message")
           ) {
-            setTimeout(saveCurrentChat, 1000)
+            shouldSave = true
           }
         }
       })
+
+      if (shouldSave) {
+        setTimeout(() => {
+          saveChat()
+        }, 2000) // Aguardar 2 segundos antes de salvar
+      }
     })
 
-    const messagesContainer = document.getElementById("messagesContainer")
-    if (messagesContainer) {
-      observer.observe(messagesContainer, { childList: true })
-      console.log("[v0] Auto-save configurado com sucesso")
-    } else {
-      console.error("[v0] Erro: messagesContainer não encontrado para auto-save")
-    }
+    observer.observe(messagesContainer, { childList: true })
+    console.log("[v0] Auto-save configurado")
   }
 
   // Marcar item ativo no menu
@@ -437,7 +398,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  if (currentPage === "index.html" || currentPage === "") {
+  const isOnChatPage =
+    window.location.pathname === "/chat" ||
+    window.location.pathname === "/" ||
+    currentPage === "index.html" ||
+    currentPage === "chat.html" ||
+    currentPage === ""
+
+  if (isOnChatPage) {
     setupAutoSave()
 
     // Definir ID do chat atual se não existir
@@ -445,8 +413,18 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("currentChatId", "chat_" + Date.now())
     }
 
+    const loadChatId = localStorage.getItem("loadChatId")
+    if (loadChatId) {
+      localStorage.removeItem("loadChatId")
+      setTimeout(() => {
+        loadChat(loadChatId)
+      }, 500)
+    }
+
     console.log("[v0] Sistema de chat inicializado")
     console.log("[v0] Chat ID atual:", localStorage.getItem("currentChatId"))
-    console.log("[v0] Chats salvos:", JSON.parse(localStorage.getItem("savedChats") || "[]").length)
+
+    const savedChatsCount = JSON.parse(localStorage.getItem("savedChats") || "[]").length
+    console.log("[v0] Chats salvos:", savedChatsCount)
   }
 })
