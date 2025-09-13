@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i>Cancelar
                   </button>
-                  <a class="btn btn-primary" id="submitTicket" href="/create_ticket">
+                  <a class="btn btn-primary" id="submitTicket" href="/add_ticket_database">
                     <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
                   </button>
                 </div>

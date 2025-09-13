@@ -44,6 +44,11 @@ def criar_chamado():
     Resposta = CriarChamadoParaBanco(text)
     return jsonify({"status": "ok", "text": Resposta})
 
+@app.route('/add_ticket_database', methods=["POST"])
+def add_ticket_database():
+    
+    redirect(url_for('/chamados'))
+
 @app.route('/chamados')
 def chamados():
     tickets = Ticket.query.all()
