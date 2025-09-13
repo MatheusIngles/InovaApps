@@ -7,6 +7,7 @@ from app import app, db
 from datetime import datetime, timezone
 
 @app.route('/')
+@app.route('/index')
 def index():
     return render_template('chat.html')
 
