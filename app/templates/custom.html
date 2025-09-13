@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Atendimento - Customização</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <h1>Customização</h1>
+                <div class="header-actions">
+                    <button class="reset-btn" id="resetBtn">Restaurar Padrão</button>
+                    <button class="hamburger-menu" id="hamburgerBtn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Menu Lateral -->
+        <nav class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <h2>Menu</h2>
+                <button class="close-menu" id="closeMenuBtn">&times;</button>
+            </div>
+            <ul class="menu-items">
+                <li><a href="index.html">Chat</a></li>
+                <li><a href="meus-chamados.html">Meus Chamados</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customizacao.html" class="active">Customização</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overlay para fechar menu -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <div class="customization-container">
+                <!-- Painel de Controles -->
+                <div class="controls-panel">
+                    <div class="control-section">
+                        <h3>Cores do Sistema</h3>
+                        
+                        <div class="control-group">
+                            <label for="primaryColor">Cor Primária:</label>
+                            <div class="color-input-group">
+                                <input type="color" id="primaryColor" value="#25D366">
+                                <input type="text" id="primaryColorText" value="#25D366" maxlength="7">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="secondaryColor">Cor Secundária:</label>
+                            <div class="color-input-group">
+                                <input type="color" id="secondaryColor" value="#128C7E">
+                                <input type="text" id="secondaryColorText" value="#128C7E" maxlength="7">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="backgroundColor">Cor de Fundo:</label>
+                            <div class="color-input-group">
+                                <input type="color" id="backgroundColor" value="#f0f2f5">
+                                <input type="text" id="backgroundColorText" value="#f0f2f5" maxlength="7">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="chatBackground">Fundo do Chat:</label>
+                            <div class="color-input-group">
+                                <input type="color" id="chatBackground" value="#e5ddd5">
+                                <input type="text" id="chatBackgroundText" value="#e5ddd5" maxlength="7">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Tipografia</h3>
+                        
+                        <div class="control-group">
+                            <label for="fontFamily">Família da Fonte:</label>
+                            <select id="fontFamily">
+                                <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI (Padrão)</option>
+                                <option value="Arial, sans-serif">Arial</option>
+                                <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+                                <option value="'Roboto', sans-serif">Roboto</option>
+                                <option value="'Open Sans', sans-serif">Open Sans</option>
+                                <option value="Georgia, serif">Georgia</option>
+                                <option value="'Times New Roman', serif">Times New Roman</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="fontSize">Tamanho da Fonte Base:</label>
+                            <div class="range-input-group">
+                                <input type="range" id="fontSize" min="12" max="20" value="16">
+                                <span id="fontSizeValue">16px</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="lineHeight">Altura da Linha:</label>
+                            <div class="range-input-group">
+                                <input type="range" id="lineHeight" min="1.2" max="2.0" step="0.1" value="1.5">
+                                <span id="lineHeightValue">1.5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Layout</h3>
+                        
+                        <div class="control-group">
+                            <label for="borderRadius">Raio das Bordas:</label>
+                            <div class="range-input-group">
+                                <input type="range" id="borderRadius" min="0" max="20" value="12">
+                                <span id="borderRadiusValue">12px</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="shadowIntensity">Intensidade da Sombra:</label>
+                            <div class="range-input-group">
+                                <input type="range" id="shadowIntensity" min="0" max="1" step="0.1" value="0.1">
+                                <span id="shadowIntensityValue">0.1</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="spacing">Espaçamento Geral:</label>
+                            <div class="range-input-group">
+                                <input type="range" id="spacing" min="0.5" max="2" step="0.1" value="1">
+                                <span id="spacingValue">1x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Tema</h3>
+                        
+                        <div class="control-group">
+                            <label for="themeMode">Modo do Tema:</label>
+                            <select id="themeMode">
+                                <option value="light">Claro</option>
+                                <option value="dark">Escuro</option>
+                                <option value="auto">Automático</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Temas Predefinidos:</label>
+                            <div class="preset-themes">
+                                <button class="preset-btn" data-theme="default">Padrão</button>
+                                <button class="preset-btn" data-theme="blue">Azul</button>
+                                <button class="preset-btn" data-theme="purple">Roxo</button>
+                                <button class="preset-btn" data-theme="green">Verde</button>
+                                <button class="preset-btn" data-theme="orange">Laranja</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>CSS Personalizado</h3>
+                        
+                        <div class="control-group">
+                            <label for="customCSS">CSS Adicional:</label>
+                            <textarea id="customCSS" placeholder="/* Adicione seu CSS personalizado aqui */
+.custom-style {
+    /* Seus estilos */
+}"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="apply-btn" id="applyBtn">Aplicar Mudanças</button>
+                        <button class="export-btn" id="exportBtn">Exportar CSS</button>
+                        <button class="import-btn" id="importBtn">Importar CSS</button>
+                        <input type="file" id="importFile" accept=".css" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Área de Preview -->
+                <div class="preview-panel">
+                    <div class="preview-header">
+                        <h3>Preview</h3>
+                        <div class="preview-tabs">
+                            <button class="tab-btn active" data-preview="chat">Chat</button>
+                            <button class="tab-btn" data-preview="dashboard">Dashboard</button>
+                            <button class="tab-btn" data-preview="tickets">Chamados</button>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-content">
+                        <iframe id="previewFrame" src="index.html"></iframe>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+</html>
