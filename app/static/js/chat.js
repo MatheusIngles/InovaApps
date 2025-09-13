@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let recognition = null
   let isListening = false
 
+  // Import Bootstrap
+  const bootstrap = window.bootstrap
+
   // Verificar se o navegador suporta Web Speech API
   if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
     recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
@@ -65,8 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(
         () => {
           hideTypingIndicator()
-          console.log(Response)
-          if (Response.enunciado == true) {
+          if (Response.enunciado) {
             addMessage(Response.text, "bot")
           } else {
             showNoResponseOptions(message)
@@ -161,13 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleAISearch(lastMessage) {
     addMessage("Pesquisando na IA...", "bot")
 
-    fetch("/respostaIA", {
+    fetch("/ai-search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        text: lastMessage,
+        message: lastMessage,
         timestamp: new Date().toISOString(),
       }),
     })
@@ -182,9 +184,112 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleOpenTicket() {
+    showTicketModal()
+  }
+
+  function showTicketModal() {
+    // Criar o modal se não existir
+    let modal = document.getElementById("ticketModal")
+    if (!modal) {
+      modal = createTicketModal()
+      document.body.appendChild(modal)
+    }
+
+    // Mostrar o modal usando Bootstrap
+    const bootstrapModal = new bootstrap.Modal(modal)
+    bootstrapModal.show()
+  }
+
+  function createTicketModal() {
+    const modalHTML = `
+      <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="ticketModalLabel">
+                <i class="fas fa-ticket-alt me-2"></i>Abrir Chamado
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="ticketForm">
+                <div class="mb-3">
+                  <label for="ticketTitle" class="form-label">
+                    <i class="fas fa-heading me-1"></i>Título do Chamado
+                  </label>
+                  <input type="text" class="form-control" id="ticketTitle" placeholder="Descreva brevemente o problema" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="ticketDescription" class="form-label">
+                    <i class="fas fa-align-left me-1"></i>Descrição Detalhada
+                  </label>
+                  <textarea class="form-control" id="ticketDescription" rows="4" placeholder="Descreva detalhadamente o problema ou solicitação" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="ticketPriority" class="form-label">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Prioridade
+                  </label>
+                  <select class="form-select" id="ticketPriority" required>
+                    <option value="">Selecione a prioridade</option>
+                    <option value="baixa">Baixa - Não é urgente</option>
+                    <option value="media">Média - Precisa de atenção</option>
+                    <option value="alta">Alta - Problema importante</option>
+                    <option value="urgente">Urgente - Requer ação imediata</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <i class="fas fa-times me-1"></i>Cancelar
+              </button>
+              <button type="button" class="btn btn-primary" id="submitTicket">
+                <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+
+    const modalElement = document.createElement("div")
+    modalElement.innerHTML = modalHTML
+    const modal = modalElement.firstElementChild
+
+    modal.addEventListener("shown.bs.modal", () => {
+      const submitBtn = modal.querySelector("#submitTicket")
+      const form = modal.querySelector("#ticketForm")
+
+      submitBtn.addEventListener("click", () => {
+        const title = modal.querySelector("#ticketTitle").value
+        const description = modal.querySelector("#ticketDescription").value
+        const priority = modal.querySelector("#ticketPriority").value
+
+        if (title && description && priority) {
+          // Fechar o modal
+          const bootstrapModal = bootstrap.Modal.getInstance(modal)
+          bootstrapModal.hide()
+
+          // Enviar dados para o backend
+          submitTicketToBackend(title, description, priority)
+
+          // Limpar formulário
+          form.reset()
+        } else {
+          alert("Por favor, preencha todos os campos obrigatórios.")
+        }
+      })
+    })
+
+    return modal
+  }
+
+  function submitTicketToBackend(title, description, priority) {
     const chatHistory = getChatHistory()
 
-    addMessage("Abrindo chamado com base no histórico da conversa...", "bot")
+    addMessage("Abrindo chamado...", "bot")
 
     fetch("/open-ticket", {
       method: "POST",
@@ -192,6 +297,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        title: title,
+        description: description,
+        priority: priority,
         chatHistory: chatHistory,
         timestamp: new Date().toISOString(),
       }),
