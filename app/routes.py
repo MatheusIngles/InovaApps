@@ -48,7 +48,7 @@ def chamados():
             "description": t.description,
             "status": t.status,
             "priority": t.priority,
-            "date": t.created_at.strftime("%d/%m/%Y"),
+            "date": t.created_at.strftime("%d-%m-%Y"),
             "time": t.created_at.strftime("%H:%M"),
         }
         for t in tickets

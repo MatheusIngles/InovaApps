@@ -83,6 +83,27 @@
     <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/chamados.js') }}"></script>
     <script>
+        // Funções auxiliares
+        function getStatusText(status) {
+            const statusMap = {
+            aberto: "Aberto",
+            "em-andamento": "Em Andamento",
+            resolvido: "Resolvido",
+            fechado: "Fechado",
+            }
+            return statusMap[status] || status
+        }
+
+        function getPriorityText(priority) {
+            const priorityMap = {
+            baixa: "Baixa",
+            media: "Média",
+            alta: "Alta",
+            urgente: "Urgente",
+            }
+            return priorityMap[priority] || priority
+        }
+
         tickets_js = {{ tickets | tojson }}
 
         window.onload = function() {
@@ -101,6 +122,7 @@
             }
 
             tickets_js.forEach((ticket) => {
+            console.log(ticket)
             const ticketCard = document.createElement("div")
             ticketCard.className = `ticket-card priority-${ticket.priority}`
             ticketCard.innerHTML = `
@@ -112,7 +134,7 @@
                         <p class="ticket-description">${ticket.description}</p>
                         <div class="ticket-meta">
                             <span class="ticket-priority priority-${ticket.priority}">${getPriorityText(ticket.priority)}</span>
-                            <span class="ticket-date">${formatDate(ticket.date)} às ${ticket.time}</span>
+                            <span class="ticket-date">${ticket.date} às ${ticket.time}</span>
                         </div>
                     `
 
