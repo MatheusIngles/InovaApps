@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (Response.enunciado) {
             addMessage(Response.text, "bot")
           } else {
+            addMessage(Response.text, "bot")
             showNoResponseOptions(message)
           }
           sendButton.disabled = false

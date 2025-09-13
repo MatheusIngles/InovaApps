@@ -33,8 +33,15 @@ def chat_preview():
 @app.route('/respostaIA', methods=["GET","POST"])
 def respostaIA():
     data = request.json
-    text = data.get("message", "")
+    text = data.get("text", "")
     Resposta = UsarGemini(text)
+    return jsonify({"status": "ok", "text": Resposta})
+
+@app.route('/criar_chamado', methods=["GET","POST"])
+def criar_chamado():
+    data = request.json
+    text = data.get("message", "")
+    Resposta = CriarChamadoParaBanco(text)
     return jsonify({"status": "ok", "text": Resposta})
 
 @app.route('/chamados')
