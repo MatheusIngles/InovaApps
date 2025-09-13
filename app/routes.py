@@ -29,7 +29,7 @@ def chamados():
     return render_template('chamados.html', render_sidebar=True)
 
 @app.route('/chamados_preview')
-def chat_preview():
+def chamados_preview():
     return render_template('chamados.html', render_sidebar=False)
 
 @app.route('/dashboard')
@@ -37,7 +37,7 @@ def dashboard():
     return render_template('dashboard.html', render_sidebar=True)
 
 @app.route('/dashboard_preview')
-def chat_preview():
+def dashboard_preview():
     return render_template('dashboard.html', render_sidebar=False)
 
 @app.route('/custom')
