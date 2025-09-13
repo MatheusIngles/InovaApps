@@ -3,7 +3,7 @@
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request, abort, jsonify
 import sqlalchemy as sa
-from app.IA import responder_usuario
+from app.IA import responder_usuario, UsarGemini, CriarChamadoParaBanco
 from app import app, db
 from datetime import datetime, timezone
 from app.models import Ticket, Chat, Message, ApplicationSettings
@@ -29,6 +29,13 @@ def chat():
 @app.route('/chat_preview')
 def chat_preview():
     return render_template('chat.html', render_sidebar=False)
+
+@app.routes('/resposta_IA')
+def resposta_IA():
+    data = request.json
+    text = data.get("message", "")
+    Resposta = UsarGemini(text)
+    return jsonify({"status": "ok", "text": Resposta})
 
 @app.route('/chamados')
 def chamados():

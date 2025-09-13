@@ -128,6 +128,9 @@ def UsarGemini(texto):
         # Fallback completo para resposta local
         return f"📋 Resposta da base local:\n{resposta_fallback_local(texto, dados)}"
 
+def CriarChamadoParaBanco(text):
+    print("Criando chamado para o banco de dados...")
+
 # Função principal para responder usuário - CORRIGIDA
 def responder_usuario(texto):
     print(f"\n🔍 Processando: '{texto}'")
