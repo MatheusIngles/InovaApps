@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const nextIndex = (currentIndex + 1) % statuses.length
       ticket.status = statuses[nextIndex]
 
-      renderTickets()
       window.closeTicketModal()
 
       // Mostrar notificação
@@ -193,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       tickets.unshift(newTicket)
-      renderTickets()
       showNotification(`Novo chamado ${newTicket.id} criado com sucesso!`)
     })
   }
@@ -216,7 +214,4 @@ document.addEventListener("DOMContentLoaded", () => {
       window.closeTicketModal()
     }
   })
-
-  // Inicializar
-  renderTickets()
 })
