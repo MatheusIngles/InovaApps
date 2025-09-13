@@ -1,12 +1,10 @@
-* Verificar questão de API gemini
-
-* Entender se devemos fazer:
-  > Artigo unico (um arquivo > uma receita de bolo)
-  VS
-  > Artigo multivalorado (um json "culinária", com chave de receita de bolo, chave de receita de biscoito...)
-
-* Terminar BD
-* Integrar reconhecimento de voz
-
-* Ajeitar hamburguer
-* Fazer layout
+* Scrollbar no dashboard
+* Scrollbar nas outras (nao sabemos se preicsa, verificar, se preicsa adiciona)
+* Grafico pizza dashboard
+* Resolver bug do chat antigo
+* Testar adicionar forms chamado no banco de dados
+* Fluxo do atendente
+  * Vai ter base de dados de chamados separado (pode ser estatico)
+* Customização
+* fazer README
+* fazer video demonstrando
