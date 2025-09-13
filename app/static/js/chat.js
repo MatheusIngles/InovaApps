@@ -241,3 +241,21 @@ document.addEventListener("DOMContentLoaded", () => {
     sendButton.disabled = messageInput.value.trim() === ""
   }
 })
+
+
+// APAGA ISSO DEPOIS É SO UMA MENSAGEM SOU UM MENSAGEIRO
+function sendAudioToBackend(audioBlob) {
+  const formData = new FormData();
+  formData.append("audio", audioBlob, "recording.wav"); // o nome e extensão são importantes
+
+  fetch("/speech", {
+    method: "POST",
+    body: formData,
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    console.log("Texto reconhecido:", data.text);
+    addMessage(data.text, "user"); // opcional: mostrar no chat
+  })
+  .catch((err) => console.error(err));
+}
