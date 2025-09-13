@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Atendimento - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <h3>Atendimento Virtual</h3>
+                    <span class="status online">Online</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar Menu -->
+        {% if render_sidebar %}
+            {% include 'sidebar.html' %}
+        {% endif %}
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="messages-container" id="messagesContainer">
+                {% for message in messages %}
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?</p>
+                        <span class="message-time">Agora</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500">
+                    <!-- Adicionando botão de áudio ao lado do botão de enviar -->
+                    <button id="audioButton" class="audio-button" title="Gravar áudio">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="sendButton" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <!-- Adicionando indicador de gravação -->
+                <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                    <div class="recording-animation">
+                        <i class="fas fa-microphone"></i>
+                        <span>Gravando...</span>
+                    </div>
+                    <button id="stopRecording" class="stop-recording-btn">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

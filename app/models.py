@@ -40,7 +40,7 @@ class Message(db.Model):
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime, default=lambda: datetime.now(timezone.utc)
     )
-    is_ai: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
+    message_type: so.Mapped[str] = so.mapped_column(sa.String(255))
 
     chat_id: so.Mapped[int] = so.mapped_column(
         sa.ForeignKey("chat.id", ondelete="CASCADE")
