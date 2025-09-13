@@ -1,0 +1,22 @@
+<!-- app/templates/500.html -->
+{% extends "error_layout.html" %}
+{% block title %} 404 - Internal Server Error {% endblock %}
+
+{% block content %}
+<div class="custom-bg text-dark">
+    <div class="d-flex align-items-center justify-content-center min-vh-100 px-2">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold">500</h1>
+            <p class="fs-2 fw-medium mt-4">Erro interno do servidor</p>
+            <p class="fs-5 fw-medium">O servidor foi incapaz de completar sua requisição.</p>
+            <p class="mt-4 mb-5">
+                Isso pode ocorrer por uma sobrecarga do servidor ou erros na aplicação.<br>
+                Caso queria reportar esse problema, <a class="custom-a" href="mailto:lucasbonato4546@gmail.com" target="_blank">fale com a gente</a>.
+            </p>
+            <a href="/index" class="btn btn-light fw-semibold rounded-pill px-4 py-2 custom-btn">
+                Voltar para a página inicial
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
