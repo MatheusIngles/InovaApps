@@ -6,14 +6,10 @@ import sqlalchemy as sa
 from app import app, db
 from datetime import datetime, timezone
 
-import speech_recognition as sr
 import tempfile
 
 @app.route('/')
 @app.route('/index')
-def index():
-    return render_template('chat.html')
-
 @app.route('/chat')
 def chat():
     return render_template('chat.html')
@@ -30,16 +26,13 @@ def dashboard():
 def custom():
     return render_template('custom.html')
 
-@app.route("/speech", methods=["POST"])
-def speech_to_text():
-    audio_file = request.files["audio"]
-    with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as tmp:
-        audio_file.save(tmp.name)
-        r = sr.Recognizer()
-        with sr.AudioFile(tmp.name) as source:
-            audio = r.record(source)
-            text = r.recognize_google(audio, language="pt-BR")
-    return jsonify({"text": text})
+@app.route("/submit_text", methods=["POST"])
+def submit_text():
+    data = request.json
+    text = data.get("text", "")
+    print("Texto recebido:", text)
+    # aqui você poderia salvar no banco, processar, etc.
+    print(jsonify({"status": "ok", "text": text}))
 
 @app.route("/erro_404")
 def erro_404():
