@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const audioButton = document.getElementById("audioButton")
   const recordingIndicator = document.getElementById("recordingIndicator")
   const stopRecordingBtn = document.getElementById("stopRecording")
+  const headerTicketButton = document.getElementById("headerTicketButton")
 
   const mediaRecorder = null
   const audioChunks = []
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let recognition = null
   let isListening = false
+  let aiSearchMode = false
 
   // Import Bootstrap
   const bootstrap = window.bootstrap
@@ -63,6 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
     sendButton.disabled = true
 
     showTypingIndicator()
+
+    if (aiSearchMode) {
+      handleAISearch(message)
+      return
+    }
 
     sendMessageToBackend(message).then((Response) => {
       setTimeout(
@@ -131,6 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     `
 
     searchButton.addEventListener("click", () => {
+      aiSearchMode = true
+      headerTicketButton.style.display = "inline-block"
       handleAISearch(lastUserMessage)
       optionsDiv.remove()
     })
@@ -176,11 +185,15 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        hideTypingIndicator()
         addMessage(data.text || "Não foi possível encontrar informações sobre sua pergunta.", "bot")
+        sendButton.disabled = false
       })
       .catch((error) => {
         console.error("Erro na pesquisa IA:", error)
+        hideTypingIndicator()
         addMessage("Erro ao pesquisar. Tente novamente.", "bot")
+        sendButton.disabled = false
       })
   }
 
@@ -246,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   </button>
                   <a class="btn btn-primary" id="submitTicket" href="/add_ticket_database">
                     <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
-                  </button>
+                  </a>
                 </div>
               </form>
             </div>
@@ -308,6 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((data) => {
         addMessage(data.text || "Chamado aberto com sucesso! Você receberá um retorno em breve.", "bot")
+        setTimeout(() => {
+          window.close()
+        }, 2000)
       })
       .catch((error) => {
         console.error("Erro ao abrir chamado:", error)
@@ -532,4 +548,10 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   stopRecordingBtn.addEventListener("click", stopListening)
+
+  if (headerTicketButton) {
+    headerTicketButton.addEventListener("click", () => {
+      handleOpenTicket()
+    })
+  }
 })
