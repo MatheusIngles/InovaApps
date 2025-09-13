@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const recordingIndicator = document.getElementById("recordingIndicator")
   const stopRecordingBtn = document.getElementById("stopRecording")
 
-  let mediaRecorder = null
-  let audioChunks = []
-  let isRecording = false
+  const mediaRecorder = null
+  const audioChunks = []
+  const isRecording = false
 
   let recognition = null
   let isListening = false
@@ -62,18 +62,169 @@ document.addEventListener("DOMContentLoaded", () => {
     showTypingIndicator()
 
     sendMessageToBackend(message).then((Response) => {
-      setTimeout(() => {
-        hideTypingIndicator()
-        if (Response.enunciado) {
-          addMessage(Response.text, "bot")
-        }
-        else{
-          addMessage(Response.text, "bot")
-          // Aqui bassul
-        }
-        sendButton.disabled = false
-      }, 1500 + Math.random() * 2000)
+      setTimeout(
+        () => {
+          hideTypingIndicator()
+          console.log(Response)
+          if (Response.enunciado == true) {
+            addMessage(Response.text, "bot")
+          } else {
+            showNoResponseOptions(message)
+          }
+          sendButton.disabled = false
+        },
+        1500 + Math.random() * 2000,
+      )
     })
+  }
+
+  function showNoResponseOptions(lastUserMessage) {
+    const optionsDiv = document.createElement("div")
+    optionsDiv.className = "message bot-message options-message"
+
+    const avatar = document.createElement("div")
+    avatar.className = "message-avatar"
+    avatar.innerHTML = '<i class="fas fa-robot"></i>'
+
+    const content = document.createElement("div")
+    content.className = "message-content"
+
+    const messageText = document.createElement("p")
+    messageText.textContent = "Não encontrei uma resposta específica para sua pergunta. O que gostaria de fazer?"
+
+    const optionsContainer = document.createElement("div")
+    optionsContainer.className = "chat-options"
+    optionsContainer.style.cssText = `
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    `
+
+    const searchButton = document.createElement("button")
+    searchButton.className = "btn btn-primary btn-sm"
+    searchButton.textContent = "Pesquisar na IA"
+    searchButton.style.cssText = `
+      background: var(--primary-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+    `
+
+    const ticketButton = document.createElement("button")
+    ticketButton.className = "btn btn-secondary btn-sm"
+    ticketButton.textContent = "Abrir Chamado"
+    ticketButton.style.cssText = `
+      background: var(--secondary-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+    `
+
+    searchButton.addEventListener("click", () => {
+      handleAISearch(lastUserMessage)
+      optionsDiv.remove()
+    })
+
+    ticketButton.addEventListener("click", () => {
+      handleOpenTicket()
+      optionsDiv.remove()
+    })
+
+    optionsContainer.appendChild(searchButton)
+    optionsContainer.appendChild(ticketButton)
+
+    content.appendChild(messageText)
+    content.appendChild(optionsContainer)
+
+    const time = document.createElement("span")
+    time.className = "message-time"
+    time.textContent = new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+
+    content.appendChild(time)
+    optionsDiv.appendChild(avatar)
+    optionsDiv.appendChild(content)
+
+    messagesContainer.appendChild(optionsDiv)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
+  function handleAISearch(lastMessage) {
+    addMessage("Pesquisando na IA...", "bot")
+
+    fetch("/respostaIA", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: lastMessage,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        addMessage(data.text || "Não foi possível encontrar informações sobre sua pergunta.", "bot")
+      })
+      .catch((error) => {
+        console.error("Erro na pesquisa IA:", error)
+        addMessage("Erro ao pesquisar. Tente novamente.", "bot")
+      })
+  }
+
+  function handleOpenTicket() {
+    const chatHistory = getChatHistory()
+
+    addMessage("Abrindo chamado com base no histórico da conversa...", "bot")
+
+    fetch("/open-ticket", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chatHistory: chatHistory,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        addMessage(data.text || "Chamado aberto com sucesso! Você receberá um retorno em breve.", "bot")
+      })
+      .catch((error) => {
+        console.error("Erro ao abrir chamado:", error)
+        addMessage("Erro ao abrir chamado. Tente novamente.", "bot")
+      })
+  }
+
+  function getChatHistory() {
+    const messages = messagesContainer.querySelectorAll(".message:not(.options-message)")
+    const history = []
+
+    messages.forEach((message) => {
+      const isUser = message.classList.contains("user-message")
+      const text = message.querySelector(".message-content p")?.textContent
+      const time = message.querySelector(".message-time")?.textContent
+
+      if (text) {
+        history.push({
+          sender: isUser ? "user" : "bot",
+          message: text,
+          time: time,
+        })
+      }
+    })
+
+    return history
   }
 
   // Adicionar mensagem ao chat
@@ -197,7 +348,6 @@ document.addEventListener("DOMContentLoaded", () => {
       typingIndicator.remove()
     }
   }
-
 
   // Inicializar estado do botão
   if (sendButton && messageInput) {
