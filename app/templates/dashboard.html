@@ -24,7 +24,9 @@
         </header>
 
         <!-- Sidebar Menu -->
-        {% include 'sidebar.html' %}
+        {% if render_sidebar %}
+            {% include 'sidebar.html' %}
+        {% endif %}
 
         <!-- Main Content -->
         <div class="main-content">

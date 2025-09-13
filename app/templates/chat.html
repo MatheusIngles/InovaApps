@@ -29,7 +29,9 @@
         </header>
 
         <!-- Sidebar Menu -->
-        {% include 'sidebar.html' %}
+        {% if render_sidebar %}
+            {% include 'sidebar.html' %}
+        {% endif %}
 
         <!-- Chat Container -->
         <div class="chat-container">

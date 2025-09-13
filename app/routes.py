@@ -15,19 +15,30 @@ def chat():
     if request.method == "POST":
         data = request.json
         text = data.get("message", "")
-        print("Texto recebido:", f"'{text}'")
-        # aqui você poderia salvar no banco, processar, etc.
+
         return jsonify({"status": "ok", "text": text})
     else:
-        return render_template('chat.html')
+        return render_template('chat.html', render_sidebar=True)
+
+@app.route('chat_preview')
+def chat_preview():
+    return render_template('chat.html', render_sidebar=False)
 
 @app.route('/chamados')
 def chamados():
-    return render_template('chamados.html')
+    return render_template('chamados.html', render_sidebar=True)
+
+@app.route('chamados_preview')
+def chat_preview():
+    return render_template('chamados.html', render_sidebar=False)
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', render_sidebar=True)
+
+@app.route('dashboard_preview')
+def chat_preview():
+    return render_template('dashboard.html', render_sidebar=False)
 
 @app.route('/custom')
 def custom():
