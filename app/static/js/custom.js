@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const previewBtn = document.getElementById("previewBtn")
   const saveBtn = document.getElementById("saveBtn")
   const resetBtn = document.getElementById("resetBtn")
-  const previewSection = document.getElementById("previewSection")
   const previewContainer = document.getElementById("previewContainer")
+  const fullscreenPreview = document.getElementById("fullscreenPreview")
 
   // Configurações padrão
   const defaultSettings = {
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       updateInputs(defaultSettings)
     }
+    updatePreview()
   }
 
   // Atualizar inputs com as configurações
@@ -112,46 +113,85 @@ document.addEventListener("DOMContentLoaded", () => {
     customStyleElement.textContent = settings.customCSS
   }
 
-  // Atualizar preview
   function updatePreview() {
     const settings = getCurrentSettings()
 
     if (previewContainer) {
+      // Aplicar configurações gerais ao preview
       previewContainer.style.fontFamily = settings.fontFamily
       previewContainer.style.fontSize = settings.fontSize + "px"
-      previewContainer.style.borderRadius = settings.borderRadius + "px"
-      previewContainer.style.padding = settings.spacing + "px"
 
-      const header = previewContainer.querySelector(".preview-header")
-      if (header) {
-        header.style.backgroundColor = settings.primaryColor
-        header.style.borderRadius = settings.borderRadius + "px"
+      // Atualizar header do chat
+      const chatHeader = previewContainer.querySelector(".preview-chat-header")
+      if (chatHeader) {
+        chatHeader.style.backgroundColor = settings.primaryColor
+        chatHeader.style.color = settings.backgroundColor
       }
 
-      const userMessage = previewContainer.querySelector(".user-message p")
-      if (userMessage) {
-        userMessage.style.backgroundColor = settings.primaryColor
+      // Atualizar avatar do usuário
+      const userAvatar = previewContainer.querySelector(".user-avatar")
+      if (userAvatar) {
+        userAvatar.style.backgroundColor = settings.primaryColor
       }
 
-      const botMessage = previewContainer.querySelector(".bot-message p")
-      if (botMessage) {
-        botMessage.style.backgroundColor = settings.backgroundColor
-        botMessage.style.color = settings.textColor
-      }
-    }
-  }
+      // Atualizar mensagens do usuário
+      const userMessages = previewContainer.querySelectorAll(".user-message .message-content")
+      userMessages.forEach((msg) => {
+        msg.style.backgroundColor = settings.primaryColor
+        msg.style.color = settings.backgroundColor
+        msg.style.borderRadius = settings.borderRadius + "px"
+      })
 
-  // Mostrar/esconder preview
-  function togglePreview() {
-    if (previewSection) {
-      const isVisible = previewSection.classList.contains("active")
-      if (isVisible) {
-        previewSection.classList.remove("active")
-        previewBtn.innerHTML = '<i class="fas fa-eye"></i> Visualizar'
-      } else {
-        previewSection.classList.add("active")
-        previewBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Preview'
-        updatePreview()
+      // Atualizar mensagens do bot
+      const botMessages = previewContainer.querySelectorAll(".bot-message .message-content")
+      botMessages.forEach((msg) => {
+        msg.style.backgroundColor = settings.backgroundColor
+        msg.style.color = settings.textColor
+        msg.style.borderRadius = settings.borderRadius + "px"
+        msg.style.border = `1px solid ${settings.secondaryColor}40`
+      })
+
+      // Atualizar botões de exemplo
+      const primaryButtons = previewContainer.querySelectorAll(".btn-primary")
+      primaryButtons.forEach((btn) => {
+        btn.style.backgroundColor = settings.primaryColor
+        btn.style.borderColor = settings.primaryColor
+        btn.style.borderRadius = settings.borderRadius + "px"
+        btn.style.padding = settings.spacing / 2 + "px " + settings.spacing + "px"
+      })
+
+      const secondaryButtons = previewContainer.querySelectorAll(".btn-secondary")
+      secondaryButtons.forEach((btn) => {
+        btn.style.backgroundColor = settings.secondaryColor
+        btn.style.borderColor = settings.secondaryColor
+        btn.style.borderRadius = settings.borderRadius + "px"
+        btn.style.padding = settings.spacing / 2 + "px " + settings.spacing + "px"
+      })
+
+      // Atualizar card de exemplo
+      const previewCard = previewContainer.querySelector(".preview-card")
+      if (previewCard) {
+        previewCard.style.borderRadius = settings.borderRadius + "px"
+        previewCard.style.padding = settings.spacing + "px"
+        previewCard.style.borderColor = settings.secondaryColor + "40"
+      }
+
+      // Atualizar input de exemplo
+      const previewInput = previewContainer.querySelector(".preview-input-area input")
+      if (previewInput) {
+        previewInput.style.borderRadius = settings.borderRadius * 2 + "px"
+        previewInput.style.borderColor = settings.secondaryColor + "60"
+      }
+
+      // Atualizar botões de áudio e envio
+      const sendBtn = previewContainer.querySelector(".send-btn")
+      if (sendBtn) {
+        sendBtn.style.backgroundColor = settings.primaryColor
+      }
+
+      const audioBtn = previewContainer.querySelector(".audio-btn")
+      if (audioBtn) {
+        audioBtn.style.backgroundColor = settings.secondaryColor
       }
     }
   }
@@ -170,7 +210,19 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.removeItem("customizationSettings")
       updateInputs(defaultSettings)
       applySettings(defaultSettings)
+      updatePreview()
       showNotification("Configurações restauradas para o padrão!", "info")
+    }
+  }
+
+  function toggleFullscreenPreview() {
+    const previewPanel = document.querySelector(".preview-panel")
+    if (previewPanel.classList.contains("fullscreen")) {
+      previewPanel.classList.remove("fullscreen")
+      fullscreenPreview.innerHTML = '<i class="fas fa-expand"></i>'
+    } else {
+      previewPanel.classList.add("fullscreen")
+      fullscreenPreview.innerHTML = '<i class="fas fa-compress"></i>'
     }
   }
 
@@ -206,60 +258,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000)
   }
 
-  // Event listeners
   if (primaryColorInput) {
-    primaryColorInput.addEventListener("change", () => {
-      if (previewSection.classList.contains("active")) updatePreview()
-    })
+    primaryColorInput.addEventListener("input", updatePreview)
   }
 
   if (secondaryColorInput) {
-    secondaryColorInput.addEventListener("change", () => {
-      if (previewSection.classList.contains("active")) updatePreview()
-    })
+    secondaryColorInput.addEventListener("input", updatePreview)
   }
 
   if (backgroundColorInput) {
-    backgroundColorInput.addEventListener("change", () => {
-      if (previewSection.classList.contains("active")) updatePreview()
-    })
+    backgroundColorInput.addEventListener("input", updatePreview)
   }
 
   if (textColorInput) {
-    textColorInput.addEventListener("change", () => {
-      if (previewSection.classList.contains("active")) updatePreview()
-    })
+    textColorInput.addEventListener("input", updatePreview)
   }
 
   if (fontFamilySelect) {
-    fontFamilySelect.addEventListener("change", () => {
-      if (previewSection.classList.contains("active")) updatePreview()
-    })
+    fontFamilySelect.addEventListener("change", updatePreview)
   }
 
   if (fontSizeRange) {
     fontSizeRange.addEventListener("input", () => {
       if (fontSizeValue) fontSizeValue.textContent = fontSizeRange.value + "px"
-      if (previewSection.classList.contains("active")) updatePreview()
+      updatePreview()
     })
   }
 
   if (borderRadiusRange) {
     borderRadiusRange.addEventListener("input", () => {
       if (borderRadiusValue) borderRadiusValue.textContent = borderRadiusRange.value + "px"
-      if (previewSection.classList.contains("active")) updatePreview()
+      updatePreview()
     })
   }
 
   if (spacingRange) {
     spacingRange.addEventListener("input", () => {
       if (spacingValue) spacingValue.textContent = spacingRange.value + "px"
-      if (previewSection.classList.contains("active")) updatePreview()
+      updatePreview()
     })
   }
 
+  if (customCSSTextarea) {
+    customCSSTextarea.addEventListener("input", updatePreview)
+  }
+
   if (previewBtn) {
-    previewBtn.addEventListener("click", togglePreview)
+    previewBtn.addEventListener("click", () => {
+      const settings = getCurrentSettings()
+      applySettings(settings)
+      showNotification("Alterações aplicadas ao site!", "info")
+    })
   }
 
   if (saveBtn) {
@@ -270,7 +319,11 @@ document.addEventListener("DOMContentLoaded", () => {
     resetBtn.addEventListener("click", resetSettings)
   }
 
-  // Adicionar estilos de animação
+  if (fullscreenPreview) {
+    fullscreenPreview.addEventListener("click", toggleFullscreenPreview)
+  }
+
+  // Adicionar estilos de animação e fullscreen
   const animationStyles = document.createElement("style")
   animationStyles.textContent = `
         @keyframes slideInRight {
@@ -293,6 +346,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 transform: translateX(100%);
                 opacity: 0;
             }
+        }
+        
+        .preview-panel.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: white;
+            border-radius: 0;
+        }
+        
+        .preview-panel.fullscreen .preview-container {
+            height: calc(100vh - 80px);
         }
     `
   document.head.appendChild(animationStyles)

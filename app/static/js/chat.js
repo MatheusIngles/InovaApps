@@ -11,6 +11,45 @@ document.addEventListener("DOMContentLoaded", () => {
   let audioChunks = []
   let isRecording = false
 
+  let recognition = null
+  let isListening = false
+
+  // Verificar se o navegador suporta Web Speech API
+  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+    recognition.lang = "pt-BR"
+    recognition.interimResults = false
+    recognition.continuous = false
+
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript
+      messageInput.value = text
+      sendButton.disabled = false
+
+      // Enviar automaticamente a mensagem reconhecida
+      setTimeout(() => {
+        sendMessage()
+      }, 500)
+    }
+
+    recognition.onerror = (event) => {
+      console.error("Erro de reconhecimento:", event.error)
+      stopListening()
+
+      if (event.error === "no-speech") {
+        addMessage("Não consegui ouvir nada. Tente novamente.", "bot")
+      } else if (event.error === "not-allowed") {
+        addMessage("Permissão de microfone negada. Verifique as configurações do navegador.", "bot")
+      } else {
+        addMessage("Erro no reconhecimento de voz. Tente novamente.", "bot")
+      }
+    }
+
+    recognition.onend = () => {
+      stopListening()
+    }
+  }
+
   // Respostas automáticas da IA
   const botResponses = [
     "Entendi sua solicitação. Vou criar um chamado para você.",
@@ -247,6 +286,37 @@ document.addEventListener("DOMContentLoaded", () => {
       })
   }
 
+  function startListening() {
+    if (!recognition) {
+      alert("Seu navegador não suporta reconhecimento de voz.")
+      return
+    }
+
+    try {
+      recognition.start()
+      isListening = true
+      audioButton.classList.add("recording")
+      recordingIndicator.style.display = "flex"
+      recordingIndicator.querySelector("span").textContent = "Ouvindo..."
+      messageInput.disabled = true
+      sendButton.disabled = true
+    } catch (error) {
+      console.error("Erro ao iniciar reconhecimento:", error)
+      addMessage("Erro ao iniciar reconhecimento de voz.", "bot")
+    }
+  }
+
+  function stopListening() {
+    if (recognition && isListening) {
+      recognition.stop()
+      isListening = false
+      audioButton.classList.remove("recording")
+      recordingIndicator.style.display = "none"
+      messageInput.disabled = false
+      sendButton.disabled = messageInput.value.trim() === ""
+    }
+  }
+
   // Event listeners
   sendButton.addEventListener("click", sendMessage)
   messageInput.addEventListener("keypress", (e) => {
@@ -259,14 +329,13 @@ document.addEventListener("DOMContentLoaded", () => {
     sendButton.disabled = messageInput.value.trim() === ""
   })
 
-  // Event listeners para gravação de áudio
   audioButton.addEventListener("click", () => {
-    if (!isRecording) {
-      startRecording()
+    if (!isListening) {
+      startListening()
     } else {
-      stopRecording()
+      stopListening()
     }
   })
 
-  stopRecordingBtn.addEventListener("click", stopRecording)
+  stopRecordingBtn.addEventListener("click", stopListening)
 })
