@@ -164,13 +164,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleAISearch(lastMessage) {
     addMessage("Pesquisando na IA...", "bot")
 
-    fetch("/ai-search", {
+    fetch("/respostaIA", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message: lastMessage,
+        text: lastMessage,
         timestamp: new Date().toISOString(),
       }),
     })
