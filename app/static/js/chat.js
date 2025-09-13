@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form id="ticketForm">
+              <form id="ticketForm" action="" method="post" novalidate>
                 <div class="mb-3">
                   <label for="ticketTitle" class="form-label">
                     <i class="fas fa-heading me-1"></i>Título do Chamado
@@ -240,15 +240,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     <option value="urgente">Urgente - Requer ação imediata</option>
                   </select>
                 </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                  </button>
+                  <a class="btn btn-primary" id="submitTicket" href="/create_ticket">
+                    <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
+                  </button>
+                </div>
               </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                <i class="fas fa-times me-1"></i>Cancelar
-              </button>
-              <button type="button" class="btn btn-primary" id="submitTicket">
-                <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
-              </button>
             </div>
           </div>
         </div>
