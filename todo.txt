@@ -1,0 +1,5 @@
+* Modificar SQLALCHEMY_DATABASE_URI em config.py
+    - Ou então nem usar sqlalchemy, a depender de como MongoDB funciona
+
+* Ao definir e construir o banco de dados, realizar flask-migrate e gerar
+  diretório "migrations"
