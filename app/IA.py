@@ -1,6 +1,7 @@
 import json
 from difflib import get_close_matches
 from sentence_transformers import SentenceTransformer, util
+from app import app
 import google.generativeai as genai
 import os
 import glob
@@ -11,7 +12,7 @@ pasta_docs = "Docs/Artigos"
 
 # Configuração do Gemini (com fallback)
 try:
-    genai.configure(api_key="AIzaSyAlM1mTfkfsGuoaban70ZjEi2NB1_tx4mM")
+    genai.configure(api_key=app.config['API'])
     # Tentar usar modelos mais leves para economizar quota
     modelo_gemini = genai.GenerativeModel("gemini-2.0-flash-lite")
     gemini_disponivel = True
@@ -129,7 +130,7 @@ def UsarGemini(texto):
         return f"📋 Resposta da base local:\n{resposta_fallback_local(texto, dados)}"
 
 def CriarChamadoParaBanco(text):
-    print("Criando chamado para o banco de dados...")
+    return
 
 # Função principal para responder usuário - CORRIGIDA
 def responder_usuario(texto):

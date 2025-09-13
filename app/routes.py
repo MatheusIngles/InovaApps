@@ -30,8 +30,8 @@ def chat():
 def chat_preview():
     return render_template('chat.html', render_sidebar=False)
 
-@app.routes('/resposta_IA')
-def resposta_IA():
+@app.route('/respostaIA', methods=["GET","POST"])
+def respostaIA():
     data = request.json
     text = data.get("message", "")
     Resposta = UsarGemini(text)
