@@ -53,6 +53,26 @@ Se houver os paths do sqlite ali, está tudo certo, se não, você deve adiciona
 Variáveis de Ambiente
 </summary>
 Se você precisou instalar o python e o sqlite, ao final do processo você deve ter algo assim:
+
+<img width="1141" height="501" alt="Instrucao variaveis" src="https://github.com/user-attachments/assets/9644d990-3d85-4f3c-ba8c-a4d07e1325b5" />
+
+Se você não está vendo os PATHs do Python ou o Path do sqlite, busque o local de instalação dos seus arquivos e adicione aqui.
+
+Por exemplo, meu sqlite está em ``C:\Program Files\sqlite``, então adiciono o Path:
+
+<img width="571" height="501" alt="image" src="https://github.com/user-attachments/assets/f3aefa79-18ee-4a40-96cc-6675b20832f3" />
+
+Após adicionar o PATH, clica "OK" em tudo e o path deve funcionar.
+
+Para verificar se o path funciona, abra seu terminal e execute:
+* ``py --version`` Para verificar se python esta instalado e com o path configurado
+* ``sqlite3`` Para verificar se o sqlite está instalado e com o path configurado
+
+<img width="814" height="421" alt="image" src="https://github.com/user-attachments/assets/c06f7fdf-1800-40ac-bf91-1cbea675b9e8" />
+
+
+  
+
 </details>
 
 
