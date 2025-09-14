@@ -216,8 +216,6 @@
 .modal-content {
   background: var(--white);
   border-radius: var(--border-radius);
-  width: 90%;
-  max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -227,6 +225,12 @@
 
 .modal.active .modal-content {
   transform: scale(1);
+}
+
+/* Garantir que o modal Bootstrap tenha a largura correta */
+.modal-dialog.modal-lg {
+  max-width: 800px;
+  width: 90%;
 }
 
 .modal-header {
