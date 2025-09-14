@@ -427,11 +427,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function createTicketModal() {
   try {
-    // Usar a mensagem original do usuário se disponível, senão usar a última mensagem do histórico
-    const messageToUse = originalUserMessage || (() => {
-      const history = getChatHistory()
-      return history.length > 0 ? history[history.length - 2].message : ""
-    })()
+    // Capturar todo o contexto da conversa
+    const history = getChatHistory()
+    
+    // Criar um contexto completo da conversa
+    let fullContext = ""
+    if (history.length > 0) {
+      // Incluir as últimas 10 mensagens para dar contexto completo
+      const recentMessages = history.slice(-10)
+      const conversationContext = recentMessages.map(msg => {
+        const sender = msg.sender === "user" ? "Usuário" : "Bot"
+        return `${sender}: ${msg.message}`
+      }).join("\n")
+      
+      fullContext = `Contexto da conversa:\n${conversationContext}`
+    }
+    
+    // Usar o contexto completo ou a mensagem original como fallback
+    const messageToUse = fullContext || originalUserMessage || ""
+    
+    console.log("Contexto completo enviado para IA:", messageToUse)
 
     const response = await fetch("/criar_chamado", {
       method: "POST",
