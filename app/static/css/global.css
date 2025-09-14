@@ -42,6 +42,17 @@ body {
   overflow: hidden;
 }
 
+.nav-custom-paragraph-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6c757d;
+  margin: 1rem 0 0.5rem 0;
+  padding-left: 0.75rem;
+  letter-spacing: 0.05em;
+  border-left: 3px solid #0d6efd;
+}
+
 /* App container agora ocupa 100% da viewport sem margens */
 .app-container {
   display: flex;
