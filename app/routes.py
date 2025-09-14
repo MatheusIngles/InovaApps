@@ -225,7 +225,7 @@ def process_satisfaction():
 
 @app.route("/artigos")
 def artigo():
-    return render_template("artigos.html")
+    return render_template("artigos.html", render_sidebar=True)
 
 @app.route("/erro_404")
 def erro_404():
