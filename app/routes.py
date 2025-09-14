@@ -131,6 +131,55 @@ def dashboard():
 def dashboard_preview():
     return render_template('dashboard.html', render_sidebar=False)
 
+@app.route('/kanban')
+def kanban():
+    tickets = Ticket.query.all()
+
+    tickets_data = [
+        {
+            "code": t.code,
+            "title": t.title,
+            "description": t.description,
+            "status": t.status,
+            "priority": t.priority,
+            "date": t.created_at.strftime("%d-%m-%Y"),
+            "time": t.created_at.strftime("%H:%M"),
+        }
+        for t in tickets
+    ]
+
+    return render_template('kanban.html', render_sidebar=True, tickets=tickets_data)
+
+@app.route('/kanban_preview')
+def kanban_preview():
+    return render_template('kanban.html', render_sidebar=False, tickets=[])
+
+@app.route('/update_ticket_status', methods=['POST'])
+def update_ticket_status():
+    try:
+        data = request.json
+        ticket_code = data.get('ticket_code')
+        new_status = data.get('status')
+
+        if not ticket_code or not new_status:
+            return jsonify({'success': False, 'error': 'Código do ticket e status são obrigatórios'})
+
+        # Buscar o ticket pelo código
+        ticket = Ticket.query.filter_by(code=ticket_code).first()
+        
+        if not ticket:
+            return jsonify({'success': False, 'error': 'Ticket não encontrado'})
+
+        # Atualizar o status
+        ticket.status = new_status
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Status atualizado com sucesso'})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/custom')
 def custom():
     return render_template('custom.html')
