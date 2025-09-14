@@ -5,6 +5,8 @@ Aqui estão as instruções do projeto do grupo atum para o inovaapps 2025!
 
 **Repositório**: https://github.com/MatheusIngles/InovaApps
 
+**LINK DO VIDEO**: https://youtu.be/y8F1zkP_2Z0
+
 **Integrantes**:
 * Lucas Bonato Soares
 * Matheus Endlich Silveira
