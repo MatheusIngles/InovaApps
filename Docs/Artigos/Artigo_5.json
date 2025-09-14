@@ -1,0 +1,42 @@
+[
+  {
+    "topico": "como economizar combustível",
+    "resposta": "Dicas para economizar combustível: 1) Mantenha os pneus calibrados; 2) Evite acelerações e frenagens bruscas; 3) Use ar-condicionado com moderação; 4) Retire peso desnecessário do veículo; 5) Faça manutenção regular (troca de velas, filtros); 6) Planeje rotas para evitar trânsito; 7) Use o combustível recomendado pelo fabricante."
+  },
+  {
+    "topico": "o que fazer se o carro não pega",
+    "resposta": "Se o carro não pega: 1) Verifique a bateria (limpe os polos, teste ou recarregue); 2) Veja se há combustível; 3) Cheque as velas de ignição; 4) Inspecione o motor de partida; 5) Se for carro com chave, teste o chip da chave; 6) Chame um guincho se não identificar o problema. Problemas elétricos são comuns."
+  },
+  {
+    "topico": "como trocar um pneu furado",
+    "resposta": "Passos para trocar o pneu: 1) Estacione em local seguro e plano; 2) Acione o freio de mão e coloque calços; 3) Afrouxe os parafusos com o carro no chão; 4) Use o macaco para levantar o carro; 5) Retire os parafusos e o pneu; 6) Coloque o estepe e aperte os parafusos; 7) Abaixe o carro e aperte bem os parafusos. Revise a pressão do estepe depois."
+  },
+  {
+    "topico": "manutenção preventiva do carro",
+    "resposta": "Manutenção preventiva: 1) Troca de óleo e filtros conforme manual; 2) Calibragem e rodízio de pneus; 3) Alinhamento e balanceamento; 4) Verificação de fluidos (freio, direção, radiador); 5) Inspeção de pastilhas de freio; 6) Limpeza de bicos injetores; 7) Verificação da bateria. Siga o cronograma do fabricante."
+  },
+  {
+    "topico": "como limpar o carro por dentro",
+    "resposta": "Para limpar o interior: 1) Remova lixo e itens pessoais; 2) Aspire tapetes e bancos; 3) Limpe painel e plásticos com pano macio e produto específico; 4) Use shampoo para estofados se necessário; 5) Limpe vidros com produto sem álcool; 6) Use protetor de plástico para evitar ressecamento. Evite produtos abrasivos."
+  },
+  {
+    "topico": "sinais de problema no motor",
+    "resposta": "Sinais de problemas: 1) Luz de alerta no painel; 2) Barulhos anormais (batidas, chiados); 3) Perda de potência; 4) Fumaça excessiva no escapamento; 5) Consumo excessivo de óleo ou combustível; 6) Superaquecimento. Leve a uma oficina para diagnóstico profissional."
+  },
+  {
+    "topico": "como dirigir na chuva com segurança",
+    "resposta": "Direção na chuva: 1) Reduza a velocidade; 2) Aumente a distância do carro à frente; 3) Use faróis baixos; 4) Evite freadas bruscas; 5) Cuidado com aquaplanagem (se ocorrer, não freie, solte o acelerador e segure a direção); 6) Verifique pneus e limpadores regularmente."
+  },
+  {
+    "topico": "o que verificar antes de uma viagem longa",
+    "resposta": "Checklist pré-viagem: 1) Pneus (calibragem e estepe); 2) Fluidos (óleo, água, fluido de freio); 3) Freios; 4) Luzes (faróis, setas, freio); 5) Documentação (CNH, CRLV); 6) Kit de emergência (triângulo, macaco); 7) Itens de segurança (água, lanterna)."
+  },
+  {
+    "topico": "como passar na prova prática de direção",
+    "resposta": "Dicas para a prova prática: 1) Pratique no local da prova; 2) Controle a ansiedade; 3) Ajuste espelhos e banco antes de iniciar; 4) Use sempre seta e olhe os espelhos; 5) Respeite a sinalização e limites de velocidade; 6) Execute balizas e rampas com calma; 7) Ouça atentamente as instruções do examinador."
+  },
+  {
+    "topico": "diferença entre gasolina e etanol",
+    "resposta": "Diferenças: 1) Etanol geralmente é mais barato, mas rende menos (cerca de 70% do rendimento da gasolina); 2) Gasolina tem maior poder calorífico; 3) Etanol é menos poluente; 4) Verifique no manual se o carro é flex. Faça a conta: se o preço do etanol for até 70% do da gasolina, abastecer com etanol é vantajoso."
+  }
+]

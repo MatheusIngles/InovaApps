@@ -3,7 +3,7 @@
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request, abort, jsonify
 import sqlalchemy as sa
-from app.IA import responder_usuario, UsarGemini, CriarChamadoParaBanco
+from app.IA import responder_usuario, UsarGemini, CriarChamadoParaBanco, recarregarDados
 from app import app, db
 from datetime import datetime, timezone
 from app.models import Ticket, Chat, Message, ApplicationSettings
@@ -194,29 +194,26 @@ def process_satisfaction():
         if not message or not messagem_bot:
             return jsonify({"error": "Message and messagem_bot are required"}), 400
         
-        # Caminho para o arquivo Artigo_llm.json
         artigo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Docs', 'Artigos', 'Artigo_llm.json')
         
-        # Ler o arquivo existente ou criar lista vazia
         try:
             with open(artigo_path, 'r', encoding='utf-8') as f:
                 artigos = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             artigos = []
         
-        # Criar nova entrada seguindo o padrão dos outros artigos
         nova_entrada = {
             "topico": message.lower().strip(),
             "resposta": messagem_bot
         }
         
-        # Adicionar a nova entrada
         artigos.append(nova_entrada)
         
-        # Salvar o arquivo atualizado
         with open(artigo_path, 'w', encoding='utf-8') as f:
             json.dump(artigos, f, ensure_ascii=False, indent=2)
         
+        recarregarDados()
+
         return jsonify({
             "status": "success", 
             "message": "Feedback registrado com sucesso! A resposta foi adicionada à base de conhecimento."

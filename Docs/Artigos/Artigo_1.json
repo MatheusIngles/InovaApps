@@ -1,54 +1,78 @@
 [
   {
     "topico": "como instalar python",
-    "resposta": "Para instalar Python, vá em python.org e baixe a versão apropriada para seu sistema."
+    "resposta": "Para instalar o Python, acesse o site oficial python.org, baixe o instalador correspondente ao seu sistema operacional (Windows, macOS ou Linux). Durante a instalação, marque a opção 'Add Python to PATH' para facilitar o uso via terminal. Após a instalação, abra o terminal ou prompt de comando e digite 'python --version' para verificar se foi instalado corretamente."
   },
   {
     "topico": "como criar ambiente virtual",
-    "resposta": "Use 'python -m venv nome_do_ambiente' e ative com 'source nome_do_ambiente/bin/activate' (Linux/Mac) ou 'nome_do_ambiente\\Scripts\\activate' (Windows)."
+    "resposta": "Ambientes virtuais permitem isolar dependências de projetos. Use o comando 'python -m venv nome_do_ambiente' para criar um. Para ativar: no Linux/macOS use 'source nome_do_ambiente/bin/activate'; no Windows use 'nome_do_ambiente\\Scripts\\activate'. Para desativar, digite 'deactivate'. É recomendado usar ambientes virtuais para evitar conflitos entre bibliotecas."
   },
   {
     "topico": "impressora não imprime",
-    "resposta": "Verifique: 1) Se está ligada e com papel 2) Conexão USB/rede 3) Driver instalado 4) Se não está com fila de impressão travada 5) Reinicie a impressora e computador"
+    "resposta": "Se a impressora não imprime, verifique: 1) Alimentação de energia e papel; 2) Conexão USB ou rede; 3) Drivers instalados e atualizados; 4) Filas de impressão (limpe-as se necessário); 5) Reinicie a impressora e o computador. Se o problema persistir, tente imprimir uma página de teste diretamente pela impressora para verificar se o problema é de hardware ou software."
   },
   {
     "topico": "sem conexão com internet",
-    "resposta": "Solução: 1) Reinicie modem/router 2) Verifique cabos 3) Teste em outro dispositivo 4) Chame provedor se problema persistir"
+    "resposta": "Caso não haja conexão com a internet: 1) Reinicie o modem e roteador; 2) Verifique os cabos de rede e conexões Wi-Fi; 3) Teste a conexão em outro dispositivo; 4) Execute a solução de problemas de rede do sistema operacional; 5) Contate seu provedor de internet se o problema persistir, pois pode ser uma falha na rede externa."
   },
   {
     "topico": "email não envia anexos grandes",
-    "resposta": "Limite geralmente é 25MB. Use: Google Drive, WeTransfer ou OneDrive para compartilhar arquivos grandes"
+    "resposta": "A maioria dos serviços de email limita anexos a 25MB. Para arquivos maiores, use serviços como Google Drive, Dropbox, WeTransfer ou OneDrive. Compartilhe o link do arquivo no email. Certifique-se de configurar as permissões de compartilhamento corretamente para que o destinatário possa acessar o arquivo."
   },
   {
     "topico": "computador lento",
-    "resposta": "Otimize: 1) Feche programas desnecessários 2) Limpe disco 3) Aumente RAM 4) Verifique malware 5) Desfragmente HD (se Windows)"
+    "resposta": "Para melhorar a performance: 1) Feche programas desnecessários; 2) Execute uma limpeza de disco; 3) Aumente a memória RAM se possível; 4) Verifique e remova malwares com um antivírus; 5) Desfragmente o HD (se for Windows e usar HD mecânico); 6) Desative programas que iniciam automaticamente com o sistema."
   },
   {
     "topico": "senha bloqueada",
-    "resposta": "Contate o administrador de TI para resetar a senha ou use a opção 'esqueci minha senha' no sistema"
+    "resposta": "Se sua senha foi bloqueada, use a opção 'Esqueci minha senha' no sistema de login. Caso não funcione, entre em contato com o administrador de TI da sua empresa ou provedor do serviço. Mantenha sempre um email ou telefone de recuperação cadastrado para facilitar o resgate de senhas."
   },
   {
     "topico": "problema com wifi",
-    "resposta": "Solução: 1) Reconecte à rede 2) Esqueça rede e reconecte 3) Atualize driver wifi 4) Reinicie roteador"
+    "resposta": "Para resolver problemas de Wi-Fi: 1) Reconecte-se à rede; 2) Esqueça a rede e reconecte digitando a senha novamente; 3) Atualize os drivers da placa de rede; 4) Reinicie o roteador; 5) Verifique se há interferência de outros dispositivos eletrônicos; 6) Altere o canal do roteador para um menos congestionado."
   },
   {
     "topico": "microfone não funciona nas reuniões",
-    "resposta": "Verifique: 1) Permissões do aplicativo 2) Microfone selecionado corretamente 3) Não está mudo 4) Drivers atualizados"
+    "resposta": "Se o microfone não funciona em chamadas: 1) Verifique as permissões do aplicativo (Zoom, Teams, etc.) para acessar o microfone; 2) Selecione o microfone correto nas configurações de áudio; 3) Certifique-se de que o microfone não está mudo no software ou fisicamente; 4) Atualize os drivers de áudio; 5) Teste o microfone em outro aplicativo para verificar se o problema é geral ou específico."
   },
   {
     "topico": "teclado/mouse não funcionam",
-    "resposta": "Teste: 1) Troque porta USB 2) Reinicie computador 3) Teste em outra máquina 4) Verifique pilhas (se wireless)"
+    "resposta": "Se o teclado ou mouse pararam de funcionar: 1) Troque a porta USB; 2) Reinicie o computador; 3) Teste em outro dispositivo para descartar defeito físico; 4) Verifique as pilhas se for wireless; 5) Atualize ou reinstale os drivers do dispositivo no Gerenciador de Dispositivos."
   },
   {
     "topico": "arquivo corrompido",
-    "resposta": "Tente: 1) Abrir backup 2) Usar 'abrir e reparar' no Office 3) Recuperar versões anteriores 4) Software de recuperação"
+    "resposta": "Para recuperar arquivos corrompidos: 1) Restaure a partir de backup; 2) No Microsoft Office, use a opção 'Abrir e Reparar'; 3) Use a funcionalidade 'Versões Anteriores' do Windows (se estiver ativada); 4) Utilize softwares de recuperação de dados como Recuva ou EaseUS Data Recovery; 5) Evite salvar novos dados no disco até recuperar o arquivo para evitar sobrescrita."
   },
   {
     "topico": "tela azul windows",
-    "resposta": "Causas comuns: 1) Driver problemático 2) Hardware defeituoso 3) Superaquecimento 4) Memória RAM defeituosa"
+    "resposta": "A tela azul (Blue Screen) geralmente indica erro crítico. Causas comuns: 1) Drivers desatualizados ou corrompidos; 2) Defeito em hardware (RAM, HD, placa de vídeo); 3) Superaquecimento; 4) Conflito de software. Anote o código de erro exibido e pesquise soluções específicas. Use a ferramenta 'Verificar Memória' do Windows para testar a RAM e verifique a integridade do sistema com 'sfc /scannow' no prompt administrativo."
   },
   {
     "topico": "programa não responde",
-    "resposta": "Use Ctrl+Alt+Del para abrir Gerenciador de Tarefas e finalizar o programa travado"
+    "resposta": "Se um programa parou de responder: 1) Use Ctrl+Alt+Del para abrir o Gerenciador de Tarefas; 2) Localize o programa travado e clique em 'Finalizar Tarefa'; 3) Reinicie o programa. Se o problema persistir, reinicie o computador. Verifique se há atualizações para o software ou conflitos com outros programas."
+  },
+  {
+    "topico": "como atualizar drivers",
+    "resposta": "Para atualizar drivers: 1) Abra o Gerenciador de Dispositivos (Windows); 2) Clique com o botão direito no dispositivo e selecione 'Atualizar driver'; 3) Escolha procurar automaticamente. Alternativamente, visite o site do fabricante para baixar drivers específicos. Use ferramentas como Driver Booster com cautela."
+  },
+  {
+    "topico": "backup automático windows",
+    "resposta": "Configure backup automático no Windows: 1) Vá em Configurações > Atualização e Segurança > Backup; 2) Adicione uma unidade externa ou rede; 3) Escolha 'Fazer backup de arquivos' e agende horários. Use o Histórico de Arquivos para restaurar versões anteriores."
+  },
+  {
+    "topico": "limpar cache navegador",
+    "resposta": "Para limpar o cache: No Chrome, vá em Configurações > Privacidade e segurança > Limpar dados de navegação. Selecione 'Cache' e clique em 'Limpar dados'. Repita processo similar em outros navegadores para melhorar performance e resolver problemas de carregamento."
+  },
+  {
+    "topico": "criptografar arquivo",
+    "resposta": "No Windows, use o BitLocker para criptografar unidades inteiras. Para arquivos individuais, use ferramentas como 7-Zip com senha ou softwares de criptografia como VeraCrypt. No macOS, use o FileVault para criptografia de disco."
+  },
+  {
+    "topico": "otimizar windows 10",
+    "resposta": "Para otimizar o Windows 10: 1) Desative efeitos visuais; 2) Desative programas de inicialização; 3) Execute limpeza de disco; 4) Desfragmente o HD; 5) Atualize drivers; 6) Use o modo de alto desempenho no plano de energia."
+  },
+  {
+    "topico": "recuperar arquivo excluído",
+    "resposta": "Para recuperar arquivos excluídos: 1) Verifique a Lixeira; 2) Use software como Recuva, EaseUS Data Recovery ou TestDisk; 3) Restaure a partir de backup; 4) Use o comando 'attrib' no prompt para recuperar arquivos ocultos por vírus."
   }
 ]

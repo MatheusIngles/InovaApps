@@ -111,6 +111,19 @@ def resposta_fallback_local(pergunta, dados_contexto):
     
     return "Desculpe, não encontrei informações específicas sobre isso na base de conhecimento."
 
+def recarregarDados():
+    global dados
+    arquivos_json = glob.glob(os.path.join(pasta_docs, "artigo_*.json"))
+    dados = []
+    for arquivo in arquivos_json:
+        try:
+            with open(arquivo, "r", encoding="utf-8") as f:
+                artigos = json.load(f)
+                dados.extend(artigos)
+                print(f"Arquivo {arquivo} carregado com sucesso!")
+        except Exception as e:
+            print(f"Erro ao carregar {arquivo}: {e}")
+
 def UsarGemini(texto, ConversasPassadas):
     if gemini_disponivel:
         try:

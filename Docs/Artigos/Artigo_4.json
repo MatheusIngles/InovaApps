@@ -1,0 +1,42 @@
+[
+  {
+    "topico": "como economizar dinheiro",
+    "resposta": "Dicas para economizar: 1) Registre todos os gastos; 2) Crie um orçamento mensal; 3) Elimine gastos supérfluos; 4) Compare preços antes de comprar; 5) Use listas de compras; 6) Cozinhe em casa; 7) Automatize transferências para poupança no dia do pagamento."
+  },
+  {
+    "topico": "como sair das dívidas",
+    "resposta": "Para sair das dívidas: 1) Liste todas as dívidas com juros e valores; 2) Priorize as de maior juro (método avalanche) ou as menores (método bola de neve); 3) Negocie com credores para reduzir juros; 4) Evite contrair novas dívidas; 5) Considere consolidar dívidas em uma com juro menor; 6) Aumente sua renda com trabalhos extras se possível."
+  },
+  {
+    "topico": "melhores investimentos para iniciantes",
+    "resposta": "Investimentos para iniciantes: 1) Tesouro Direto (Selic, IPCA+); 2) CDB de bancos sólidos; 3) Fundos de renda fixa; 4) LCIs e LCAs (isentos de IR); 5) ETFs de índices (como IVVB11). Comece com aplicações de baixo risco e liquidez. Estude antes de investir e diversifique."
+  },
+  {
+    "topico": "como fazer um planejamento financeiro",
+    "resposta": "Passos do planejamento: 1) Calcule sua renda mensal; 2) Liste todas as despesas fixas e variáveis; 3) Defina metas (curto, médio e longo prazo); 4) Estabeleça um limite de gastos por categoria; 5) Reserve uma parte para emergências; 6) Invista conforme suas metas; 7) Revise e ajuste mensalmente."
+  },
+  {
+    "topico": "o que é fundo de emergência",
+    "resposta": "Fundo de emergência é uma reserva para cobrir imprevistos (desemprego, saúde). Deve equivaler a 3-6 meses de despesas. Mantenha em aplicações seguras e de fácil acesso, como poupança ou Tesouro Selic. Não use para investimentos ou gastos não essenciais."
+  },
+  {
+    "topico": "como gastar menos com supermercado",
+    "resposta": "Para economizar no mercado: 1) Faça lista de compras e siga-a; 2) Não vá com fome; 3) Compare preços por kg/l; 4) Prefira marcas próprias; 5) Aproveite promoções de itens não perecíveis; 6) Compre frutas e verduras da estação; 7) Evite produtos industrializados."
+  },
+  {
+    "topico": "dicas para controlar gastos com cartão de crédito",
+    "resposta": "Para controlar o cartão: 1) Gaste apenas o que pode pagar à vista; 2) Pague a fatura total para evitar juros; 3) Acompanhe os gastos pelo app; 4) Estabeleça um limite mensal; 5) Cuidado com compras parceladas; 6) Use programas de recompensa com sabedoria."
+  },
+  {
+    "topico": "como negociar dívidas",
+    "resposta": "Para negociar dívidas: 1) Contate o credor e explique sua situação; 2) Peça descontos em juros e multas; 3) Proponha um plano de pagamento viável; 4) Considere procurar um advogado para renegociação judicial; 5) Evite aceitar propostas que não cabem no seu orçamento."
+  },
+  {
+    "topico": "aplicativos para controlar finanças",
+    "resposta": "Apps para finanças: 1) Mobills (controle de gastos); 2) Guiabolso (visão geral das contas); 3) Organizze (orçamento doméstico); 4) Tesouro Direto (investimentos); 5) Minhas Economias (metas e relatórios). Escolha um que se adapte à sua necessidade."
+  },
+  {
+    "topico": "como comprar à vista ou parcelado",
+    "resposta": "Decisão entre à vista ou parcelado: 1) À vista geralmente tem desconto; 2) Parcelamento sem juros pode ser vantajoso se o dinheiro render mais aplicado; 3) Evite parcelamentos com juros altos; 4) Considere seu fluxo de caixa; 5) Não comprometa muita renda futura com parcelas."
+  }
+]
