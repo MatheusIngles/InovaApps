@@ -230,6 +230,7 @@ def add_article():
         with open('Docs/Artigos/Artigo_llm.json', 'w', encoding='utf-8') as f:
             json.dump(articles, f, ensure_ascii=False, indent=2)
         
+        recarregarDados()
         return jsonify({'success': True, 'message': 'Artigo adicionado com sucesso'})
         
     except Exception as e:

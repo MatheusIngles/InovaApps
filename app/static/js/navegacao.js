@@ -425,10 +425,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loadChat(loadChatId)
       }, 500)
     }
-
     console.log("[v0] Sistema de chat inicializado")
     console.log("[v0] Chat ID atual:", localStorage.getItem("currentChatId"))
-
     const savedChatsCount = JSON.parse(localStorage.getItem("savedChats") || "[]").length
     console.log("[v0] Chats salvos:", savedChatsCount)
   }
