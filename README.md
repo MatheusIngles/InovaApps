@@ -346,7 +346,7 @@ Novamente, apenas o ADMIN teria acesso a essa pagina, mas deixamos solto sem ess
 
 Nessa pagina o admin pode ver os artigos registrados no sistema, e também as solicitações de artigo novo gerado nos fluxo de chatbot IA no chat.
 
-Ao aceitar uma solicitação, ela é adicionada aos artigos, o que iria permitir o chat de encontrar a resposta predefinida na próxima solicitação do mesmo problema.
+Ao aceitar uma solicitação, ela é adicionada aos artigos, o que iria permitir o chat de ter maior acurácia ao responder perguntas de tópico semelhante no futuro.
 
 Admin pode clicar em uma solicitação e em APROVAR para adicionar aos artigos registrados.
 
