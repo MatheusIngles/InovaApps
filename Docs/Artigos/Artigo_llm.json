@@ -1,6 +1,6 @@
 [
   {
-    "topico": "como baixar python na minha maquina",
+    "topico": "como baixar python no meu computador",
     "resposta": "Para instalar o Python, acesse o site oficial python.org, baixe o instalador correspondente ao seu sistema operacional (Windows, macOS ou Linux). Durante a instalação, marque a opção 'Add Python to PATH' para facilitar o uso via terminal. Após a instalação, abra o terminal ou prompt de comando e digite 'python --version' para verificar se foi instalado corretamente."
   }
 ]

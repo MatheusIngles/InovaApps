@@ -123,7 +123,7 @@ def recarregarDados():
                 print(f"Arquivo {arquivo} carregado com sucesso!")
         except Exception as e:
             print(f"Erro ao carregar {arquivo}: {e}")
-
+            
 def UsarGemini(texto, ConversasPassadas):
     if gemini_disponivel:
         try:

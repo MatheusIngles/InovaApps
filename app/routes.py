@@ -346,9 +346,8 @@ def approve_permission():
         # Salvar solicitações atualizadas
         with open('Docs/Artigos/solicitacoes_alteracao.json', 'w', encoding='utf-8') as f:
             json.dump(permissions, f, ensure_ascii=False, indent=2)
-        
+        recarregarDados()
         return jsonify({'success': True, 'message': 'Permissão aprovada e artigo adicionado com sucesso'})
-        
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -374,7 +373,7 @@ def reject_permission():
         # Salvar solicitações atualizadas
         with open('Docs/Artigos/solicitacoes_alteracao.json', 'w', encoding='utf-8') as f:
             json.dump(permissions, f, ensure_ascii=False, indent=2)
-        
+        recarregarDados()
         return jsonify({'success': True, 'message': 'Permissão rejeitada'})
         
     except Exception as e:
