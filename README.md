@@ -163,6 +163,20 @@ Nos artigos temos um tópico de "como instalar python". Tente perguntar ao chat 
 
 * ``"Para instalar o Python, acesse o site oficial python.org, baixe o instalador correspondente ao seu sistema operacional (Windows, macOS ou Linux). Durante a instalação, marque a opção 'Add Python to PATH' para facilitar o uso via terminal. Após a instalação, abra o terminal ou prompt de comando e digite 'python --version' para verificar se foi instalado corretamente."``
 
+Se a sua pergunta for **exatamente** "como instalar python", ele vai dar correspondência exata ao artigo registrado.
+
+Se a sua pergunta for **semelhante** a "como instalar python", como por exemplo, "como baixar python no computador", ele vai dar correspondência aproximada ao artigo registrado.
+
+No caso de correspondência exata, nada muda, ele simplesmente retorna a resposta predefinida.
+
+No caso de correspondência aproximada, ele retorna a resposta predefinida e pergunta se a resposta atende a pergunta do usuário.
+
+Se atende, uma solicitação de atualização dos artigos é enviada para o admin do sistema. Se aprovada por um admin, a correspondência aproximada dessa pergunta será considerada exata, via alteração dos artigos.
+
+Se a resposta não atende, o usuário pode abrir chamado pré-preenchido pela IA ou então tentar resolver o problema via chat com a IA (caindo nos casos de testes seguintes).
+
+Essa verificação de proximidade existe para que com o tempo, usuários alimentam a base de artigos com perguntas semelhantes de mesma resposta para melhorar cada vez mais a acurácia da ferramenta.
+
 </details>
 
 <details>
@@ -223,25 +237,6 @@ Clicando em Abrir Chamado após a resposta do chatbot IA, o formulário de chama
 * **Descrição do Chamado**: O usuário questiona a causa da extinção dos dinossauros. Necessita de informações sobre os eventos que levaram à sua extinção.
 * **Prioridade**: Baixa
 
-
-</details>
-
-<details>
-<summary>
-Solicitante - Chat - Fluxo de solicitar novo artigo
-</summary>
-
-| **caso** | Usuário solicitante quer adicionar resposta útil aos artigos |
-|----------|-------------------------------------------------------------|
-| **fluxo** | Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe resolver problema via IA. Usuário satisfeito com resposta, envia solicitação de adicionar aos artigos |
-
-Se após a resposta da IA o usuário considerar a resposta suficiente, e não abrir um chamado, ele pode opcionalmente enviar a resposta da IA como um possível novo artigo para ser adicionado ao banco de dados.
-
-Isso é enviado ao usuário ADMIN, que pode administrar as solicitações de novos artigos na página de Artigos.
-
-isso permitiria um certo "crowd-sourcing", onde os artigos cresceriam conforme as necessidades das pessoas são atendidas.
-
-Claro, se o usuário estiver satisfeito mas não quer enviar a solicitação como novo artigo porque está com preguiça, tudo bem também! Basta fechar o chat.
 
 </details>
 
@@ -352,5 +347,7 @@ Novamente, apenas o ADMIN teria acesso a essa pagina, mas deixamos solto sem ess
 Nessa pagina o admin pode ver os artigos registrados no sistema, e também as solicitações de artigo novo gerado nos fluxo de chatbot IA no chat.
 
 Ao aceitar uma solicitação, ela é adicionada aos artigos, o que iria permitir o chat de encontrar a resposta predefinida na próxima solicitação do mesmo problema.
+
+Admin pode clicar em uma solicitação e em APROVAR para adicionar aos artigos registrados.
 
 </details>
