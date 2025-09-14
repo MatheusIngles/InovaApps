@@ -180,6 +180,246 @@ def update_ticket_status():
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/artigos')
+def artigos():
+    # Carregar artigos do arquivo JSON
+    try:
+        with open('Docs/Artigos/Artigo_llm.json', 'r', encoding='utf-8') as f:
+            articles = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        articles = []
+    
+    # Carregar solicitações de alteração do arquivo JSON
+    try:
+        with open('Docs/Artigos/solicitacoes_alteracao.json', 'r', encoding='utf-8') as f:
+            permissions = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        permissions = []
+    
+    return render_template('artigos.html', render_sidebar=True, articles=articles, permissions=permissions)
+
+@app.route('/artigos_preview')
+def artigos_preview():
+    return render_template('artigos.html', render_sidebar=False, articles=[], permissions=[])
+
+@app.route('/add_article', methods=['POST'])
+def add_article():
+    try:
+        data = request.json
+        topic = data.get('topico')
+        answer = data.get('resposta')
+        
+        if not topic or not answer:
+            return jsonify({'success': False, 'error': 'Tópico e resposta são obrigatórios'})
+        
+        # Carregar artigos existentes
+        try:
+            with open('Docs/Artigos/Artigo_llm.json', 'r', encoding='utf-8') as f:
+                articles = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            articles = []
+        
+        # Adicionar novo artigo
+        new_article = {
+            'topico': topic,
+            'resposta': answer
+        }
+        articles.append(new_article)
+        
+        # Salvar arquivo
+        with open('Docs/Artigos/Artigo_llm.json', 'w', encoding='utf-8') as f:
+            json.dump(articles, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Artigo adicionado com sucesso'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/update_article', methods=['POST'])
+def update_article():
+    try:
+        data = request.json
+        index = data.get('index')
+        topic = data.get('topico')
+        answer = data.get('resposta')
+        
+        if index is None or not topic or not answer:
+            return jsonify({'success': False, 'error': 'Índice, tópico e resposta são obrigatórios'})
+        
+        # Carregar artigos existentes
+        try:
+            with open('Docs/Artigos/Artigo_llm.json', 'r', encoding='utf-8') as f:
+                articles = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return jsonify({'success': False, 'error': 'Arquivo de artigos não encontrado'})
+        
+        if index >= len(articles):
+            return jsonify({'success': False, 'error': 'Índice inválido'})
+        
+        # Atualizar artigo
+        articles[index] = {
+            'topico': topic,
+            'resposta': answer
+        }
+        
+        # Salvar arquivo
+        with open('Docs/Artigos/Artigo_llm.json', 'w', encoding='utf-8') as f:
+            json.dump(articles, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Artigo atualizado com sucesso'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/delete_article', methods=['POST'])
+def delete_article():
+    try:
+        data = request.json
+        index = data.get('index')
+        
+        if index is None:
+            return jsonify({'success': False, 'error': 'Índice é obrigatório'})
+        
+        # Carregar artigos existentes
+        try:
+            with open('Docs/Artigos/Artigo_llm.json', 'r', encoding='utf-8') as f:
+                articles = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return jsonify({'success': False, 'error': 'Arquivo de artigos não encontrado'})
+        
+        if index >= len(articles):
+            return jsonify({'success': False, 'error': 'Índice inválido'})
+        
+        # Remover artigo
+        articles.pop(index)
+        
+        # Salvar arquivo
+        with open('Docs/Artigos/Artigo_llm.json', 'w', encoding='utf-8') as f:
+            json.dump(articles, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Artigo excluído com sucesso'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/approve_permission', methods=['POST'])
+def approve_permission():
+    try:
+        data = request.json
+        permission_id = data.get('permissionId')
+        
+        # Carregar solicitações existentes
+        try:
+            with open('Docs/Artigos/solicitacoes_alteracao.json', 'r', encoding='utf-8') as f:
+                permissions = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return jsonify({'success': False, 'error': 'Arquivo de solicitações não encontrado'})
+        
+        if permission_id >= len(permissions):
+            return jsonify({'success': False, 'error': 'ID de permissão inválido'})
+        
+        # Adicionar aos artigos aprovados
+        approved_permission = permissions[permission_id]
+        new_article = {
+            'topico': approved_permission['topic'],
+            'resposta': approved_permission['answer']
+        }
+        
+        # Carregar artigos existentes
+        try:
+            with open('Docs/Artigos/Artigo_llm.json', 'r', encoding='utf-8') as f:
+                articles = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            articles = []
+        
+        # Adicionar novo artigo
+        articles.append(new_article)
+        
+        # Salvar artigos
+        with open('Docs/Artigos/Artigo_llm.json', 'w', encoding='utf-8') as f:
+            json.dump(articles, f, ensure_ascii=False, indent=2)
+        
+        # Remover solicitação da lista (aprovada)
+        permissions.pop(permission_id)
+        
+        # Salvar solicitações atualizadas
+        with open('Docs/Artigos/solicitacoes_alteracao.json', 'w', encoding='utf-8') as f:
+            json.dump(permissions, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Permissão aprovada e artigo adicionado com sucesso'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/reject_permission', methods=['POST'])
+def reject_permission():
+    try:
+        data = request.json
+        permission_id = data.get('permissionId')
+        
+        # Carregar solicitações existentes
+        try:
+            with open('Docs/Artigos/solicitacoes_alteracao.json', 'r', encoding='utf-8') as f:
+                permissions = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return jsonify({'success': False, 'error': 'Arquivo de solicitações não encontrado'})
+        
+        if permission_id >= len(permissions):
+            return jsonify({'success': False, 'error': 'ID de permissão inválido'})
+        
+        # Remover solicitação da lista (rejeitada)
+        permissions.pop(permission_id)
+        
+        # Salvar solicitações atualizadas
+        with open('Docs/Artigos/solicitacoes_alteracao.json', 'w', encoding='utf-8') as f:
+            json.dump(permissions, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Permissão rejeitada'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/add_permission_request', methods=['POST'])
+def add_permission_request():
+    try:
+        data = request.json
+        topic = data.get('topic')
+        answer = data.get('answer')
+        user_message = data.get('user_message', '')
+        
+        if not topic or not answer:
+            return jsonify({'success': False, 'error': 'Tópico e resposta são obrigatórios'})
+        
+        # Carregar solicitações existentes
+        try:
+            with open('Docs/Artigos/solicitacoes_alteracao.json', 'r', encoding='utf-8') as f:
+                permissions = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            permissions = []
+        
+        # Criar nova solicitação
+        new_permission = {
+            'topic': topic,
+            'answer': answer,
+            'user_message': user_message,
+            'status': 'pending',
+            'created_date': datetime.now().isoformat(),
+            'id': len(permissions) + 1,
+            'type': data.get('type', 'chamado'),
+            'bot_message': data.get('bot_message', '')
+        }
+        
+        permissions.append(new_permission)
+        
+        # Salvar solicitações
+        with open('Docs/Artigos/solicitacoes_alteracao.json', 'w', encoding='utf-8') as f:
+            json.dump(permissions, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({'success': True, 'message': 'Solicitação de alteração criada com sucesso'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/custom')
 def custom():
     return render_template('custom.html')
@@ -194,29 +434,11 @@ def process_satisfaction():
         if not message or not messagem_bot:
             return jsonify({"error": "Message and messagem_bot are required"}), 400
         
-        artigo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Docs', 'Artigos', 'Artigo_llm.json')
-        
-        try:
-            with open(artigo_path, 'r', encoding='utf-8') as f:
-                artigos = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            artigos = []
-        
-        nova_entrada = {
-            "topico": message.lower().strip(),
-            "resposta": messagem_bot
-        }
-        
-        artigos.append(nova_entrada)
-        
-        with open(artigo_path, 'w', encoding='utf-8') as f:
-            json.dump(artigos, f, ensure_ascii=False, indent=2)
-        
-        recarregarDados()
-
+        # Agora o feedback de satisfação é processado através do sistema de solicitações
+        # A função createSatisfactionPermissionRequest no frontend já cuida disso
         return jsonify({
             "status": "success", 
-            "message": "Feedback registrado com sucesso! A resposta foi adicionada à base de conhecimento."
+            "message": "Feedback registrado com sucesso! Será analisado para possível adição à base de conhecimento."
         })
         
     except Exception as e:

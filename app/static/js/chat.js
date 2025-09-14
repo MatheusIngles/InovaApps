@@ -354,25 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     addMessage("Processando sua satisfação...", "bot")
     
-    fetch("/process-satisfaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: lastUserMessage,
-        messagem_bot: lastBotMessage,
-        timestamp: new Date().toISOString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        addMessage(data.message || "Obrigado pelo seu feedback! Sua satisfação foi registrada.", "bot")
-      })
-      .catch((error) => {
-        console.error("Erro ao processar satisfação:", error)
-        addMessage("Obrigado pelo seu feedback!", "bot")
-      })
+    // Criar solicitação de alteração para aprovação
+    createSatisfactionPermissionRequest(lastUserMessage, lastBotMessage)
   }
 
   function handleAISearch(lastMessage) {
@@ -805,3 +788,63 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
+// Função para criar solicitação de alteração
+async function createPermissionRequest(topic, answer, userMessage) {
+  try {
+    const response = await fetch('/add_permission_request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        topic: topic,
+        answer: answer,
+        user_message: userMessage
+      })
+    })
+    
+    const data = await response.json()
+    if (data.success) {
+      console.log('Solicitação de alteração criada com sucesso')
+    } else {
+      console.error('Erro ao criar solicitação:', data.error)
+    }
+  } catch (error) {
+    console.error('Erro ao criar solicitação de alteração:', error)
+  }
+}
+
+// Função para criar solicitação de satisfação
+async function createSatisfactionPermissionRequest(userMessage, botMessage) {
+  try {
+    // Usar a pergunta do usuário como tópico
+    const topic = userMessage.toLowerCase().trim()
+    const answer = botMessage
+    
+    const response = await fetch('/add_permission_request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        topic: topic,
+        answer: answer,
+        user_message: userMessage,
+        bot_message: botMessage,
+        type: 'satisfaction'
+      })
+    })
+    
+    const data = await response.json()
+    if (data.success) {
+      addMessage("Obrigado pelo seu feedback! Sua satisfação foi registrada e será analisada para possível adição à base de conhecimento.", "bot")
+    } else {
+      console.error('Erro ao criar solicitação de satisfação:', data.error)
+      addMessage("Obrigado pelo seu feedback!", "bot")
+    }
+  } catch (error) {
+    console.error('Erro ao criar solicitação de satisfação:', error)
+    addMessage("Obrigado pelo seu feedback!", "bot")
+  }
+}
