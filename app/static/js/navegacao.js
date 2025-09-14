@@ -46,23 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   if (chatDropdownToggle && chatDropdownMenu) {
-    console.log("Dropdown elements found:", chatDropdownToggle, chatDropdownMenu)
+
     chatDropdownToggle.addEventListener("click", (e) => {
       e.preventDefault()
       e.stopPropagation()
-      console.log("Dropdown clicked!")
+
 
       const isActive = chatDropdownMenu.classList.contains("active")
-      console.log("Is active:", isActive)
+
 
       if (isActive) {
         chatDropdownMenu.classList.remove("active")
         chatDropdownToggle.classList.remove("active")
-        console.log("Dropdown closed")
+
       } else {
         chatDropdownMenu.classList.add("active")
         chatDropdownToggle.classList.add("active")
-        console.log("Dropdown opened")
+
         loadSavedChats()
       }
     })
@@ -89,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveChat() {
-    console.log("[v0] Iniciando salvamento do chat...")
+
 
     const messagesContainer = document.getElementById("messagesContainer")
     if (!messagesContainer) {
-      console.log("[v0] Container de mensagens não encontrado")
+
       return
     }
 
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Filtrar apenas mensagens válidas (deve ter pelo menos uma mensagem do usuário)
     const userMessages = messages.filter((msg) => msg.classList.contains("user-message"))
     if (userMessages.length === 0) {
-      console.log("[v0] Nenhuma mensagem do usuário encontrada - não salvando")
+
       return
     }
 
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter((msg) => msg.content.length > 0)
 
     if (chatMessages.length < 2) {
-      console.log("[v0] Mensagens insuficientes para salvar")
+
       return
     }
 
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
       } catch (e) {
-        console.log("[v0] Erro ao ler chats salvos, criando nova lista")
+
         savedChats = []
       }
 
@@ -165,10 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const existingIndex = savedChats.findIndex((chat) => chat.id === currentChatId)
       if (existingIndex >= 0) {
         savedChats[existingIndex] = chatData
-        console.log("[v0] Chat atualizado:", title)
+
       } else {
         savedChats.unshift(chatData)
-        console.log("[v0] Novo chat salvo:", title)
+
       }
 
       // Manter apenas 20 chats mais recentes
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("savedChats", JSON.stringify(savedChats))
       localStorage.setItem("currentChatId", currentChatId)
 
-      console.log("[v0] Chat salvo com sucesso! Total de chats:", savedChats.length)
+
     } catch (error) {
       console.error("[v0] Erro ao salvar chat:", error)
 
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
           const reducedChats = savedChats.slice(0, 10)
           localStorage.setItem("savedChats", JSON.stringify(reducedChats))
-          console.log("[v0] Chat salvo após limpeza do localStorage")
+
         } catch (secondError) {
           console.error("[v0] Erro crítico no localStorage:", secondError)
         }
@@ -199,13 +199,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadSavedChats() {
-    console.log("[v0] Carregando chats salvos...")
+
 
     let savedChats = []
     try {
       savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
     } catch (e) {
-      console.log("[v0] Erro ao carregar chats salvos")
+
       savedChats = []
     }
 
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadChat(chatId) {
-    console.log("[v0] Carregando chat:", chatId)
+
 
     if (window.location.pathname !== "/chat" && window.location.pathname !== "/") {
       localStorage.setItem("loadChatId", chatId)
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chat = savedChats.find((c) => c.id === chatId)
 
     if (!chat) {
-      console.log("[v0] Chat não encontrado:", chatId)
+
       return
     }
 
@@ -294,11 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     localStorage.setItem("currentChatId", chatId)
-    console.log("[v0] Chat carregado com sucesso:", chat.title)
+
   }
 
   function startNewChat() {
-    console.log("[v0] Iniciando novo chat...")
+
 
     // Salvar chat atual se houver mensagens
     saveChat()
@@ -324,11 +324,11 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("currentChatId", newChatId)
     localStorage.removeItem("loadChatId")
 
-    console.log("[v0] Novo chat iniciado:", newChatId)
+
   }
 
   window.deleteChat = (chatId) => {
-    console.log("[v0] Deletando chat:", chatId)
+
 
     let savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]")
     savedChats = savedChats.filter((chat) => chat.id !== chatId)
@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Recarregar lista
     loadSavedChats()
 
-    console.log("[v0] Chat deletado. Total restante:", savedChats.length)
+
   }
 
   function formatTime(timestamp) {
@@ -387,7 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     observer.observe(messagesContainer, { childList: true })
-    console.log("[v0] Auto-save configurado")
+
   }
 
   // Marcar item ativo no menu
@@ -425,9 +425,9 @@ document.addEventListener("DOMContentLoaded", () => {
         loadChat(loadChatId)
       }, 500)
     }
-    console.log("[v0] Sistema de chat inicializado")
-    console.log("[v0] Chat ID atual:", localStorage.getItem("currentChatId"))
+
+
     const savedChatsCount = JSON.parse(localStorage.getItem("savedChats") || "[]").length
-    console.log("[v0] Chats salvos:", savedChatsCount)
+
   }
 })

@@ -136,12 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(
         () => {
           hideTypingIndicator()
-          console.log(Response)
+          
           if (Response.encontrado == true) {
             addMessage(Response.text, "bot")
             if (Response.boaSimilidade == false){
               // Mostrar opções de satisfação quando a similaridade não é boa
-              console.log("Bassul Aqui")
+
               setTimeout(() => {
                 showSatisfactionOptions(message)
               }, 1000)
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Usar o contexto completo ou a mensagem original como fallback
     const messageToUse = fullContext || originalUserMessage || ""
     
-    console.log("Contexto completo enviado para IA:", messageToUse)
+
 
     const response = await fetch("/criar_chamado", {
       method: "POST",
@@ -440,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     const data = await response.json()
-    console.log("Resposta IA para chamado:", data)
+
 
     // Cria o modal
     const modalHTML = `
@@ -806,7 +806,7 @@ async function createPermissionRequest(topic, answer, userMessage) {
     
     const data = await response.json()
     if (data.success) {
-      console.log('Solicitação de alteração criada com sucesso')
+
     } else {
       console.error('Erro ao criar solicitação:', data.error)
     }
