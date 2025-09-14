@@ -241,6 +241,50 @@
   border-radius: var(--border-radius);
 }
 
+/* Mobile Interaction */
+.ticket-card.selected {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.kanban-column:hover {
+  cursor: pointer;
+}
+
+.kanban-column:hover .column-header {
+  background: rgba(0, 123, 255, 0.05);
+}
+
+/* Instruções Mobile */
+.mobile-instructions {
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  opacity: 0.9;
+}
+
+.mobile-instructions.active {
+  background: var(--success-color);
+  opacity: 1;
+}
+
+.instructions-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.instructions-content i {
+  font-size: 1rem;
+}
+
 /* Responsividade */
 @media (max-width: 1200px) {
   .kanban-board {
