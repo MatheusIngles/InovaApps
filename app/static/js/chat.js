@@ -427,20 +427,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function createTicketModal() {
   try {
-    // Capturar todo o contexto da conversa
+    // Capturar apenas as mensagens do usuário
     const history = getChatHistory()
     
-    // Criar um contexto completo da conversa
+    // Filtrar apenas mensagens do usuário
+    const userMessages = history.filter(msg => msg.sender === "user")
+    
+    // Criar contexto apenas com mensagens do usuário
     let fullContext = ""
-    if (history.length > 0) {
-      // Incluir as últimas 10 mensagens para dar contexto completo
-      const recentMessages = history.slice(-10)
-      const conversationContext = recentMessages.map(msg => {
-        const sender = msg.sender === "user" ? "Usuário" : "Bot"
-        return `${sender}: ${msg.message}`
-      }).join("\n")
-      
-      fullContext = `Contexto da conversa:\n${conversationContext}`
+    if (userMessages.length > 0) {
+      // Incluir todas as mensagens do usuário
+      const userContext = userMessages.map(msg => msg.message).join(" | ")
+      fullContext = `Mensagens do usuário: ${userContext}`
     }
     
     // Usar o contexto completo ou a mensagem original como fallback
