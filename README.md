@@ -241,6 +241,19 @@ Claro, se o usuário estiver satisfeito mas não quer enviar a solicitação com
 
 <details>
 <summary>
+Solicitante - Chats Salvos - Fluxo de abrir chat antigo
+</summary>
+
+| **caso** | Usuário solicitante quer abrir um chat antigo |
+|----------|-------------------------------------------------------------|
+| **fluxo** | Abre o menu, clica em Chats Salvos, acessa o chat antigo. |
+
+Usuário pode acessar os chats antigos dele abrindo a opção no menu, carregando chats antigos e permitindo interação para que usuário possa consultar respostas antigas ou continuar uma conversa que estava tendo.
+
+</details>
+
+<details>
+<summary>
 Solicitante - Meus Chamados - Fluxo de consulta de chamados registrados
 </summary>
 
