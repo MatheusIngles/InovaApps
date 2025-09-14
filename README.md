@@ -154,31 +154,35 @@ Vale notar que a aplicação é responsiva e funciona em **MOBILE** e **DESKTOP*
 
 <details>
 <summary>
-Solicitante - Chat - Fluxo de consulta de artigo
+Solicitante - Chat - Fluxo de consulta de artigo - RESPOSTA EXATA
 </summary>
 
-| **caso** | Usuário solicitante vai ao chat, pergunta algo e a pergunta está na base de dados dos artigos |
+| **caso** | Usuário solicitante vai ao chat, pergunta algo e a pergunta está de forma exata na base de dados dos artigos |
 |----------|----------------------------------------------------------------------------------------------|
 | **fluxo** | Abre o chat, pergunta algo, chat responde com resposta padronizada do artigo. |
 
-Nos artigos temos um tópico de "como instalar python". Tente perguntar ao chat como fazer a instalação do python, e ele deve responder:
+Nos artigos temos um tópico de "como instalar python". Tente perguntar ao chat exatamente "como instalar python", e ele deve responder:
 
 * ``"Para instalar o Python, acesse o site oficial python.org, baixe o instalador correspondente ao seu sistema operacional (Windows, macOS ou Linux). Durante a instalação, marque a opção 'Add Python to PATH' para facilitar o uso via terminal. Após a instalação, abra o terminal ou prompt de comando e digite 'python --version' para verificar se foi instalado corretamente."``
 
-Se a sua pergunta for **exatamente** "como instalar python", ele vai dar correspondência exata ao artigo registrado.
+</details>
 
-Se a sua pergunta for **semelhante** a "como instalar python", como por exemplo, "como baixar python no computador", ele vai dar correspondência aproximada ao artigo registrado.
+<details>
+<summary>
+Solicitante - Chat - Fluxo de consulta de artigo - RESPOSTA APROXIMADA
+</summary>
 
-No caso de correspondência exata, nada muda, ele simplesmente retorna a resposta predefinida.
+Se a sua pergunta for **semelhante** a "como instalar python", como por exemplo, "como baixar python no computador", ele vai ainda retornar a mesma resposta que daria em uma pergunta exata, mas vai perguntar: **"Esta resposta atende a sua solicitação?"**.
 
-No caso de correspondência aproximada, ele retorna a resposta predefinida e pergunta se a resposta atende a pergunta do usuário.
+Se o usuário falar que atende, uma solicitação de atualização dos artigos é enviada para o admin do sistema. 
 
-Se atende, uma solicitação de atualização dos artigos é enviada para o admin do sistema. Se aprovada por um admin, a correspondência aproximada dessa pergunta será considerada exata, via alteração dos artigos.
+Se a resposta não atende, o usuário pode abrir chamado pré-preenchido pela IA ou então tentar resolver o problema via chat com a IA (caindo nos casos de testes seguintes a este).
 
-Se a resposta não atende, o usuário pode abrir chamado pré-preenchido pela IA ou então tentar resolver o problema via chat com a IA (caindo nos casos de testes seguintes).
+A solicitação de atualização dos artigos é gerenciada por administradores na pagina de Artigos, onde se o admin considerar que a resposta aproximada equivale a resposta exata, ele adiciona aos artigos.
 
-Essa verificação de proximidade existe para que com o tempo, usuários alimentam a base de artigos com perguntas semelhantes de mesma resposta para melhorar cada vez mais a acurácia da ferramenta.
+Após adicionar aos artigos, o sistema vai considerar as respostas como equivalentes e de correspondência exata, ou seja, "como instalar python" seria equivalente a "como baixar python no computador".
 
+Essa alteração dos artigos existe para que com o tempo, usuários alimentam a base de artigos com perguntas semelhantes de mesma resposta para melhorar cada vez mais a acurácia da ferramenta.
 </details>
 
 <details>
