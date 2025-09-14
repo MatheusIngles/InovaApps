@@ -223,6 +223,9 @@ def process_satisfaction():
         print(f"Erro ao processar satisfação: {str(e)}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
+@app.route("/artigos")
+def artigo():
+    return render_template("artigos.html")
 
 @app.route("/erro_404")
 def erro_404():
