@@ -1,5 +1,7 @@
 // Kanban JavaScript
 let draggedElement = null;
+let selectedTicket = null;
+let isMobile = window.innerWidth <= 768;
 
 // Inicializar o Kanban
 function initializeKanban() {
@@ -20,8 +22,12 @@ function initializeKanban() {
     // Atualizar contadores
     updateTicketCounts(ticketsByStatus);
     
-    // Configurar drag and drop
-    setupDragAndDrop();
+    // Configurar interação (drag and drop para desktop, clique para mobile)
+    if (isMobile) {
+        setupMobileInteraction();
+    } else {
+        setupDragAndDrop();
+    }
 }
 
 // Organizar tickets por status
@@ -87,12 +93,13 @@ function renderTicketsInColumns(ticketsByStatus) {
 // Criar card do ticket
 function createTicketCard(ticket) {
     const priorityColor = getPriorityColor(ticket.priority);
+    const draggableAttr = isMobile ? '' : 'draggable="true"';
     
     return `
         <div class="ticket-card priority-${ticket.priority}" 
              data-ticket-id="${ticket.code}" 
              data-status="${ticket.status}"
-             draggable="true">
+             ${draggableAttr}>
             <div class="ticket-header">
                 <span class="ticket-id">${ticket.code}</span>
                 <span class="ticket-priority priority-${ticket.priority}">${getPriorityText(ticket.priority)}</span>
@@ -117,6 +124,25 @@ function updateTicketCounts(ticketsByStatus) {
             countElement.textContent = ticketsByStatus[status].length;
         }
     });
+}
+
+// Configurar interação mobile (clique)
+function setupMobileInteraction() {
+    const ticketCards = document.querySelectorAll('.ticket-card');
+    const columns = document.querySelectorAll('.kanban-column');
+
+    // Configurar eventos de clique para os tickets
+    ticketCards.forEach(card => {
+        card.addEventListener('click', handleTicketClick);
+    });
+
+    // Configurar eventos de clique para as colunas
+    columns.forEach(column => {
+        column.addEventListener('click', handleColumnClick);
+    });
+
+    // Adicionar instruções visuais
+    showMobileInstructions();
 }
 
 // Configurar drag and drop
@@ -202,6 +228,118 @@ function handleDrop(e) {
     updateTicketStatusInDatabase(draggedElement.dataset.ticketId, newStatus);
 }
 
+// Event handlers para mobile
+function handleTicketClick(e) {
+    e.stopPropagation();
+    
+    // Remover seleção anterior
+    if (selectedTicket) {
+        selectedTicket.classList.remove('selected');
+    }
+    
+    // Selecionar novo ticket
+    selectedTicket = e.currentTarget;
+    selectedTicket.classList.add('selected');
+    
+    // Mostrar instruções
+    showMoveInstructions();
+}
+
+function handleColumnClick(e) {
+    if (!selectedTicket) return;
+    
+    const column = e.currentTarget;
+    const newStatus = column.dataset.status;
+    const oldStatus = selectedTicket.dataset.status;
+    
+    // Se o status não mudou, não fazer nada
+    if (newStatus === oldStatus) {
+        selectedTicket.classList.remove('selected');
+        selectedTicket = null;
+        hideInstructions();
+        return;
+    }
+    
+    // Mover ticket
+    moveTicketToColumn(selectedTicket, newStatus, oldStatus);
+    
+    // Limpar seleção
+    selectedTicket.classList.remove('selected');
+    selectedTicket = null;
+    hideInstructions();
+}
+
+function moveTicketToColumn(ticket, newStatus, oldStatus) {
+    const newColumn = document.getElementById(`column-${newStatus}`);
+    const oldColumn = document.getElementById(`column-${oldStatus}`);
+    
+    // Remover mensagem "Nenhum ticket" se existir
+    const emptyMessage = newColumn.querySelector('.empty-column');
+    if (emptyMessage) {
+        emptyMessage.remove();
+    }
+    
+    // Atualizar status do ticket no DOM
+    ticket.dataset.status = newStatus;
+    
+    // Mover o elemento para a nova coluna
+    newColumn.appendChild(ticket);
+    
+    // Atualizar contadores
+    updateCountersAfterMove(oldStatus, newStatus);
+    
+    // Atualizar no banco de dados
+    updateTicketStatusInDatabase(ticket.dataset.ticketId, newStatus);
+}
+
+function showMobileInstructions() {
+    // Criar banner de instruções se não existir
+    if (!document.getElementById('mobile-instructions')) {
+        const instructions = document.createElement('div');
+        instructions.id = 'mobile-instructions';
+        instructions.className = 'mobile-instructions';
+        instructions.innerHTML = `
+            <div class="instructions-content">
+                <i class="fas fa-hand-pointer"></i>
+                <span>Toque em um ticket para selecioná-lo, depois toque na coluna de destino</span>
+            </div>
+        `;
+        
+        const mainContent = document.querySelector('.main-content');
+        mainContent.insertBefore(instructions, mainContent.firstChild);
+    }
+}
+
+function showMoveInstructions() {
+    const instructions = document.getElementById('mobile-instructions');
+    if (instructions) {
+        instructions.innerHTML = `
+            <div class="instructions-content">
+                <i class="fas fa-arrow-right"></i>
+                <span>Ticket selecionado! Toque na coluna de destino</span>
+            </div>
+        `;
+        instructions.classList.add('active');
+    }
+}
+
+function hideInstructions() {
+    const instructions = document.getElementById('mobile-instructions');
+    if (instructions) {
+        instructions.classList.remove('active');
+        setTimeout(() => {
+            if (instructions) {
+                instructions.innerHTML = `
+                    <div class="instructions-content">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>Toque em um ticket para selecioná-lo, depois toque na coluna de destino</span>
+                    </div>
+                `;
+            }
+        }, 300);
+    }
+}
+
 // Atualizar contadores após mover ticket
 function updateCountersAfterMove(oldStatus, newStatus) {
     const oldCount = document.getElementById(`count-${oldStatus}`);
@@ -265,11 +403,15 @@ function reloadKanban() {
 
 // Event listeners globais
 document.addEventListener('DOMContentLoaded', function() {
-    // Reconfigurar drag and drop quando novos tickets são adicionados
+    // Reconfigurar eventos quando novos tickets são adicionados
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type === 'childList') {
-                setupDragAndDrop();
+                if (isMobile) {
+                    setupMobileInteraction();
+                } else {
+                    setupDragAndDrop();
+                }
             }
         });
     });
@@ -281,6 +423,35 @@ document.addEventListener('DOMContentLoaded', function() {
             subtree: true
         });
     }
+
+    // Detectar mudanças de tamanho de tela
+    window.addEventListener('resize', function() {
+        const newIsMobile = window.innerWidth <= 768;
+        if (newIsMobile !== isMobile) {
+            isMobile = newIsMobile;
+            
+            // Limpar seleção se existir
+            if (selectedTicket) {
+                selectedTicket.classList.remove('selected');
+                selectedTicket = null;
+            }
+            
+            // Remover instruções mobile se não for mobile
+            if (!isMobile) {
+                const instructions = document.getElementById('mobile-instructions');
+                if (instructions) {
+                    instructions.remove();
+                }
+            }
+            
+            // Reconfigurar eventos
+            if (isMobile) {
+                setupMobileInteraction();
+            } else {
+                setupDragAndDrop();
+            }
+        }
+    });
 });
 
 // Funções auxiliares (já definidas no HTML, mas aqui para referência)
