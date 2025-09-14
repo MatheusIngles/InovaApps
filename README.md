@@ -20,6 +20,13 @@ Para executar o projeto, são necessários os seguintes programas externos:
 * Python>=3.12 + dependências
 * sqlite3
 
+## AVISO: Primeira execução
+A primeira execução pode demorar bastante tempo, pois o modelo de linguagem precisa fazer a inicialização de vários parâmetros.
+
+Isso ocorre apenas na primeira execução, e as seguintes vão ter rempo de execução normal.
+
+## Instruções de instalação
+
 <details> 
 <summary>
 Python
