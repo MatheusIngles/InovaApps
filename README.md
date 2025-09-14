@@ -142,6 +142,12 @@ Isso significa que a primeira execução vai demorar um pouco a mais para proces
 
 Aqui vou descrever varios casos de uso / fluxo de usuário que podem ser replicados em testes.
 
+Quanto aos 3 usuários: Solicitante, Atendente e Admin, entendemos que todo usuário é solicitante, alguns também atendentes, alguns também ADMIN.
+
+Não implementamos sistema de acesso e separação de usuários, e sim nos focamos em demonstrar os fluxos de cada página e como os usuários interagem com o sistema. 
+
+Ou seja, normalmente, o solicitante não acessaria a página de atendente e admin, e atendente não acessaria a página de admin, mas no projeto estamos mostrando todas a todo momento.
+
 Vale notar que a aplicação é responsiva e funciona em **MOBILE** e **DESKTOP**, então pode ser feito os fluxos/testes em ambos modelos.
 
 <details>
@@ -327,6 +333,8 @@ Por meio dos temas predefinidos, seria possivel a equipe entregar a solução j�
 O que essa pagina faz não é delegar a responsabilidade de identidade visual a empresa, e sim permitir que, após a entrega, a empresa possa alterar e gerenciar isso de forma facil.
 
 Alterações seriam facilmente reversíveis apenas clicando de volta no tema predefinido.
+
+Ao terminar de modificar tudo, usuário pode clicar em salvar configurações para aplicar as alterações.
 
 </details>
 
