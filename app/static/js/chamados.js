@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `
 
-      ticketCard.addEventListener("click", () => openTicketModal(ticket))
       ticketsContainer.appendChild(ticketCard)
     })
   }
@@ -57,65 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     renderTickets(filteredTickets)
-  }
-
-  // Abrir modal do ticket
-  function openTicketModal(ticket) {
-    modalTitle.textContent = `Chamado ${ticket.id}`
-    modalBody.innerHTML = `
-            <div style="margin-bottom: 1rem;">
-                <strong>Status:</strong> 
-                <span class="ticket-status status-${ticket.status}">${getStatusText(ticket.status)}</span>
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <strong>Prioridade:</strong> 
-                <span class="ticket-priority priority-${ticket.priority}">${getPriorityText(ticket.priority)}</span>
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <strong>Data:</strong> ${formatDate(ticket.date)} às ${ticket.time}
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <strong>Título:</strong> ${ticket.title}
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <strong>Descrição:</strong>
-                <p style="margin-top: 0.5rem; padding: 1rem; background: var(--gray-100); border-radius: var(--border-radius);">
-                    ${ticket.description}
-                </p>
-            </div>
-            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                <button class="btn btn-secondary" onclick="window.closeTicketModal()">Fechar</button>
-                <button class="btn btn-primary" onclick="window.updateTicketStatus('${ticket.id}')">Atualizar Status</button>
-            </div>
-        `
-
-    ticketModal.classList.add("active")
-    overlay.classList.add("active")
-    document.body.style.overflow = "hidden"
-  }
-
-  // Fechar modal
-  window.closeTicketModal = () => {
-    ticketModal.classList.remove("active")
-    overlay.classList.remove("active")
-    document.body.style.overflow = ""
-  }
-
-  // Atualizar status do ticket
-  window.updateTicketStatus = (ticketId) => {
-    const ticket = tickets.find((t) => t.id === ticketId)
-    if (ticket) {
-      // Simular atualização de status
-      const statuses = ["aberto", "em-andamento", "resolvido", "fechado"]
-      const currentIndex = statuses.indexOf(ticket.status)
-      const nextIndex = (currentIndex + 1) % statuses.length
-      ticket.status = statuses[nextIndex]
-
-      window.closeTicketModal()
-
-      // Mostrar notificação
-      showNotification(`Status do chamado ${ticketId} atualizado para: ${getStatusText(ticket.status)}`)
-    }
   }
 
   // Mostrar notificação
@@ -168,6 +108,142 @@ document.addEventListener("DOMContentLoaded", () => {
     return date.toLocaleDateString("pt-BR")
   }
 
+  const bootstrap = window.bootstrap
+  function handleOpenTicket() {
+    showTicketModal()
+
+    document.getElementsByClassName("modal-backdrop")[0].remove()
+  }
+
+  function showTicketModal() {
+    // Criar o modal se não existir
+    let modal = document.getElementById("ticketModal")
+    if (!modal) {
+      modal = createTicketModal()
+      console.log(modal)
+      document.body.appendChild(modal)
+    }
+
+    // Mostrar o modal usando Bootstrap
+    const bootstrapModal = new bootstrap.Modal(modal)
+    bootstrapModal.show()
+  }
+
+  function createTicketModal() {
+    const modalHTML = `
+      <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="ticketModalLabel">
+                <i class="fas fa-ticket-alt me-2"></i>Abrir Chamado
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="ticketForm" action="/add_ticket_database" method="post" novalidate>
+                <div class="mb-3">
+                  <label for="ticketTitle" class="form-label">
+                    <i class="fas fa-heading me-1"></i>Título do Chamado
+                  </label>
+                  <input name="title" type="text" class="form-control" id="ticketTitle" placeholder="Descreva brevemente o problema" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="ticketDescription" class="form-label">
+                    <i class="fas fa-align-left me-1"></i>Descrição Detalhada
+                  </label>
+                  <textarea name="description" class="form-control" id="ticketDescription" rows="4" placeholder="Descreva detalhadamente o problema ou solicitação" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="ticketPriority" class="form-label">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Prioridade
+                  </label>
+                  <select name="priority" class="form-select" id="ticketPriority" required>
+                    <option value="">Selecione a prioridade</option>
+                    <option value="baixa">Baixa - Não é urgente</option>
+                    <option value="media">Média - Precisa de atenção</option>
+                    <option value="alta">Alta - Problema importante</option>
+                    <option value="urgente">Urgente - Requer ação imediata</option>
+                  </select>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" id="submitTicket" href="/add_ticket_database">
+                    <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+
+    const modalElement = document.createElement("div")
+    modalElement.innerHTML = modalHTML
+    const modal = modalElement.firstElementChild
+
+    modal.addEventListener("shown.bs.modal", () => {
+      const submitBtn = modal.querySelector("#submitTicket")
+      const form = modal.querySelector("#ticketForm")
+
+      submitBtn.addEventListener("click", () => {
+        const title = modal.querySelector("#ticketTitle").value
+        const description = modal.querySelector("#ticketDescription").value
+        const priority = modal.querySelector("#ticketPriority").value
+
+        if (title && description && priority) {
+          // Fechar o modal
+          const bootstrapModal = bootstrap.Modal.getInstance(modal)
+          bootstrapModal.hide()
+
+          // Enviar dados para o backend
+          submitTicketToBackend(title, description, priority)
+
+          // Limpar formulário
+          form.reset()
+        } else {
+          alert("Por favor, preencha todos os campos obrigatórios.")
+        }
+      })
+    })
+
+    return modal
+  }
+
+function submitTicketToBackend(title, description, priority) {
+
+    addMessage("Abrindo chamado...", "bot")
+
+    fetch("/open-ticket", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        description: description,
+        priority: priority,
+        chatHistory: chatHistory,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        addMessage(data.text || "Chamado aberto com sucesso! Você receberá um retorno em breve.", "bot")
+        setTimeout(() => {
+          window.close()
+        }, 2000)
+      })
+      .catch((error) => {
+        console.error("Erro ao abrir chamado:", error)
+        addMessage("Erro ao abrir chamado. Tente novamente.", "bot")
+      })
+  }
   // Event listeners
   if (statusFilter) {
     statusFilter.addEventListener("change", filterTickets)
@@ -179,19 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (newTicketBtn) {
     newTicketBtn.addEventListener("click", () => {
-      // Simular criação de novo ticket
-      const newTicket = {
-        id: `TK-${String(tickets.length + 1).padStart(3, "0")}`,
-        title: "Novo chamado criado",
-        description: "Descrição do novo chamado criado via interface.",
-        status: "aberto",
-        priority: "media",
-        date: new Date().toISOString().split("T")[0],
-        time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-      }
-
-      tickets.unshift(newTicket)
-      showNotification(`Novo chamado ${newTicket.id} criado com sucesso!`)
+      handleOpenTicket()
     })
   }
 

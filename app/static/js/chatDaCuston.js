@@ -15,67 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let recognition = null
   let isListening = false
   let aiSearchMode = false
-  let originalUserMessage = null // Armazenar a mensagem original do usuário
-
-  // Função para mostrar o botão "Abrir chamado" no header
-  function showOpenTicketButton() {
-    const openTicketBtn = document.getElementById("openTicketBtn")
-    if (openTicketBtn) {
-      openTicketBtn.classList.add("show")
-    }
-  }
-
-  // Função para esconder o botão "Abrir chamado" no header
-  function hideOpenTicketButton() {
-    const openTicketBtn = document.getElementById("openTicketBtn")
-    if (openTicketBtn) {
-      openTicketBtn.classList.remove("show")
-    }
-  }
-
-  // Função para bloquear a área de envio de mensagens
-  function blockMessageArea() {
-    if (messageInput) {
-      messageInput.disabled = true
-      messageInput.placeholder = "Escolha uma das opções acima para continuar..."
-      messageInput.style.opacity = "0.6"
-      messageInput.style.cursor = "not-allowed"
-    }
-    
-    if (sendButton) {
-      sendButton.disabled = true
-      sendButton.style.opacity = "0.6"
-      sendButton.style.cursor = "not-allowed"
-    }
-    
-    if (audioButton) {
-      audioButton.disabled = true
-      audioButton.style.opacity = "0.6"
-      audioButton.style.cursor = "not-allowed"
-    }
-  }
-
-  // Função para desbloquear a área de envio de mensagens
-  function unblockMessageArea() {
-    if (messageInput) {
-      messageInput.disabled = false
-      messageInput.placeholder = "Digite sua mensagem..."
-      messageInput.style.opacity = "1"
-      messageInput.style.cursor = "text"
-    }
-    
-    if (sendButton) {
-      sendButton.disabled = messageInput.value.trim() === ""
-      sendButton.style.opacity = "1"
-      sendButton.style.cursor = "pointer"
-    }
-    
-    if (audioButton) {
-      audioButton.disabled = false
-      audioButton.style.opacity = "1"
-      audioButton.style.cursor = "pointer"
-    }
-  }
 
   // Import Bootstrap
   const bootstrap = window.bootstrap
@@ -136,20 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(
         () => {
           hideTypingIndicator()
-          console.log(Response)
-          if (Response.encontrado == true) {
-            addMessage(Response.text, "bot")
-            if (Response.boaSimilidade == false){
-              // Mostrar opções de satisfação quando a similaridade não é boa
-              console.log("Bassul Aqui")
-              setTimeout(() => {
-                showSatisfactionOptions(message)
-              }, 1000)
-            }
-          } else {
-            addMessage(Response.text, "bot")
-            showNoResponseOptions(message)
-          }
+          addMessage("Exemplo de resposta:", "bot")
           sendButton.disabled = false
         },
         1500 + Math.random() * 2000,
@@ -206,29 +132,18 @@ document.addEventListener("DOMContentLoaded", () => {
       font-size: 12px;
     `
 
-    // Bloquear área de envio de mensagens
-    blockMessageArea()
-
     searchButton.addEventListener("click", () => {
-      // Armazenar a mensagem original do usuário
-      originalUserMessage = lastUserMessage
       aiSearchMode = true
       if (headerTicketButton) {
         headerTicketButton.style.display = "inline-block"
       }
-      // Mostrar botão "Abrir chamado" no header
-      showOpenTicketButton()
       handleAISearch(lastUserMessage)
       optionsDiv.remove()
-      // Desbloquear área de envio após escolha
-      unblockMessageArea()
     })
 
     ticketButton.addEventListener("click", () => {
       handleOpenTicket()
       optionsDiv.remove()
-      // Desbloquear área de envio após escolha
-      unblockMessageArea()
     })
 
     optionsContainer.appendChild(searchButton)
@@ -252,201 +167,28 @@ document.addEventListener("DOMContentLoaded", () => {
     messagesContainer.scrollTop = messagesContainer.scrollHeight
   }
 
-  function showSatisfactionOptions(lastUserMessage) {
-    const optionsDiv = document.createElement("div")
-    optionsDiv.className = "message bot-message options-message"
-
-    const avatar = document.createElement("div")
-    avatar.className = "message-avatar"
-    avatar.innerHTML = '<i class="fas fa-robot"></i>'
-
-    const content = document.createElement("div")
-    content.className = "message-content"
-
-    const messageText = document.createElement("p")
-    messageText.textContent = "A resposta foi útil para você? Como você avalia sua satisfação?"
-
-    const optionsContainer = document.createElement("div")
-    optionsContainer.className = "chat-options"
-    optionsContainer.style.cssText = `
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    `
-
-    const satisfiedButton = document.createElement("button")
-    satisfiedButton.className = "btn btn-success btn-sm"
-    satisfiedButton.textContent = "Sim, estou satisfeito"
-    satisfiedButton.style.cssText = `
-      background: #28a745;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-    `
-
-    const notSatisfiedButton = document.createElement("button")
-    notSatisfiedButton.className = "btn btn-warning btn-sm"
-    notSatisfiedButton.textContent = "Não, pesquisar na IA"
-    notSatisfiedButton.style.cssText = `
-      background: #ffc107;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-    `
-
-    // Bloquear área de envio de mensagens
-    blockMessageArea()
-
-    satisfiedButton.addEventListener("click", () => {
-      // Fazer fetch da última mensagem do usuário
-      fetchLastUserMessage(lastUserMessage)
-      optionsDiv.remove()
-      // Desbloquear área de envio após escolha
-      unblockMessageArea()
-    })
-
-    notSatisfiedButton.addEventListener("click", () => {
-      // Armazenar a mensagem original do usuário
-      originalUserMessage = lastUserMessage
-      // Ativar modo de pesquisa IA
-      aiSearchMode = true
-      // Mostrar botão "Abrir chamado" no header
-      showOpenTicketButton()
-      // Pesquisar na IA
-      handleAISearch(lastUserMessage)
-      optionsDiv.remove()
-      // Desbloquear área de envio após escolha
-      unblockMessageArea()
-    })
-
-    optionsContainer.appendChild(satisfiedButton)
-    optionsContainer.appendChild(notSatisfiedButton)
-
-    content.appendChild(messageText)
-    content.appendChild(optionsContainer)
-
-    const time = document.createElement("span")
-    time.className = "message-time"
-    time.textContent = new Date().toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-
-    content.appendChild(time)
-    optionsDiv.appendChild(avatar)
-    optionsDiv.appendChild(content)
-
-    messagesContainer.appendChild(optionsDiv)
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
-  }
-
-  function fetchLastUserMessage(lastUserMessage) {
-    // Obter a mensagem do bot ANTES de adicionar "Processando sua satisfação..."
-    const history = getChatHistory()
-    const lastBotMessage = history.length > 0 ? history[history.length - 1].message : ""
-    
-    addMessage("Processando sua satisfação...", "bot")
-    
-    fetch("/process-satisfaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: lastUserMessage,
-        messagem_bot: lastBotMessage,
-        timestamp: new Date().toISOString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        addMessage(data.message || "Obrigado pelo seu feedback! Sua satisfação foi registrada.", "bot")
-      })
-      .catch((error) => {
-        console.error("Erro ao processar satisfação:", error)
-        addMessage("Obrigado pelo seu feedback!", "bot")
-      })
-  }
-
   function handleAISearch(lastMessage) {
     addMessage("Pesquisando na IA...", "bot")
-    const history = getChatHistory()
-    fetch("/respostaIA", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: lastMessage,
-        history: history,
-        timestamp: new Date().toISOString(),
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        hideTypingIndicator()
-        addMessage(data.text || "Não foi possível encontrar informações sobre sua pergunta.", "bot")
-        sendButton.disabled = false
-      })
-      .catch((error) => {
-        console.error("Erro na pesquisa IA:", error)
-        hideTypingIndicator()
-        addMessage("Erro ao pesquisar. Tente novamente.", "bot")
-        sendButton.disabled = false
-      })
   }
 
   function handleOpenTicket() {
     showTicketModal()
   }
 
-  async function showTicketModal() {
-    try {
-      // Criar o modal se não existir
-      let modal = document.getElementById("ticketModal")
-      if (!modal) {
-        modal = await createTicketModal()
-        document.body.appendChild(modal)
-      }
-
-      // Mostrar o modal usando Bootstrap
-      const bootstrapModal = new bootstrap.Modal(modal)
-      bootstrapModal.show()
-    } catch (error) {
-      console.error("Erro ao mostrar modal:", error)
-      addMessage("Erro ao abrir formulário de chamado. Tente novamente.", "bot")
+  function showTicketModal() {
+    // Criar o modal se não existir
+    let modal = document.getElementById("ticketModal")
+    if (!modal) {
+      modal = createTicketModal()
+      document.body.appendChild(modal)
     }
+
+    // Mostrar o modal usando Bootstrap
+    const bootstrapModal = new bootstrap.Modal(modal)
+    bootstrapModal.show()
   }
 
-  async function createTicketModal() {
-  try {
-    // Usar a mensagem original do usuário se disponível, senão usar a última mensagem do histórico
-    const messageToUse = originalUserMessage || (() => {
-      const history = getChatHistory()
-      return history.length > 0 ? history[history.length - 2].message : ""
-    })()
-
-    const response = await fetch("/criar_chamado", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: messageToUse, 
-      }),
-    })
-
-    const data = await response.json()
-    console.log("Resposta IA para chamado:", data)
-
-    // Cria o modal
+  function createTicketModal() {
     const modalHTML = `
       <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -458,20 +200,19 @@ document.addEventListener("DOMContentLoaded", () => {
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form id="ticketForm" action="/add_ticket_database" method="post" novalidate>
+              <form id="ticketForm" action="" method="post" novalidate>
                 <div class="mb-3">
                   <label for="ticketTitle" class="form-label">
                     <i class="fas fa-heading me-1"></i>Título do Chamado
                   </label>
-                  <input name="title" type="text" class="form-control" id="ticketTitle"
-                    value="${data.text.title || ""}" required>
+                  <input name="title" type="text" class="form-control" id="ticketTitle" placeholder="Descreva brevemente o problema" required>
                 </div>
                 
                 <div class="mb-3">
                   <label for="ticketDescription" class="form-label">
                     <i class="fas fa-align-left me-1"></i>Descrição Detalhada
                   </label>
-                  <textarea name="description" class="form-control" id="ticketDescription" rows="4" required>${data.text.description || ""}</textarea>
+                  <textarea name="description" class="form-control" id="ticketDescription" rows="4" placeholder="Descreva detalhadamente o problema ou solicitação" required></textarea>
                 </div>
                 
                 <div class="mb-3">
@@ -480,19 +221,19 @@ document.addEventListener("DOMContentLoaded", () => {
                   </label>
                   <select name="priority" class="form-select" id="ticketPriority" required>
                     <option value="">Selecione a prioridade</option>
-                    <option value="baixa" ${data.text.prioridade === "baixa" ? "selected" : ""}>Baixa - Não é urgente</option>
-                    <option value="media" ${data.text.prioridade === "média" ? "selected" : ""}>Média - Precisa de atenção</option>
-                    <option value="alta" ${data.text.prioridade === "alta" ? "selected" : ""}>Alta - Problema importante</option>
-                    <option value="urgente" ${data.text.prioridade === "urgente" ? "selected" : ""}>Urgente - Requer ação imediata</option>
+                    <option value="baixa">Baixa - Não é urgente</option>
+                    <option value="media">Média - Precisa de atenção</option>
+                    <option value="alta">Alta - Problema importante</option>
+                    <option value="urgente">Urgente - Requer ação imediata</option>
                   </select>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i>Cancelar
                   </button>
-                  <button type="submit" class="btn btn-primary" id="submitTicket" href="/add_ticket_database">
+                  <a class="btn btn-primary" id="submitTicket" href="/add_ticket_database">
                     <i class="fas fa-paper-plane me-1"></i>Abrir Chamado
-                  </button>
+                  </a>
                 </div>
               </form>
             </div>
@@ -515,9 +256,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const priority = modal.querySelector("#ticketPriority").value
 
         if (title && description && priority) {
+          // Fechar o modal
           const bootstrapModal = bootstrap.Modal.getInstance(modal)
           bootstrapModal.hide()
+
+          // Enviar dados para o backend
           submitTicketToBackend(title, description, priority)
+
+          // Limpar formulário
           form.reset()
         } else {
           alert("Por favor, preencha todos os campos obrigatórios.")
@@ -526,12 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     return modal
-  } catch (error) {
-    console.error("Erro ao criar chamado:", error)
-  }
   }
 
   function submitTicketToBackend(title, description, priority) {
+    const chatHistory = getChatHistory()
 
     addMessage("Abrindo chamado...", "bot")
 
@@ -544,6 +288,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: title,
         description: description,
         priority: priority,
+        chatHistory: chatHistory,
+        timestamp: new Date().toISOString(),
       }),
     })
       .then((response) => response.json())
@@ -739,7 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function sendMessageToBackend(message) {
-    return fetch("/chat", {
+    return fetch("/chatDaCuston", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -750,9 +496,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
     })
       .then((response) => response.json())
-      .catch((error) => {
-        console.error("Erro ao enviar mensagem para o backend:", error)
-      })
   }
 
   // Event listeners
@@ -774,15 +517,6 @@ document.addEventListener("DOMContentLoaded", () => {
       stopListening()
     }
   })
-
-  // Event listener para o botão "Abrir chamado" no header
-  const openTicketBtn = document.getElementById("openTicketBtn")
-  if (openTicketBtn) {
-    openTicketBtn.addEventListener("click", () => {
-      handleOpenTicket()
-      // Não esconder o botão - ele deve permanecer visível
-    })
-  }
 
   stopRecordingBtn.addEventListener("click", stopListening)
 

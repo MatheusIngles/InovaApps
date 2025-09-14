@@ -153,6 +153,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Preview tabs
     previewTabs.forEach((tab) => {
       tab.addEventListener("change", switchPreviewTab)
+      document.querySelectorAll("#previewMenu + .dropdown-menu label").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          const targetFor = item.getAttribute("for")
+          if (targetFor) {
+            const input = document.getElementById(targetFor)
+            if (input) {
+              input.checked = true
+              input.dispatchEvent(new Event("change")) // força o switchPreviewTab rodar
+            }
+          }
+        })
+      })
     })
 
     // Theme presets

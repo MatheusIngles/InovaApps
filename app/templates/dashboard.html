@@ -6,10 +6,11 @@
     <title>Central de Atendimento - Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icone.ico') }}" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="dashboard">
     <div class="app-container">
         <!-- Header -->
         <header class="chat-header">
@@ -97,5 +98,106 @@
 
     <script src="{{ url_for('static', filename='js/navegacao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script>
+        const dashboardData = {
+            totalTickets:  {{ total_tickets | tojson }},
+            pendingTickets: {{ pendentes | tojson }},
+            resolvedTickets: {{ finalizados | tojson }},
+            avgResponseTime: {{ horas_media | tojson }},
+            activities: {{ ultimos_tickets | tojson }}
+        }
+
+        function createStatusChart() {
+            const ctx = document.getElementById("statusChart")
+            if (!ctx) return
+
+            new window.Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["Abertos", "Em Andamento", "Resolvidos", "Fechados"],
+                datasets: [
+                {
+                    data: [{{ abertos }}, {{ pendentes }}, {{ finalizados }}, {{ fechados }}],
+                    backgroundColor: ["#007bff", "#ffc107", "#28a745", "#6c757d"],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    },
+                },
+                },
+            },
+            })
+        }
+
+        // Criar gráfico mensal
+        function createMonthlyChart() {
+            const ctx = document.getElementById("monthlyChart")
+            if (!ctx) return
+
+            new window.Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+                datasets: [
+                {
+                    label: "Chamados Criados",
+                    data: [12, 19, 15, 25, 22, 18],
+                    borderColor: "#007bff",
+                    backgroundColor: "rgba(0, 123, 255, 0.1)",
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                },
+                {
+                    label: "Chamados Resolvidos",
+                    data: [8, 15, 18, 20, 25, 22],
+                    borderColor: "#28a745",
+                    backgroundColor: "rgba(40, 167, 69, 0.1)",
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    },
+                },
+                },
+                scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                    },
+                },
+                x: {
+                    grid: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                    },
+                },
+                },
+            },
+            })
+        }
+    </script>
 </body>
 </html>

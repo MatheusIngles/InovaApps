@@ -334,6 +334,129 @@
   }
 }
 
+/* Correção do dropdown na página de chat */
+.chat-dropdown {
+  position: relative !important;
+}
+
+/* Manter a setinha do dropdown visível */
+.chat-dropdown .dropdown-arrow {
+  display: block !important;
+}
+
+.chat-dropdown .dropdown-menu {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-10px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.chat-dropdown .dropdown-menu.active {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+/* Garantir que o sidebar não corte o dropdown */
+.sidebar {
+  overflow: visible !important;
+}
+
+/* Garantir que o chat-container não corte o dropdown */
+.chat-container {
+  overflow: visible !important;
+}
+
+/* Forçar o dropdown a aparecer na página de chat */
+body:has(.chat-container) .chat-dropdown .dropdown-menu.active {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+/* Botão para abrir chamado */
+.open-ticket-btn {
+  display: none !important; /* Escondido por padrão */
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-left: 0.5rem;
+  animation: slideInLeft 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
+}
+
+/* Classe para mostrar o botão */
+.open-ticket-btn.show {
+  display: inline-flex !important;
+}
+
+/* Garantir que o header-right mantenha os elementos na mesma linha */
+.header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  flex-direction: row-reverse !important; /* Inverte a ordem para botão ficar à esquerda */
+}
+
+.open-ticket-btn:hover {
+  background: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.open-ticket-btn i {
+  font-size: 0.8rem;
+}
+
+.open-ticket-btn span {
+  font-size: 0.8rem;
+}
+
+/* Animação para o botão aparecer */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .message {
@@ -350,6 +473,22 @@
 
   .chat-container {
     height: calc(100vh - 70px);
+  }
+
+  /* Ajustar botão "Abrir chamado" em mobile */
+  .open-ticket-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+    margin-left: 0.3rem;
+  }
+
+  .open-ticket-btn span {
+    display: none; /* Esconder texto em mobile, mostrar apenas ícone */
+  }
+
+  /* Garantir alinhamento em mobile */
+  .header-right {
+    gap: 0.3rem !important;
   }
 }
 

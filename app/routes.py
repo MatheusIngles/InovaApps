@@ -7,14 +7,17 @@ from app.IA import responder_usuario, UsarGemini, CriarChamadoParaBanco
 from app import app, db
 from datetime import datetime, timezone
 from app.models import Ticket, Chat, Message, ApplicationSettings
-
 import random
 import string
-
 import tempfile
+import json
+import os
 
 @app.route('/')
 @app.route('/index')
+def index():
+    return redirect(url_for('chat'))
+
 @app.route('/chat', methods=["GET", "POST"])
 def chat():
     if request.method == "POST":
@@ -22,12 +25,16 @@ def chat():
         text = data.get("message", "")
         Resposta = responder_usuario(text)
         if Resposta:
-            text = Resposta
-            return jsonify({"status": "ok", "text": text, "encontrado": True})
+            text, boaSimilidade = Resposta
+            return jsonify({"status": "ok", "text": text, "encontrado": True, "boaSimilidade": True if boaSimilidade >= 0.81 else False})
         else:
             return jsonify({"text": "Desculpe, Não encontrei informações específicas sobre isso na base de conhecimento. Quer que eu pense para te responder ou já abrir um chamado com base no chat?", "encontrado": False})     
     else:
         return render_template('chat.html', render_sidebar=True)
+
+@app.route('/chatDaCuston', methods=["GET"])
+def chatDaCuston():
+    return render_template('chatDaCuston.html', render_sidebar=True)
 
 @app.route('/chat_preview')
 def chat_preview():
@@ -37,13 +44,15 @@ def chat_preview():
 def respostaIA():
     data = request.json
     text = data.get("text", "")
-    Resposta = UsarGemini(text)
+    conversas_passadas = data.get("history", [])
+    Resposta = UsarGemini(text, conversas_passadas)
     return jsonify({"status": "ok", "text": Resposta})
 
 @app.route('/criar_chamado', methods=["GET","POST"])
 def criar_chamado():
     data = request.json
     text = data.get("message", "")
+    print(text)
     Resposta = CriarChamadoParaBanco(text)
     return jsonify({"status": "ok", "text": Resposta})
 
@@ -52,6 +61,9 @@ def add_ticket_database():
     title = request.form.get("title")
     description = request.form.get("description")
     priority = request.form.get("priority")
+
+    if title == "" or description == "" or priority == "":
+        return redirect(url_for("chamados"))
 
     letters = ''.join(random.choices(string.ascii_uppercase, k=2))
     numbers = ''.join(random.choices(string.digits, k=3))
@@ -69,7 +81,7 @@ def add_ticket_database():
 
     db.session.commit()
 
-    redirect(url_for('chamados'))
+    return redirect(url_for('chamados'))
 
 @app.route('/chamados')
 def chamados():
@@ -96,7 +108,24 @@ def chamados_preview():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html', render_sidebar=True)
+    total_tickets = Ticket.query.count()
+    abertos = Ticket.query.filter_by(status="aberto").count()
+    pendentes = Ticket.query.filter_by(status="em-andamento").count()
+    finalizados = Ticket.query.filter_by(status="resolvido").count()
+    fechados = Ticket.query.filter_by(status="fechado").count()
+    horas_media = "1 dia"
+    ultimos_tickets = Ticket.query.order_by(Ticket.id.desc()).limit(3).all()
+    tikets_formatado = []
+    for ticket in ultimos_tickets:
+        tikets_formatado.append({
+            "type": "new" if ticket.status == "aberto" else "update" if ticket.status == "em-andamento" else "close",
+            "title": ticket.title,
+            "description": ticket.description,
+            "time": ticket.created_at
+        })
+    return render_template('dashboard.html', render_sidebar=True, total_tickets=total_tickets,
+                            fechados=fechados, abertos=abertos, pendentes=pendentes, finalizados=finalizados,
+                              horas_media=horas_media, ultimos_tickets=tikets_formatado)
 
 @app.route('/dashboard_preview')
 def dashboard_preview():
@@ -105,6 +134,48 @@ def dashboard_preview():
 @app.route('/custom')
 def custom():
     return render_template('custom.html')
+
+@app.route('/process-satisfaction', methods=["POST"])
+def process_satisfaction():
+    try:
+        data = request.json
+        message = data.get("message", "")
+        messagem_bot = data.get("messagem_bot", "")
+        
+        if not message or not messagem_bot:
+            return jsonify({"error": "Message and messagem_bot are required"}), 400
+        
+        # Caminho para o arquivo Artigo_llm.json
+        artigo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Docs', 'Artigos', 'Artigo_llm.json')
+        
+        # Ler o arquivo existente ou criar lista vazia
+        try:
+            with open(artigo_path, 'r', encoding='utf-8') as f:
+                artigos = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            artigos = []
+        
+        # Criar nova entrada seguindo o padrão dos outros artigos
+        nova_entrada = {
+            "topico": message.lower().strip(),
+            "resposta": messagem_bot
+        }
+        
+        # Adicionar a nova entrada
+        artigos.append(nova_entrada)
+        
+        # Salvar o arquivo atualizado
+        with open(artigo_path, 'w', encoding='utf-8') as f:
+            json.dump(artigos, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({
+            "status": "success", 
+            "message": "Feedback registrado com sucesso! A resposta foi adicionada à base de conhecimento."
+        })
+        
+    except Exception as e:
+        print(f"Erro ao processar satisfação: {str(e)}")
+        return jsonify({"error": "Erro interno do servidor"}), 500
 
 
 @app.route("/erro_404")

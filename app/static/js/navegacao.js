@@ -46,18 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   if (chatDropdownToggle && chatDropdownMenu) {
+    console.log("Dropdown elements found:", chatDropdownToggle, chatDropdownMenu)
     chatDropdownToggle.addEventListener("click", (e) => {
       e.preventDefault()
       e.stopPropagation()
+      console.log("Dropdown clicked!")
 
       const isActive = chatDropdownMenu.classList.contains("active")
+      console.log("Is active:", isActive)
 
       if (isActive) {
         chatDropdownMenu.classList.remove("active")
         chatDropdownToggle.classList.remove("active")
+        console.log("Dropdown closed")
       } else {
         chatDropdownMenu.classList.add("active")
         chatDropdownToggle.classList.add("active")
+        console.log("Dropdown opened")
         loadSavedChats()
       }
     })
@@ -227,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="chat-item-actions">
           <span class="chat-item-time">${formatTime(chat.timestamp)}</span>
           <button class="delete-chat-btn" onclick="deleteChat('${chat.id}')">
-            <i class="fas fa-trash"></i>
+            <i class="far fa-trash-can"></i>
           </button>
         </div>
       `

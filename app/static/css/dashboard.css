@@ -6,6 +6,13 @@
   margin-bottom: 2rem;
 }
 
+.main-content {
+  max-height: calc(100vh - 70px); /* Ajuste conforme a altura do header */
+  overflow-y: auto; /* Scroll vertical */
+  padding: 1rem; /* Opcional, para dar espaçamento interno */
+}
+
+
 .stat-card {
   background: var(--white);
   padding: 1.5rem;

@@ -1,6 +1,6 @@
 # app/models.py
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
@@ -14,7 +14,7 @@ class Ticket(db.Model):
     title: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     description: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     created_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime, default=lambda: datetime.now(timezone.utc)
+        sa.DateTime, default=lambda: datetime.now()
     )
     status: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     code: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
@@ -38,7 +38,7 @@ class Message(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     content: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     created_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime, default=lambda: datetime.now(timezone.utc)
+        sa.DateTime, default=lambda: datetime.now()
     )
     message_type: so.Mapped[str] = so.mapped_column(sa.String(255))
 
@@ -61,5 +61,5 @@ class ApplicationSettings(db.Model):
     font_size: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     logo_path: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc)
+        sa.DateTime, default=lambda: datetime.now(), onupdate=lambda: datetime.now()
     )

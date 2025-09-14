@@ -1,10 +1,5 @@
-* Scrollbar no dashboard
-* Scrollbar nas outras (nao sabemos se preicsa, verificar, se preicsa adiciona)
-* Grafico pizza dashboard
-* Resolver bug do chat antigo
 * Testar adicionar forms chamado no banco de dados
 * Fluxo do atendente
-  * Vai ter base de dados de chamados separado (pode ser estatico)
+* Vai ter base de dados de chamados separado (pode ser estatico)
 * Customização
-* fazer README
 * fazer video demonstrando

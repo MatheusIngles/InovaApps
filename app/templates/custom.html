@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icone.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 </head>
@@ -48,15 +48,7 @@
         <div class="row g-0 min-vh-100">
             <!-- Painel de Controles -->
             <div class="col-lg-4 col-xl-3 bg-white border-end shadow-sm">
-                <div class="p-4 border-bottom bg-gradient" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
-                    <h5 class="text-white mb-1 fw-semibold">
-                        <i class="fas fa-sliders-h me-2"></i>
-                        Controles de Personalização
-                    </h5>
-                    <p class="text-white-50 mb-0 small">Ajuste e veja mudanças em tempo real</p>
-                </div>
-
-                <div class="controls-scroll" style="height: calc(100vh - 140px); overflow-y: auto;">
+                <div class="controls-scroll" style="height: calc(100vh - 100px); overflow-y: auto;">
                     <!-- Seção de Cores -->
                     <div class="p-4 border-bottom">
                         <h6 class="fw-semibold mb-3 text-primary">
@@ -218,38 +210,62 @@
                 <div class="bg-white h-100">
                     <!-- Header do Preview -->
                     <div class="p-3 border-bottom bg-light">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0 fw-semibold">
-                                <i class="fas fa-eye me-2 text-primary"></i>
-                                Preview em Tempo Real
-                            </h6>
-                            <div class="d-flex gap-2">
-                                <!-- Tabs de Preview -->
-                                <div class="btn-group" role="group">
-                                    <input type="radio" class="btn-check" name="previewTab" id="chatTab" checked>
-                                    <label class="btn btn-outline-primary btn-sm" for="chatTab">
-                                        <i class="fas fa-comments me-1"></i>
-                                        Chat
-                                    </label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-semibold">
+                        <i class="fas fa-eye me-2 text-primary"></i>
+                        Preview em Tempo Real
+                        </h6>
+                        <div class="d-flex gap-2">
+                        <!-- Tabs de Preview - versão desktop -->
+                        <div class="btn-group d-none d-md-inline-flex" role="group">
+                            <input type="radio" class="btn-check" name="previewTab" id="chatTab" checked>
+                            <label class="btn btn-outline-primary btn-sm" for="chatTab">
+                            <i class="fas fa-comments me-1"></i>
+                            Chat
+                            </label>
 
-                                    <input type="radio" class="btn-check" name="previewTab" id="ticketsTab">
-                                    <label class="btn btn-outline-primary btn-sm" for="ticketsTab">
-                                        <i class="fas fa-ticket-alt me-1"></i>
-                                        Chamados
-                                    </label>
+                            <input type="radio" class="btn-check" name="previewTab" id="ticketsTab">
+                            <label class="btn btn-outline-primary btn-sm" for="ticketsTab">
+                            <i class="fas fa-ticket-alt me-1"></i>
+                            Chamados
+                            </label>
 
-                                    <input type="radio" class="btn-check" name="previewTab" id="dashboardTab">
-                                    <label class="btn btn-outline-primary btn-sm" for="dashboardTab">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Dashboard
-                                    </label>
-                                </div>
-                                
-                                <button id="fullscreenBtn" class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                            </div>
+                            <input type="radio" class="btn-check" name="previewTab" id="dashboardTab">
+                            <label class="btn btn-outline-primary btn-sm" for="dashboardTab">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            Dashboard
+                            </label>
                         </div>
+
+                        <!-- Dropdown - versão mobile -->
+                        <div class="dropdown d-md-none">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="previewMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bars"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="previewMenu">
+                            <li>
+                                <label class="dropdown-item" for="chatTab">
+                                <i class="fas fa-comments me-1"></i> Chat
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item" for="ticketsTab">
+                                <i class="fas fa-ticket-alt me-1"></i> Chamados
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item" for="dashboardTab">
+                                <i class="fas fa-chart-bar me-1"></i> Dashboard
+                                </label>
+                            </li>
+                            </ul>
+                        </div>
+
+                        <button id="fullscreenBtn" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        </div>
+                    </div>
                     </div>
 
                     <!-- Container de Preview -->
@@ -263,7 +279,7 @@
 
                         <!-- Preview do Chat -->
                         <div class="preview-content h-100" id="chatPreview">
-                            <iframe src="/chat" class="w-100 h-100 border-0 rounded" id="chatFrame"></iframe>
+                            <iframe src="/chatDaCuston" class="w-100 h-100 border-0 rounded" id="chatFrame"></iframe>
                         </div>
 
                         <!-- Preview dos Chamados -->
