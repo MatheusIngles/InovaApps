@@ -38,6 +38,7 @@ O python pode ser instalado seguindo o url: https://www.python.org/.
 Em sistemas Windows, após a instalação, tenha certeza que o Python foi adicionado ao PATH do seu sistema. Isso pode ser verificando acessando "Váriaveis de Ambiente" > "Path".
 
 Se houver os paths do python ali, está tudo certo, se não, você deve adicionar.
+<hr>
 </details>
 
 <details> 
@@ -147,8 +148,10 @@ Vale notar que a aplicação é responsiva e funciona em **MOBILE** e **DESKTOP*
 <summary>
 Solicitante - Chat - Fluxo de consulta de artigo
 </summary>
-|**caso**|Usuário solicitante vai ao chat, pergunta algo e a pergunta está na base de dados dos artigos|
-|**fluxo**|Abre o chat, pergunta algo, chat responde com resposta padronizada do artigo.|
+
+| **caso** | Usuário solicitante vai ao chat, pergunta algo e a pergunta está na base de dados dos artigos |
+|----------|----------------------------------------------------------------------------------------------|
+| **fluxo** | Abre o chat, pergunta algo, chat responde com resposta padronizada do artigo. |
 
 Nos artigos temos um tópico de "como instalar python". Tente perguntar ao chat como fazer a instalação do python, e ele deve responder:
 
@@ -160,8 +163,10 @@ Nos artigos temos um tópico de "como instalar python". Tente perguntar ao chat 
 <summary>
 Solicitante - Chat - Fluxo de abrir chamado
 </summary>
-|**caso**|Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe abrir chamado.|
-|**fluxo**|Abre o chat, pergunta algo, chat não encontra artigo, usuário escolhe abrir chamado|
+
+| **caso** | Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe abrir chamado. |
+|----------|----------------------------------------------------------------------------------------------------------------------------------|
+| **fluxo** | Abre o chat, pergunta algo, chat não encontra artigo, usuário escolhe abrir chamado |
 
 Tente perguntar algo absurdo, como "como os dinossauros morreram?".
 
@@ -184,8 +189,10 @@ No exemplo dos dinossauros que dei, o formulário de chamado veio pré-preenchid
 <summary>
 Solicitante - Chat - Fluxo de solução chatbot IA
 </summary>
-|**caso**|Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe resolver problema via IA.|
-|**fluxo**|Abre o chat, pergunta algo, chat não encontra artigo, usuário escolhe Pesquisar na IA|
+
+| **caso** | Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe resolver problema via IA. |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| **fluxo** | Abre o chat, pergunta algo, chat não encontra artigo, usuário escolhe Pesquisar na IA |
 
 Tente perguntar algo absurdo, como "como os dinossauros morreram?".
 
@@ -217,8 +224,10 @@ Clicando em Abrir Chamado após a resposta do chatbot IA, o formulário de chama
 <summary>
 Solicitante - Chat - Fluxo de solicitar novo artigo
 </summary>
-|**caso**|Usuário solicitante quer adicionar resposta útil aos artigos|
-|**fluxo**|Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe resolver problema via IA. Usuário satisfeito com resposta, envia solicitação de adicionar aos artigos|
+
+| **caso** | Usuário solicitante quer adicionar resposta útil aos artigos |
+|----------|-------------------------------------------------------------|
+| **fluxo** | Usuário solicitante vai ao chat, pergunta algo e a pergunta não está na base de dados dos artigos. Usuário escolhe resolver problema via IA. Usuário satisfeito com resposta, envia solicitação de adicionar aos artigos |
 
 Se após a resposta da IA o usuário considerar a resposta suficiente, e não abrir um chamado, ele pode opcionalmente enviar a resposta da IA como um possível novo artigo para ser adicionado ao banco de dados.
 
@@ -234,8 +243,10 @@ Claro, se o usuário estiver satisfeito mas não quer enviar a solicitação com
 <summary>
 Solicitante - Meus Chamados - Fluxo de consulta de chamados registrados
 </summary>
-|**caso**|Usuário solicitante quer ver seus chamados registrados|
-|**fluxo**|Abre o menu, clica em Meus Chamados|
+
+| **caso** | Usuário solicitante quer ver seus chamados registrados |
+|----------|-------------------------------------------------------|
+| **fluxo** | Abre o menu, clica em Meus Chamados |
 
 Acessando a página de "Meus Chamados", temos uma lista de chamados criados de acordo com o banco de dados. Ou seja, se criar um chamado nos fluxos anteriores, vai surgir aqui.
 
@@ -251,8 +262,10 @@ O status de cada chamado também é puxado do banco de dados, e o atendente pode
 <summary>
 Atendente - kanban - Fluxo de atendimento de chamados registrados
 </summary>
-|**caso**|Usuário atendente quer gerenciar seus chamados|
-|**fluxo**|Abre o menu, clica em Kanban|
+
+| **caso** | Usuário atendente quer gerenciar seus chamados |
+|----------|-----------------------------------------------|
+| **fluxo** | Abre o menu, clica em Kanban |
 
 Aqui o atendente acessa os chamados abertos.
 
@@ -268,8 +281,10 @@ Deixamos tudo junto para poupar tempo de desenvolvimento e apenas demonstrar a i
 <summary>
 Admin - Dashboard - Fluxo de consulta de dados da aplicação
 </summary>
-|**caso**|Usuário admin quer ver os dados da aplicação|
-|**fluxo**|Abre o menu, clica em Dashboard|
+
+| **caso** | Usuário admin quer ver os dados da aplicação |
+|----------|---------------------------------------------|
+| **fluxo** | Abre o menu, clica em Dashboard |
 
 Novamente, apenas o ADMIN teria acesso a essa pagina, mas deixamos solto sem essa separação para poupar tempo.
 
@@ -285,8 +300,10 @@ Além disso, no final da pagina, existe a "Atividade Recente", onde pode ser vis
 <summary>
 Admin - Customização - Fluxo de estilo de visual da aplicação
 </summary>
-|**caso**|Usuário admin quer editar a aparência da aplicação|
-|**fluxo**|Abre o menu, clica em Customização|
+
+| **caso** | Usuário admin quer editar a aparência da aplicação |
+|----------|---------------------------------------------------|
+| **fluxo** | Abre o menu, clica em Customização |
 
 Novamente, apenas o ADMIN teria acesso a essa pagina, mas deixamos solto sem essa separação para poupar tempo.
 
@@ -304,8 +321,10 @@ Alterações seriam facilmente reversíveis apenas clicando de volta no tema pre
 <summary>
 Admin - Artigos - Fluxo de gerenciamento de artigos
 </summary>
-|**caso**|Usuário admin quer gerenciar os artigos do chat|
-|**fluxo**|Abre o menu, clica em Artigos|
+
+| **caso** | Usuário admin quer gerenciar os artigos do chat |
+|----------|------------------------------------------------|
+| **fluxo** | Abre o menu, clica em Artigos |
 
 Novamente, apenas o ADMIN teria acesso a essa pagina, mas deixamos solto sem essa separação para poupar tempo.
 
