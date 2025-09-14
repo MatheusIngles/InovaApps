@@ -238,25 +238,26 @@
                         </div>
 
                         <!-- Dropdown - versão mobile -->
-                        <div class="dropdown d-md-none">
-                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="previewMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-bars"></i>
+                        <div class="mobile-dropdown d-md-none position-relative">
+                            <button class="btn btn-outline-primary btn-sm" type="button" id="previewMenu">
+                            <i class="fas fa-bars me-1"></i>
+                            Telas
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="previewMenu">
+                            <ul class="mobile-dropdown-menu" id="mobileDropdownMenu" style="display: none;">
                             <li>
-                                <label class="dropdown-item" for="chatTab">
-                                <i class="fas fa-comments me-1"></i> Chat
-                                </label>
+                                <a class="dropdown-item preview-option" href="#" data-tab="chatTab">
+                                <i class="fas fa-comments me-2"></i> Chat
+                                </a>
                             </li>
                             <li>
-                                <label class="dropdown-item" for="ticketsTab">
-                                <i class="fas fa-ticket-alt me-1"></i> Chamados
-                                </label>
+                                <a class="dropdown-item preview-option" href="#" data-tab="ticketsTab">
+                                <i class="fas fa-ticket-alt me-2"></i> Chamados
+                                </a>
                             </li>
                             <li>
-                                <label class="dropdown-item" for="dashboardTab">
-                                <i class="fas fa-chart-bar me-1"></i> Dashboard
-                                </label>
+                                <a class="dropdown-item preview-option" href="#" data-tab="dashboardTab">
+                                <i class="fas fa-chart-bar me-2"></i> Dashboard
+                                </a>
                             </li>
                             </ul>
                         </div>

@@ -30,11 +30,11 @@ def chat():
         else:
             return jsonify({"text": "Desculpe, Não encontrei informações específicas sobre isso na base de conhecimento. Quer que eu pense para te responder ou já abrir um chamado com base no chat?", "encontrado": False})     
     else:
-        return render_template('chat.html', render_sidebar=True)
+        return render_template('chat.html', render_sidebar=True, show_chat_history=True)
 
 @app.route('/chatDaCuston', methods=["GET"])
 def chatDaCuston():
-    return render_template('chatDaCuston.html', render_sidebar=True)
+    return render_template('chatDaCuston.html', render_sidebar=True, show_chat_history=True)
 
 @app.route('/chat_preview')
 def chat_preview():
@@ -100,7 +100,7 @@ def chamados():
         for t in tickets
     ]
 
-    return render_template('chamados.html', render_sidebar=True, tickets=tickets_data)
+    return render_template('chamados.html', render_sidebar=True, show_chat_history=False, tickets=tickets_data)
 
 @app.route('/chamados_preview')
 def chamados_preview():
@@ -123,7 +123,7 @@ def dashboard():
             "description": ticket.description,
             "time": ticket.created_at
         })
-    return render_template('dashboard.html', render_sidebar=True, total_tickets=total_tickets,
+    return render_template('dashboard.html', render_sidebar=True, show_chat_history=False, total_tickets=total_tickets,
                             fechados=fechados, abertos=abertos, pendentes=pendentes, finalizados=finalizados,
                               horas_media=horas_media, ultimos_tickets=tikets_formatado)
 
@@ -148,7 +148,7 @@ def kanban():
         for t in tickets
     ]
 
-    return render_template('kanban.html', render_sidebar=True, tickets=tickets_data)
+    return render_template('kanban.html', render_sidebar=True, show_chat_history=False, tickets=tickets_data)
 
 @app.route('/kanban_preview')
 def kanban_preview():
@@ -196,7 +196,7 @@ def artigos():
     except (FileNotFoundError, json.JSONDecodeError):
         permissions = []
     
-    return render_template('artigos.html', render_sidebar=True, articles=articles, permissions=permissions)
+    return render_template('artigos.html', render_sidebar=True, show_chat_history=False, articles=articles, permissions=permissions)
 
 @app.route('/artigos_preview')
 def artigos_preview():
@@ -423,7 +423,7 @@ def add_permission_request():
 
 @app.route('/custom')
 def custom():
-    return render_template('custom.html')
+    return render_template('custom.html', render_sidebar=True, show_chat_history=False)
 
 @app.route('/process-satisfaction', methods=["POST"])
 def process_satisfaction():
@@ -446,9 +446,6 @@ def process_satisfaction():
         print(f"Erro ao processar satisfação: {str(e)}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
-@app.route("/artigos")
-def artigo():
-    return render_template("artigos.html", render_sidebar=True)
 
 @app.route("/erro_404")
 def erro_404():

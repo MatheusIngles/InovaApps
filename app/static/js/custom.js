@@ -153,17 +153,43 @@ document.addEventListener("DOMContentLoaded", () => {
     // Preview tabs
     previewTabs.forEach((tab) => {
       tab.addEventListener("change", switchPreviewTab)
-      document.querySelectorAll("#previewMenu + .dropdown-menu label").forEach((item) => {
-        item.addEventListener("click", (e) => {
-          const targetFor = item.getAttribute("for")
-          if (targetFor) {
-            const input = document.getElementById(targetFor)
-            if (input) {
-              input.checked = true
-              input.dispatchEvent(new Event("change")) // força o switchPreviewTab rodar
-            }
-          }
-        })
+    })
+
+    // Dropdown mobile customizado
+    const previewMenuBtn = document.getElementById("previewMenu")
+    const mobileDropdownMenu = document.getElementById("mobileDropdownMenu")
+    
+    if (previewMenuBtn && mobileDropdownMenu) {
+      // Toggle dropdown
+      previewMenuBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const isVisible = mobileDropdownMenu.style.display !== "none"
+        mobileDropdownMenu.style.display = isVisible ? "none" : "block"
+      })
+
+      // Fechar dropdown ao clicar fora
+      document.addEventListener("click", (e) => {
+        if (!previewMenuBtn.contains(e.target) && !mobileDropdownMenu.contains(e.target)) {
+          mobileDropdownMenu.style.display = "none"
+        }
+      })
+    }
+
+    // Preview options no dropdown mobile
+    document.querySelectorAll(".preview-option").forEach((option) => {
+      option.addEventListener("click", (e) => {
+        e.preventDefault()
+        const tabId = option.getAttribute("data-tab")
+        const input = document.getElementById(tabId)
+        if (input) {
+          input.checked = true
+          input.dispatchEvent(new Event("change"))
+        }
+        // Fechar dropdown
+        if (mobileDropdownMenu) {
+          mobileDropdownMenu.style.display = "none"
+        }
       })
     })
 

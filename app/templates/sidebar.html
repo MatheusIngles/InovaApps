@@ -13,6 +13,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Novo Chat</span>
                     </a>
+                    {% if show_chat_history %}
                     <div class="chat-dropdown">
                         <button class="dropdown-toggle" id="chatDropdownToggle">
                             <i class="fas fa-history"></i>
@@ -32,6 +33,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <a href="/chamados" class="nav-item">
                     <i class="fas fa-ticket-alt"></i>
