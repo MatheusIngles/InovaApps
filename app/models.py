@@ -1,30 +1,10 @@
+# app/models.py
+
 from datetime import datetime
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db
-
-
-class User(db.Model):
-    __tablename__ = "user"
-
-    id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    name: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
-    role: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
-
-    # Relacionamentos
-    tickets_responsible: so.WriteOnlyMapped["Ticket"] = so.relationship(
-        back_populates="responsible_user",
-        foreign_keys="Ticket.responsible_user_id"
-    )
-    tickets_applicant: so.WriteOnlyMapped["Ticket"] = so.relationship(
-        back_populates="applicant_user",
-        foreign_keys="Ticket.applicant_user_id"
-    )
-    chats: so.WriteOnlyMapped["Chat"] = so.relationship(
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
 
 
 class Ticket(db.Model):
@@ -40,34 +20,12 @@ class Ticket(db.Model):
     code: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
     priority: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
 
-    # FK -> User
-    responsible_user_id: so.Mapped[int] = so.mapped_column(
-        sa.ForeignKey("user.id")
-    )
-    applicant_user_id: so.Mapped[int] = so.mapped_column(
-        sa.ForeignKey("user.id")
-    )
-
-    # Relacionamentos
-    responsible_user: so.Mapped["User"] = so.relationship(
-        back_populates="tickets_responsible",
-        foreign_keys=[responsible_user_id]
-    )
-    applicant_user: so.Mapped["User"] = so.relationship(
-        back_populates="tickets_applicant",
-        foreign_keys=[applicant_user_id]
-    )
-
 
 class Chat(db.Model):
     __tablename__ = "chat"
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     title: so.Mapped[Optional[str]] = so.mapped_column(sa.String(255))
-
-    # FK -> User
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"))
-    user: so.Mapped["User"] = so.relationship(back_populates="chats")
 
     messages: so.WriteOnlyMapped["Message"] = so.relationship(
         back_populates="chat", cascade="all, delete-orphan"
